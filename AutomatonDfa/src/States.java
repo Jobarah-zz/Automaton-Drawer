@@ -34,20 +34,5 @@ public class States {
         isAcceptanceState = acceptanceState;
     }
 
-    public Transition getTransitionOrigin() {
-        return transitionOrigin;
-    }
-
-    public void setTransitionOrigin(Transition transitionOrigin) {
-        this.transitionOrigin = transitionOrigin;
-    }
-
-    public Transition getTransitionDestiny() {
-        return transitionDestiny;
-    }
-
-    public void setTransitionDestiny(Transition transitionDestiny) {
-        this.transitionDestiny = transitionDestiny;
-    }
 
 }
