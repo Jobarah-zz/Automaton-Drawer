@@ -1,3 +1,6 @@
+/**
+ * Created by jenamorado on 7/25/16.
+ */
 import java.util.ArrayList;
 
 /**
@@ -46,3 +49,4 @@ public class Automaton {
         return false;
     }
 }
+
