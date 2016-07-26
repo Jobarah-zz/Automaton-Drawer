@@ -21,6 +21,8 @@ class MainApplication : Application() {
     override fun start(stage: Stage) {
 
         val graph = mxGraph()
+        var automaton:Automaton = Automaton()
+        automaton.alphabet.add('0')
         val parent = graph.defaultParent
 
         graph.update {}
@@ -35,6 +37,8 @@ class MainApplication : Application() {
 
         graph.isEdgeLabelsMovable = false
 
+        graph.isCellsResizable = false
+
         mxConstants.DEFAULT_HOTSPOT = 1.0
 
         val miCombo = ComboBox<String>()
@@ -44,35 +48,57 @@ class MainApplication : Application() {
         val insertLabel = Label("New Vertex name: ")
         val editVertex = Label("Edit vertex")
         val trans0 = Label("Transition 0")
+        val initialState = Label("Is initial state")
         val comboTransition0 = ComboBox<String>()
         val trans1 = Label("Transition 1")
         val comboTransition1 = ComboBox<String>()
-        val isAcceptanceState = Label("Is accepted state")
+        val isAcceptanceState = Label("Is acceptance state")
         val acceptanceCombo = ComboBox<String>()
         acceptanceCombo.items.add("True")
         acceptanceCombo.items.add("False")
+        val initialCombo = ComboBox<String>()
+        initialCombo.items.add("True")
+        initialCombo.items.add("False")
         val deleteLabel = Label("Delete vertex")
         val deleteCombo = ComboBox<String>()
         val separator = Separator()
         val separator2 = Separator()
+        val separator3 = Separator()
         val aTextField = TextField()
         aTextField.setMaxSize(120.0,20.0)
+        var estadoInicial = ""
 
-        val aButton = Button("Insertar")
+        val aButton = Button("Insert")
         val bButton = Button("Apply Changes")
         val cButton = Button("Delete")
+        val dButton = Button("Evaluate Automaton")
 
         aButton.onMouseClicked = EventHandler<MouseEvent> {
 
             val aceptado = acceptanceCombo.getSelectionModel().getSelectedItem().toString()
+            val isInitialState = initialCombo.getSelectionModel().getSelectedItem().toString()
+            var sizeX=0.0
+            var sizeY=0.0
+            var acceptance:Boolean =false
+            var initial:Boolean = false
             if(acceptanceCombo.selectionModel.selectedIndex>=0 && aTextField.text!=""){
                 var style=""
                 if(aceptado == "True"){
+                    acceptance = true
                     style = "shape=doubleEllipse;fillColor=white"
                 }else{
                     style = "shape=ellipse;fillColor=white"
                 }
-                val vertex = graph.insertVertex(parent, null, aTextField.text, 150.0, 150.0, 50.0, 50.0,style)
+                if(isInitialState == "True"){
+                    initial = true
+                    sizeX = 100.00
+                    sizeY = 100.00
+                }else{
+                    sizeX = 50.00
+                    sizeY = 50.00
+                }
+                automaton.states.add(States(aTextField.text,initial,acceptance))
+                val vertex = graph.insertVertex(parent, null, aTextField.text, 150.0, 150.0, sizeX, sizeY,style)
                 miCombo.items.add(aTextField.text)
                 comboTransition0.items.add(aTextField.text)
                 comboTransition1.items.add(aTextField.text)
@@ -109,10 +135,14 @@ class MainApplication : Application() {
 
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
+                    var state:States? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
+                    state!!._transition.add(Transition('0',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct0Opcion)].value.toString()))
                 }
 
                 if(comboTransition1.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "1", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition1.items.indexOf(ct1Opcion)])
+                    var state:States? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
+                    state!!._transition.add(Transition('1',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct1Opcion)].value.toString()))
                 }
             }
             graph.refresh()
@@ -132,6 +162,9 @@ class MainApplication : Application() {
                 graph.refresh()
             }
         }
+        dButton.onMouseClicked = EventHandler<MouseEvent> {
+            println(automaton.evaluate("0000"))
+        }
 
         val sceneRoot = GridPane()
         sceneRoot.setPrefSize(400.0, 400.0)
@@ -144,19 +177,23 @@ class MainApplication : Application() {
         sceneRoot.add(aTextField, 0, 2)
         sceneRoot.add(isAcceptanceState, 0, 3)
         sceneRoot.add(acceptanceCombo, 0, 4)
-        sceneRoot.add(aButton, 0, 5)
-        sceneRoot.add(separator, 0, 6)
-        sceneRoot.add(editVertex, 0, 7)
-        sceneRoot.add(miCombo, 0, 8)
-        sceneRoot.add(trans0, 0, 9)
-        sceneRoot.add(comboTransition0, 0, 10)
-        sceneRoot.add(trans1, 0, 11)
-        sceneRoot.add(comboTransition1, 0, 12)
-        sceneRoot.add(bButton, 0, 13)
-        sceneRoot.add(separator2, 0, 14)
-        sceneRoot.add(deleteLabel, 0, 15)
-        sceneRoot.add(deleteCombo, 0, 16)
-        sceneRoot.add(cButton, 0, 17)
+        sceneRoot.add(initialState,0,5)
+        sceneRoot.add(initialCombo, 0, 6)
+        sceneRoot.add(aButton, 0, 7)
+        sceneRoot.add(separator, 0, 8)
+        sceneRoot.add(editVertex, 0, 9)
+        sceneRoot.add(miCombo, 0, 10)
+        sceneRoot.add(trans0, 0, 11)
+        sceneRoot.add(comboTransition0, 0, 12)
+        sceneRoot.add(trans1, 0, 13)
+        sceneRoot.add(comboTransition1, 0, 14)
+        sceneRoot.add(bButton, 0, 15)
+        sceneRoot.add(separator2, 0, 16)
+        sceneRoot.add(deleteLabel, 0, 17)
+        sceneRoot.add(deleteCombo, 0, 18)
+        sceneRoot.add(cButton, 0, 19)
+        sceneRoot.add(separator3, 0, 20)
+        sceneRoot.add(dButton,0,21)
 
         stage.scene = Scene(sceneRoot, 825.0, 900.0)
 
