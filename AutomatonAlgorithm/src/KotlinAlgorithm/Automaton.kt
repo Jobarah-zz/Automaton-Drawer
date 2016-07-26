@@ -2,10 +2,9 @@
  * Created by Jobarah on 7/25/2016.
  */
 
-open class Automaton(strToEval:String){
+open class Automaton{
     val states = mutableListOf<States>()
     val alphabet = mutableListOf<Char>()
-    val _strToEval=strToEval
 
     open fun getInitialState():States?{
         for (i in states.indices) {
@@ -26,13 +25,17 @@ open class Automaton(strToEval:String){
     }
 
     open fun evaluate(strEvString:String):Boolean{
-        var eval = _strToEval.toCharArray()
-        var currentState = getInitialState()
-        if(currentState as States!=null){
-            for (i in eval.indices) {
-                for (i in currentState!!._transition.indices) {
-                    if(currentState!!._transition[j]._symbol==eval[i]){
-                        currentState = getState(currentState._transition[j]._destiny)
+        var eval = strEvString.toCharArray()
+        var currentState: States? = getInitialState()
+        if(currentState!=null){
+            for(a in alphabet.indices){
+                for (i in eval.indices) {
+                    if(eval[i]==alphabet[a]){
+                        for (j in currentState!!._transition.indices) {
+                            if(currentState!!._transition[j]._symbol==eval[i]){
+                                currentState = getState(currentState._transition[j]._destiny)
+                            }
+                        }
                     }
                 }
             }
@@ -44,6 +47,4 @@ open class Automaton(strToEval:String){
         }
         return false
     }
-
-
 }
