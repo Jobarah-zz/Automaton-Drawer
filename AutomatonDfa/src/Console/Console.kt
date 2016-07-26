@@ -5,4 +5,9 @@ package Console
  */
 fun main(arr : Array<String>){
     println("hola")
+    val a = Automaton()
+}
+
+class Automaton {
+
 }

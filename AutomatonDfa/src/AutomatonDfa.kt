@@ -111,6 +111,7 @@ class MainApplication : Application() {
                 bc.items.add(aTextField.text)
                 nodes.add(vertex as mxCell)
             }
+            graph.refresh()
             //val str = miCombo.getSelectionModel().getSelectedItem().toString()
         }
 
@@ -146,6 +147,7 @@ class MainApplication : Application() {
                     graph.insertEdge(parent, null, "1", nodes[miCombo.items.indexOf(verEdit)], nodes[ct1.items.indexOf(ct1Opcion)])
                 }
             }
+            graph.refresh()
         }
 
         cButton.onMouseClicked = EventHandler<MouseEvent> {
@@ -159,6 +161,7 @@ class MainApplication : Application() {
                 ct1.items.removeAt(bc.items.indexOf(verDelete))
                 miCombo.items.removeAt(bc.items.indexOf(verDelete))
                 bc.items.removeAt(bc.items.indexOf(verDelete))
+                graph.refresh()
             }
         }
 

@@ -9,6 +9,4 @@ class States {
     var transitions: ArrayList<Transition>? = null
     var isInitialState: Boolean = false
     var isAcceptanceState: Boolean = false
-
-
 }
