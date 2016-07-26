@@ -28,9 +28,8 @@ open class Automaton{
         var eval = strEvString.toCharArray()
         var currentState: States? = getInitialState()
         if(currentState!=null){
-            for(a in alphabet.indices){
                 for (i in eval.indices) {
-                    if(eval[i]==alphabet[a]){
+                    if(alphabet.contains(eval[i])){
                         for (j in currentState!!._transition.indices) {
                             if(currentState!!._transition[j]._symbol==eval[i]){
                                 currentState = getState(currentState._transition[j]._destiny)
@@ -38,7 +37,6 @@ open class Automaton{
                         }
                     }
                 }
-            }
             if(currentState!!._isAcceptanceState){
                 return true
             }else {
