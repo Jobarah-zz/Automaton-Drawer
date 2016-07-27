@@ -1,3 +1,5 @@
+
+package KotlinAlgorithm;
 /**
  * Created by Jobarah on 7/25/2016.
  */
@@ -28,12 +30,11 @@ open class Automaton{
         var eval = strEvString.toCharArray()
         var currentState: States? = getInitialState()
         if(currentState!=null){
-                for (i in eval.indices) {
-                    if(alphabet.contains(eval[i])){
-                        for (j in currentState!!._transition.indices) {
-                            println("strToEval current index: "+i+" state transition index: "+j)
-                            if(currentState!!._transition[j]._symbol==eval[i]){
-                                currentState = getState(currentState._transition[j]._destiny)
+                for (charater in eval) {
+                    if(alphabet.contains(charater)){
+                        for (transition in currentState!!._transition) {
+                            if(transition._symbol==charater){
+                                currentState = getState(transition._destiny)
                             }
                         }
                     }

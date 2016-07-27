@@ -1,3 +1,6 @@
+import KotlinAlgorithm.Automaton
+import KotlinAlgorithm.States
+import KotlinAlgorithm.Transition
 import com.mxgraph.model.mxCell
 import com.mxgraph.model.mxICell
 import com.mxgraph.swing.mxGraphComponent
@@ -22,7 +25,7 @@ class MainApplication : Application() {
     override fun start(stage: Stage) {
 
         val graph = mxGraph()
-        var automaton:Automaton = Automaton()
+        var automaton: Automaton = Automaton()
         automaton.alphabet.add('0')
         automaton.alphabet.add('1')
         val parent = graph.defaultParent
@@ -138,7 +141,7 @@ class MainApplication : Application() {
 
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
-                    var state:States? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
+                    var state: States? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
                     state!!._transition.add(Transition('0',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct0Opcion)].value.toString()))
                 }
 
