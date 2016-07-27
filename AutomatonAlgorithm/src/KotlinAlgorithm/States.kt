@@ -1,3 +1,5 @@
+package KotlinAlgorithm;
+
 import java.util.*
 
 open class States(name:String,isInitialState:Boolean,isAcceptanceState:Boolean){

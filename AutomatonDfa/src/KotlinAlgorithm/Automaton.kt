@@ -31,6 +31,7 @@ open class Automaton{
                 for (i in eval.indices) {
                     if(alphabet.contains(eval[i])){
                         for (j in currentState!!._transition.indices) {
+                            println("strToEval current index: "+i+" state transition index: "+j)
                             if(currentState!!._transition[j]._symbol==eval[i]){
                                 currentState = getState(currentState._transition[j]._destiny)
                             }

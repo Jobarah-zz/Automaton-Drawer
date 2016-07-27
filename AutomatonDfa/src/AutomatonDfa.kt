@@ -1,4 +1,5 @@
 import com.mxgraph.model.mxCell
+import com.mxgraph.model.mxICell
 import com.mxgraph.swing.mxGraphComponent
 import com.mxgraph.util.mxConstants
 import com.mxgraph.util.mxRectangle
@@ -23,6 +24,7 @@ class MainApplication : Application() {
         val graph = mxGraph()
         var automaton:Automaton = Automaton()
         automaton.alphabet.add('0')
+        automaton.alphabet.add('1')
         val parent = graph.defaultParent
 
         graph.update {}
@@ -46,6 +48,7 @@ class MainApplication : Application() {
         val nodes: MutableList<mxCell> = mutableListOf()
 
         val insertLabel = Label("New Vertex name: ")
+        val strToEvalLabel = Label("String to Evaluate: ")
         val editVertex = Label("Edit vertex")
         val trans0 = Label("Transition 0")
         val initialState = Label("Is initial state")
@@ -65,7 +68,9 @@ class MainApplication : Application() {
         val separator2 = Separator()
         val separator3 = Separator()
         val aTextField = TextField()
+        val strToEval = TextField()
         aTextField.setMaxSize(120.0,20.0)
+        strToEval.setMaxSize(120.0,20.0)
         var estadoInicial = ""
 
         val aButton = Button("Insert")
@@ -123,15 +128,13 @@ class MainApplication : Application() {
                     ct1Opcion = comboTransition1.getSelectionModel().getSelectedItem().toString()
                 }
 
-                var cantEdges = nodes[miCombo.items.indexOf(verEdit)].edgeCount
-                if(cantEdges==1){
-                    nodes[miCombo.items.indexOf(verEdit)].getEdgeAt(0).removeFromParent()
+                val misEdges = graph.getEdges(nodes[miCombo.items.indexOf(verEdit)],parent,false,true,true)
+                var cont2 = 0
+                while (cont2<misEdges.count()){
+                    (misEdges[cont2] as mxICell).removeFromParent()
+                    cont2++
                 }
-
-                if(cantEdges==2){
-                    nodes[miCombo.items.indexOf(verEdit)].getEdgeAt(0).removeFromParent()
-                    nodes[miCombo.items.indexOf(verEdit)].getEdgeAt(1).removeFromParent()
-                }
+                graph.refresh()
 
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
@@ -163,7 +166,16 @@ class MainApplication : Application() {
             }
         }
         dButton.onMouseClicked = EventHandler<MouseEvent> {
-            println(automaton.evaluate("0000"))
+            if(strToEval.text!=""){
+                println(automaton.evaluate(strToEval.text))
+                val alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Automaton Evaluation"
+                alert.headerText = null
+                alert.contentText = "The result of the evaluation is: "+automaton.evaluate(strToEval.text).toString()
+//                alert.contentText = "The result of the evaluation is: "+automaton.evaluate(strToEval.text).toString()
+
+                alert.showAndWait()
+            }
         }
 
         val sceneRoot = GridPane()
@@ -193,7 +205,9 @@ class MainApplication : Application() {
         sceneRoot.add(deleteCombo, 0, 18)
         sceneRoot.add(cButton, 0, 19)
         sceneRoot.add(separator3, 0, 20)
-        sceneRoot.add(dButton,0,21)
+        sceneRoot.add(strToEvalLabel,0,21)
+        sceneRoot.add(strToEval,0,22)
+        sceneRoot.add(dButton,0,23)
 
         stage.scene = Scene(sceneRoot, 825.0, 900.0)
 
