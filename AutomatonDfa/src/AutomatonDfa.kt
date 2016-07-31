@@ -1,6 +1,7 @@
 import KotlinAlgorithm.Automaton
-import KotlinAlgorithm.States
+import KotlinAlgorithm.State
 import KotlinAlgorithm.Transition
+import KotlinAlgorithm.deterministicFiniteAutomaton
 import com.mxgraph.model.mxCell
 import com.mxgraph.model.mxICell
 import com.mxgraph.swing.mxGraphComponent
@@ -25,7 +26,7 @@ class MainApplication : Application() {
     override fun start(stage: Stage) {
 
         val graph = mxGraph()
-        var automaton: Automaton = Automaton()
+        var automaton: Automaton = deterministicFiniteAutomaton()
         automaton.alphabet.add('0')
         automaton.alphabet.add('1')
         val parent = graph.defaultParent
@@ -105,7 +106,7 @@ class MainApplication : Application() {
                     sizeX = 50.00
                     sizeY = 50.00
                 }
-                automaton.states.add(States(aTextField.text,initial,acceptance))
+                automaton.states.add(State(aTextField.text,initial,acceptance))
                 val vertex = graph.insertVertex(parent, null, aTextField.text, 150.0, 150.0, sizeX, sizeY,style)
                 miCombo.items.add(aTextField.text)
                 comboTransition0.items.add(aTextField.text)
@@ -141,14 +142,14 @@ class MainApplication : Application() {
 
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
-                    var state: States? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
-                    state!!._transition.add(Transition('0',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct0Opcion)].value.toString()))
+                    var state: State? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
+                    state!!._transitions.add(Transition('0',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct0Opcion)].value.toString()))
                 }
 
                 if(comboTransition1.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "1", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition1.items.indexOf(ct1Opcion)])
-                    var state:States? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
-                    state!!._transition.add(Transition('1',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct1Opcion)].value.toString()))
+                    var state: State? = automaton.getState(nodes[miCombo.items.indexOf(verEdit)].value.toString())
+                    state!!._transitions.add(Transition('1',nodes[miCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct1Opcion)].value.toString()))
                 }
             }
             graph.refresh()

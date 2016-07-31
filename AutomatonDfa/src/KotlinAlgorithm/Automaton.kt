@@ -4,11 +4,15 @@ package KotlinAlgorithm;
  * Created by Jobarah on 7/25/2016.
  */
 
-open class Automaton{
-    val states = mutableListOf<States>()
+open abstract class Automaton{
+    val states = mutableListOf<State>()
     val alphabet = mutableListOf<Char>()
 
-    open fun getInitialState():States?{
+    open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
+        states.add(State(name,isInitialState,isAcceptanceState))
+    }
+
+    open fun getInitialState(): State?{
         for (i in states.indices) {
             if (states[i]._initialState) {
                 return states[i]
@@ -17,7 +21,7 @@ open class Automaton{
         return null
     }
 
-    open fun getState(stateName:String):States?{
+    open fun getState(stateName:String): State?{
         for (i in states.indices) {
             if(states[i]._name.equals(stateName)){
                 return states[i]
@@ -26,25 +30,5 @@ open class Automaton{
         return null
     }
 
-    open fun evaluate(strEvString:String):Boolean{
-        var eval = strEvString.toCharArray()
-        var currentState: States? = getInitialState()
-        if(currentState!=null){
-                for (charater in eval) {
-                    if(alphabet.contains(charater)){
-                        for (transition in currentState!!._transition) {
-                            if(transition._symbol==charater){
-                                currentState = getState(transition._destiny)
-                            }
-                        }
-                    }
-                }
-            if(currentState!!._isAcceptanceState){
-                return true
-            }else {
-                return false
-            }
-        }
-        return false
-    }
+    open abstract fun evaluate(strEvString:String):Boolean
 }
