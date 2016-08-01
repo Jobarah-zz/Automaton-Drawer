@@ -3,7 +3,7 @@ package KotlinAlgorithm;
  * Created by Jobarah on 7/25/2016.
  */
 fun main(arr : Array<String>){
-    var a =  deterministicFiniteAutomaton()
+    var a =  nonDeterministicFiniteAutomaton()
     val state1 = State("q0",true,false)
     val states2 = State("q1",false,false)
     val states3 = State("q2",false,false)
