@@ -1,7 +1,4 @@
-import KotlinAlgorithm.Automaton
-import KotlinAlgorithm.State
-import KotlinAlgorithm.Transition
-import KotlinAlgorithm.deterministicFiniteAutomaton
+import KotlinAlgorithm.*
 import com.mxgraph.model.mxCell
 import com.mxgraph.model.mxICell
 import com.mxgraph.swing.mxGraphComponent
@@ -26,7 +23,7 @@ class MainApplication : Application() {
     override fun start(stage: Stage) {
 
         val graph = mxGraph()
-        var automaton: Automaton = deterministicFiniteAutomaton()
+        var automaton: Automaton = nonDeterministicFiniteAutomaton()
         automaton.alphabet.add('0')
         automaton.alphabet.add('1')
         val parent = graph.defaultParent
@@ -53,6 +50,7 @@ class MainApplication : Application() {
 
         val insertLabel = Label("New Vertex name: ")
         val strToEvalLabel = Label("String to Evaluate: ")
+        val alphabetLabel = Label("Define Alphabet: ")
         val editVertex = Label("Edit vertex")
         val trans0 = Label("Transition 0")
         val initialState = Label("Is initial state")
@@ -73,8 +71,10 @@ class MainApplication : Application() {
         val separator3 = Separator()
         val aTextField = TextField()
         val strToEval = TextField()
+        val alphabet = TextField()
         aTextField.setMaxSize(120.0,20.0)
         strToEval.setMaxSize(120.0,20.0)
+        alphabet.setMaxSize(120.0,20.0)
         var estadoInicial = ""
 
         val aButton = Button("Insert")
@@ -132,13 +132,13 @@ class MainApplication : Application() {
                     ct1Opcion = comboTransition1.getSelectionModel().getSelectedItem().toString()
                 }
 
-                val misEdges = graph.getEdges(nodes[miCombo.items.indexOf(verEdit)],parent,false,true,true)
-                var cont2 = 0
-                while (cont2<misEdges.count()){
-                    (misEdges[cont2] as mxICell).removeFromParent()
-                    cont2++
-                }
-                graph.refresh()
+//                val misEdges = graph.getEdges(nodes[miCombo.items.indexOf(verEdit)],parent,false,true,true)
+//                var cont2 = 0
+//                while (cont2<misEdges.count()){
+//                    (misEdges[cont2] as mxICell).removeFromParent()
+//                    cont2++
+//                }
+//                graph.refresh()
 
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[miCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
@@ -170,6 +170,18 @@ class MainApplication : Application() {
             }
         }
         dButton.onMouseClicked = EventHandler<MouseEvent> {
+
+//            val _alphabet = alphabet.text
+//            var chars = mutableListOf<Char>()
+//            for (symbol in _alphabet)
+//            {
+//                chars.add(symbol)
+//            }
+//            for(element in chars){
+//                if(element!=',')
+//                    println(element)
+//            }
+
             if(strToEval.text!=""){
                 println(automaton.evaluate(strToEval.text))
                 val alert = Alert(Alert.AlertType.INFORMATION)
@@ -209,11 +221,13 @@ class MainApplication : Application() {
         sceneRoot.add(deleteCombo, 0, 18)
         sceneRoot.add(cButton, 0, 19)
         sceneRoot.add(separator3, 0, 20)
+//        sceneRoot.add(alphabetLabel,0,21)
+//        sceneRoot.add(alphabet,0,22)
         sceneRoot.add(strToEvalLabel,0,21)
         sceneRoot.add(strToEval,0,22)
         sceneRoot.add(dButton,0,23)
 
-        stage.scene = Scene(sceneRoot, 825.0, 900.0)
+        stage.scene = Scene(sceneRoot, 825.0, 1000.0)
 
         stage.show()
     }

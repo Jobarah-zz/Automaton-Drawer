@@ -4,25 +4,6 @@ package KotlinAlgorithm
  * Created by Jobarah on 7/31/2016.
  */
 class nonDeterministicFiniteAutomaton :Automaton(){
-    var acceptanStates= mutableListOf<State>()
-
-    override open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
-        states.add(State(name,isInitialState,isAcceptanceState))
-        if(isAcceptanceState==true){
-            acceptanStates.add(State(name,isInitialState,isAcceptanceState))
-        }
-    }
-    fun getStateIndex(name: String): Int{
-        var pos = 0
-        for(state: State in states)
-        {
-            if(state._name == name)
-                break
-            pos++
-        }
-
-        return  pos
-    }
     override fun evaluate(strEvString:String):Boolean{
         var eval = strEvString.toCharArray()
         var currentStates = mutableListOf<State>()
@@ -36,7 +17,7 @@ class nonDeterministicFiniteAutomaton :Automaton(){
             {
                 for (transition in currentState!!._transitions) {
                     if (character == transition._symbol)
-                        currentStatesFiltered.add(states[getStateIndex(transition._destiny)])
+                        currentStatesFiltered.add(getState(transition._destiny) as State)
                 }
             }
             currentStates = currentStatesFiltered
@@ -44,7 +25,7 @@ class nonDeterministicFiniteAutomaton :Automaton(){
 
         for (state in currentStates)
         {
-            if (acceptanStates.contains(state))
+            if (state._isAcceptanceState == true)
             {
                 return true
             }
