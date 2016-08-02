@@ -25,7 +25,7 @@ class nonDeterministicFiniteAutomaton :Automaton(){
 
         for (state in currentStates)
         {
-            if (state._isAcceptanceState == true)
+            if (state._isAcceptanceState)
             {
                 return true
             }
