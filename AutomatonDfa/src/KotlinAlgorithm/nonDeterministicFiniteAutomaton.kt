@@ -4,6 +4,8 @@ package KotlinAlgorithm
  * Created by Jobarah on 7/31/2016.
  */
 class nonDeterministicFiniteAutomaton :Automaton(){
+    var evaluatedStates:MutableList<String> = mutableListOf<String>()
+    var epsilonClosure = mutableListOf<State>()
     override fun evaluate(strEvString:String):Boolean{
         var eval = strEvString.toCharArray()
         var currentStates = mutableListOf<State>()
@@ -33,10 +35,32 @@ class nonDeterministicFiniteAutomaton :Automaton(){
         return false
     }
 
-    open fun getClosure(state:State?):MutableList<State>{
-        return mutableListOf<State>()
+    open fun getClosure(state:State){
+        if(!evaluatedStates.contains(state._name)){
+            epsilonClosure.add( state )
+            evaluatedStates.add( state._name )
+            for(transition in state._transitions){
+                if(transition._symbol.equals('e')){
+                    var nextState = getState(transition._destiny) as State
+                    getClosure( nextState )
+                }
+            }
+        }
     }
 
+    open fun getReachableStates(closureStates:MutableList<State>, alphabetItem:Char):MutableList<State>{
+        var  reachableStates:MutableList<State> = mutableListOf()
+        for(state in closureStates){
+            for (transition in state._transitions){
+                if(transition._symbol.equals(alphabetItem)){
+                    reachableStates.add(getState(transition._destiny) as State)
+                }
+            }
+        }
+        closureStates.clear()
+        evaluatedStates.clear()
+        return reachableStates
+    }
     open fun convertToDFA(): deterministicFiniteAutomaton{
         var dfa: deterministicFiniteAutomaton = deterministicFiniteAutomaton()
         var dfaStates: MutableList<State> = mutableListOf()
