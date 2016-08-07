@@ -14,6 +14,7 @@ import javafx.scene.control.*
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.GridPane
 import javafx.stage.Stage
+import java.util.*
 
 fun main(args: Array<String>) {
     Application.launch(MainApplication::class.java)
@@ -26,6 +27,9 @@ class MainApplication : Application() {
         var automaton: Automaton = nonDeterministicFiniteAutomaton()
         automaton.alphabet.add('0')
         automaton.alphabet.add('1')
+
+        var automata2:deterministicFiniteAutomaton = deterministicFiniteAutomaton()
+
         val parent = graph.defaultParent
 
         graph.update {}
@@ -48,6 +52,7 @@ class MainApplication : Application() {
 
         val nodes: MutableList<mxCell> = mutableListOf()
 
+        val TransformLabel = Label("Transform")
         val insertLabel = Label("New Vertex name: ")
         val strToEvalLabel = Label("String to Evaluate: ")
         val alphabetLabel = Label("Define Alphabet: ")
@@ -69,6 +74,7 @@ class MainApplication : Application() {
         val separator = Separator()
         val separator2 = Separator()
         val separator3 = Separator()
+        val separator4 = Separator()
         val stateNameTextField = TextField()
         val strToEval = TextField()
         val alphabet = TextField()
@@ -76,6 +82,8 @@ class MainApplication : Application() {
         strToEval.setMaxSize(120.0,20.0)
         alphabet.setMaxSize(120.0,20.0)
         var estadoInicial = ""
+        val fButton = Button("From DFA to NFA")
+        var isTransformed = false
 
         val statesButton = Button("Insert")
         val transitionsButton = Button("Apply Changes")
@@ -131,14 +139,6 @@ class MainApplication : Application() {
                     ct1Opcion = comboTransition1.getSelectionModel().getSelectedItem().toString()
                 }
 
-//                val transitions = graph.getEdges(nodes[statesCombo.items.indexOf(verEdit)],parent,false,true,true)
-//                var cont2 = 0
-//                while (cont2<misEdges.count()){
-//                    (misEdges[cont2] as mxICell).removeFromParent()
-//                    cont2++
-//                }
-//                graph.refresh()
-
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[statesCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
                     var state: State? = automaton.getState(nodes[statesCombo.items.indexOf(verEdit)].value.toString())
@@ -152,6 +152,8 @@ class MainApplication : Application() {
                 }
             }
             graph.refresh()
+            comboTransition0.selectionModel.clearSelection()
+            comboTransition1.selectionModel.clearSelection()
         }
 
         deleteButton.onMouseClicked = EventHandler<MouseEvent> {
@@ -170,26 +172,106 @@ class MainApplication : Application() {
         }
         evalButton.onMouseClicked = EventHandler<MouseEvent> {
 
-//            val _alphabet = alphabet.text
-//            var chars = mutableListOf<Char>()
-//            for (symbol in _alphabet)
-//            {
-//                chars.add(symbol)
-//            }
-//            for(element in chars){
-//                if(element!=',')
-//                    println(element)
-//            }
-
             if(strToEval.text!=""){
                 println(automaton.evaluate(strToEval.text))
                 val alert = Alert(Alert.AlertType.INFORMATION)
                 alert.title = "Automaton Evaluation"
                 alert.headerText = null
                 alert.contentText = "The result of the evaluation is: "+automaton.evaluate(strToEval.text).toString()
-//                alert.contentText = "The result of the evaluation is: "+automaton.evaluate(strToEval.text).toString()
-
                 alert.showAndWait()
+            }
+        }
+
+
+        fButton.onMouseClicked = EventHandler<MouseEvent> {
+            graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+            if(isTransformed){
+                //reconstruir AFN
+                isTransformed = false
+            }else{
+                //build dfa
+                automata2.states.clear()
+                val dfaList: MutableList<mxCell> = mutableListOf()
+                val listaDeAceptados: MutableList<String> = mutableListOf()
+                for (t in automaton.states.indices){
+                    if(automaton.states[t]._isAcceptanceState){
+                        listaDeAceptados.add(automaton.states[t]._name)
+                    }
+                }
+
+                var nuevosVertex: MutableList<State> = mutableListOf()
+                val initVertex = automaton.getInitialState() as State
+                nuevosVertex.add(State(initVertex._name,true,initVertex._isAcceptanceState))
+
+                var acc = initVertex._isAcceptanceState
+                var style = "shape=ellipse;fillColor=white"
+                if(acc)
+                    style = "shape=doubleEllipse;fillColor=white"
+                val vertex2 = graph.insertVertex(parent, null, initVertex._name, 740.0, 350.0, 100.0, 100.0, style)
+                dfaList.add(vertex2 as mxCell)
+                var contadorIndices = 0
+                val mapaIndices: MutableMap<String,Int> = mutableMapOf()
+                mapaIndices.put(initVertex._name,contadorIndices)
+                contadorIndices++
+
+                automata2.alphabet = automaton.alphabet
+                automata2.states.add(State(initVertex._name,true,initVertex._isAcceptanceState))
+                while(nuevosVertex.count() > 0){
+                    val vertexActual = nuevosVertex[0]
+                    val mapaNombres: MutableMap<Char,String> = mutableMapOf()
+
+                    for (p in automata2.alphabet.indices){
+                        val separados = vertexActual._name.split(",")
+                        for (w in separados.indices){
+                            val subVertexActual = automaton.getState(separados[w]) as State
+                            for (o in subVertexActual._transitions.indices){
+                                if(subVertexActual._transitions[o]._symbol == automata2.alphabet[p]){
+                                    if(mapaNombres.containsKey(automata2.alphabet[p])){
+                                        val miStr = (mapaNombres.get(automata2.alphabet[p])) as String
+                                        val cortado = miStr.split(",")
+                                        if(!cortado.contains(subVertexActual._transitions[o]._destiny))
+                                            mapaNombres.set(automata2.alphabet[p],miStr + "," + subVertexActual._transitions[o]._destiny)
+                                    }else{
+                                        mapaNombres.put(automata2.alphabet[p], subVertexActual._transitions[o]._destiny)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    val contador1 = mapaNombres.count()
+                    var contador2 = 0
+                    var misNombres = mapaNombres.entries
+                    while(contador1>contador2){
+                        val miStr = misNombres.elementAt(contador2).value
+                        val miStrSeparado = miStr.split(",")
+                        println(miStrSeparado)
+                        for (m in miStrSeparado.indices){
+                            println(miStrSeparado[m])
+                        }
+                        val nombreV = yaExisteString(automata2,miStr)
+                        if(!yaExisteBoolean(automata2, miStr)){
+                            val isAccept = esVertexAceptable(listaDeAceptados,nombreV)
+                            var accept = "shape=ellipse;fillColor=white"
+                            if(isAccept)
+                                accept = "shape=doubleEllipse;fillColor=white"
+                            val state = graph.insertVertex(parent, null, nombreV, 740.0, 350.0, 50.0, 50.0, accept)
+                            dfaList.add(state as mxCell)
+                            mapaIndices.put(nombreV,contadorIndices)
+                            contadorIndices++
+                            automata2.states.add(State(nombreV,false,isAccept))
+                            nuevosVertex.add(State(nombreV,false,isAccept))
+                        }
+                        graph.insertEdge(parent, null, misNombres.elementAt(contador2).key, dfaList.elementAt(mapaIndices.get(vertexActual._name) as Int), dfaList.elementAt(mapaIndices.get(nombreV) as Int)) //Si es uno que ya existe no lo agrega
+                        var state:KotlinAlgorithm.State? = automata2.getState(vertexActual._name)
+                        state!!._transitions.add(Transition(misNombres.elementAt(contador2).key,vertexActual._name,nombreV))
+                        contador2++
+                    }
+
+                    println(nuevosVertex.count())
+                    nuevosVertex.removeAt(0)
+                }
+                graph.refresh()
+                isTransformed = true
             }
         }
 
@@ -225,11 +307,16 @@ class MainApplication : Application() {
         sceneRoot.add(strToEvalLabel,0,21)
         sceneRoot.add(strToEval,0,22)
         sceneRoot.add(evalButton,0,23)
+        sceneRoot.add(separator4,0,24)
+        sceneRoot.add(TransformLabel,0,25)
+        sceneRoot.add(fButton,0,26)
 
         stage.scene = Scene(sceneRoot, 825.0, 1000.0)
 
         stage.show()
     }
+
+
 
     private fun  mxGraph.update(block: () -> Any) {
         model.beginUpdate()
@@ -239,5 +326,50 @@ class MainApplication : Application() {
         finally {
             model.endUpdate()
         }
+    }
+    open fun yaExisteString(miAFD:deterministicFiniteAutomaton, miStr:String):String{
+        for (i in miAFD.states.indices){
+            val strCompare = miAFD.states[i]._name
+            val miArr = strCompare.split(",")
+            val miArr2 = miStr.split(",")
+            if(miArr.count() == miArr2.count()){
+                val set1 = HashSet<String>()
+                set1.addAll(miArr)
+                val set2 = HashSet<String>()
+                set2.addAll(miArr2)
+                if(set1.equals(set2)){
+                    return strCompare
+                }
+            }
+        }
+        return miStr
+    }
+
+    open fun yaExisteBoolean(dfa:deterministicFiniteAutomaton, miStr:String):Boolean{
+        for (i in dfa.states.indices){
+            val strCompare = dfa.states[i]._name
+            val miArr = strCompare.split(",")
+            val miArr2 = miStr.split(",")
+            if(miArr.count() == miArr2.count()){
+                val set1 = HashSet<String>()
+                set1.addAll(miArr)
+                val set2 = HashSet<String>()
+                set2.addAll(miArr2)
+                if(set1.equals(set2)){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    open fun esVertexAceptable(acceptanceStates:kotlin.collections.MutableList<String>, str:String): Boolean{
+        val toCmp = str.split(",")
+        for (i in acceptanceStates.indices){
+            if(toCmp.contains(acceptanceStates[i])){
+                return true
+            }
+        }
+        return false
     }
 }

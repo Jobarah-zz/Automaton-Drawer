@@ -5,31 +5,33 @@ package KotlinAlgorithm;
 fun main(arr : Array<String>){
     var a =  nonDeterministicFiniteAutomaton()
     val state1 = State("q0",true,false)
-    val states2 = State("q1",false,false)
-    val states3 = State("q2",false,false)
-    val states4 = State("q3",false,false)
-    val states5 = State("q4",false,true)
-    var transition1 = Transition('0',"q0","q1")
-    var transition2 = Transition('0',"q1","q2")
-    var transition3 = Transition('0',"q2","q3")
-    var transition4 = Transition('0',"q3","q0")
-    var transition5 = Transition('1',"q3","q4")
+    val state2 = State("q1",false,false)
+    val state3 = State("q2",false,true)
+    var transition1 = Transition('a',"q0","q0")
+    var transition2 = Transition('b',"q0","q0")
+    var transition3 = Transition('a',"q0","q1")
     state1._transitions.add(transition1)
-    states2._transitions.add(transition2)
-    states3._transitions.add(transition3)
-    states4._transitions.add(transition4)
-    states4._transitions.add(transition5)
+    state1._transitions.add(transition2)
+    state1._transitions.add(transition3)
+    var transition4 = Transition('a',"q1","q2")
+    var transition5 = Transition('b',"q1","q2")
+    state2._transitions.add(transition4)
+    state2._transitions.add(transition5)
     a.states.add(state1)
-    a.states.add(states2)
-    a.states.add(states3)
-    a.states.add(states4)
-    a.states.add(states5)
-    a.alphabet.add('0')
-    a.alphabet.add('1')
-    if(a.evaluate("0000")){
+    a.states.add(state2)
+    a.states.add(state3)
+    a.alphabet.add('a')
+    a.alphabet.add('b')
+    if(a.evaluate("abba")){
         println("paso")
     }
     else{
         println("no paso")
+    }
+
+    var  dfa=a.convertToDFA()
+    var states = dfa.states
+    for (state in states){
+        println(state._name)
     }
 }

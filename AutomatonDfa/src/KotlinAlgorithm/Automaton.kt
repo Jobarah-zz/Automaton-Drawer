@@ -5,8 +5,8 @@ package KotlinAlgorithm;
  */
 
 open abstract class Automaton{
-    val states = mutableListOf<State>()
-    val alphabet = mutableListOf<Char>()
+    var states = mutableListOf<State>()
+    var alphabet = mutableListOf<Char>()
 
     open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
         states.add(State(name,isInitialState,isAcceptanceState))
