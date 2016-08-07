@@ -44,6 +44,7 @@ package KotlinAlgorithm
         for(thisStates in states) {
            nfa.states.add(State(thisStates._name,thisStates._initialState,thisStates._isAcceptanceState))
         }
+
         for(state in states){
             for(symbol in alphabet){
                 getClosure(state)
@@ -53,6 +54,11 @@ package KotlinAlgorithm
                 }
                 for(currentState in epsilonClosure){
                     var stateToModify = nfa.getState(state._name)
+
+                    if(currentState._isAcceptanceState){
+                        stateToModify!!._isAcceptanceState = true
+                    }
+
                     stateToModify!!.addTransition(symbol, currentState._name)
                 }
                 evaluatedStates.clear()

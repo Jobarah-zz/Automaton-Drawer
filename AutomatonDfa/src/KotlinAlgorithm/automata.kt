@@ -41,6 +41,8 @@ fun main(arr : Array<String>){
         }
         println(' ')
     }
+
+    print(nfa.evaluate(""))
 //    var  dfa=a.convertToDFA()
 //    var states = dfa.states
 //    for (state in states){
