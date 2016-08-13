@@ -39,10 +39,13 @@ package KotlinAlgorithm
 
     open fun convertToNFA():nonDeterministicFiniteAutomaton{
         var nfa:nonDeterministicFiniteAutomaton = nonDeterministicFiniteAutomaton()
+        var acceptanceStates = mutableListOf<String>()
         nfa.alphabet = alphabet
 
         for(thisStates in states) {
            nfa.states.add(State(thisStates._name,thisStates._initialState,thisStates._isAcceptanceState))
+            if(thisStates._isAcceptanceState)
+                acceptanceStates.add(thisStates._name)
         }
 
         for(state in states){
@@ -55,9 +58,9 @@ package KotlinAlgorithm
                 for(currentState in epsilonClosure){
                     var stateToModify = nfa.getState(state._name)
 
-                    if(currentState._isAcceptanceState){
-                        stateToModify!!._isAcceptanceState = true
-                    }
+                        if (acceptanceStates.contains(state._name)) {
+                            stateToModify!!._isAcceptanceState = true
+                        }
 
                     stateToModify!!.addTransition(symbol, currentState._name)
                 }
