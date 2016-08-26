@@ -25,4 +25,8 @@ open class deterministicFiniteAutomaton() : Automaton(){
         }
         return false
     }
+
+    fun minimize() {
+
+    }
 }

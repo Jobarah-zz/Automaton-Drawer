@@ -31,4 +31,22 @@ open abstract class Automaton{
     }
 
     open abstract fun evaluate(strEvString:String):Boolean
+
+    fun getDastinyState(stateName: String, symbol:Char):State? {
+        val estadoOrigen = getState(stateName) as State
+        for(transition in estadoOrigen._transitions){
+            if(transition._symbol == symbol){
+                return getState(transition._destiny)
+            }
+        }
+        return null
+    }
+    open fun clearAutomaton(){
+        states.clear()
+        alphabet.clear()
+    }
+
+    open fun getAutomatonAlphabet(): MutableList<Char>{
+        return alphabet
+    }
 }
