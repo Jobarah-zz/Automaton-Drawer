@@ -5,7 +5,7 @@ import java.util.*
  * Created by VirtualChus on 8/25/2016.
  */
 
-open class AFD_MIN() : deterministicFiniteAutomaton(){
+open class dFAMinifier() : deterministicFiniteAutomaton(){
     var afd_minimizado:deterministicFiniteAutomaton = deterministicFiniteAutomaton()
     val combinaciones: MutableMap<String,Int> = mutableMapOf()
 
