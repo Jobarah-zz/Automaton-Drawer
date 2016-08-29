@@ -15,14 +15,14 @@ fun main(arr : Array<String>){
 //=====================================================
     var b = deterministicFiniteAutomaton()
 
-    val statea = State("q2",true,true)
+    val statea = State("q0",true,true)
     val stateb = State("q3",false,false)
 
-    var transitiona = Transition('a',"q2","q2")
-    var transitionb = Transition('b',"q2","q3")
+    var transitiona = Transition('a',"q0","q0")
+    var transitionb = Transition('b',"q0","q3")
     //------------------------------------------
     var transitionc = Transition('a',"q3","q3")
-    var transitiond = Transition('b',"q3","q2")
+    var transitiond = Transition('b',"q3","q0")
 
     state1._transitions.add(transition1)
     state1._transitions.add(transition2)
@@ -44,7 +44,7 @@ fun main(arr : Array<String>){
     b.alphabet.add('a')
     b.alphabet.add('b')
 
-    var nfa = automatonOps().operation(a,b,"not")
+    var nfa = automatonOps().operation(a,b,"subtraction")
 
     for(state in nfa.states){
         println(state._name)
@@ -59,6 +59,6 @@ fun main(arr : Array<String>){
         println("----------")
     }
 
-    print(nfa.evaluate("a"))
+    print(nfa.evaluate("aa"))
 
 }
