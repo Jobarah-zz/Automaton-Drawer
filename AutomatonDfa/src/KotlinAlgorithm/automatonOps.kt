@@ -123,35 +123,27 @@ class automatonOps {
         return unifiedAlphabet
     }
 
-    fun operation(a:deterministicFiniteAutomaton, b:deterministicFiniteAutomaton, operation:String):deterministicFiniteAutomaton {
+    open fun operation(a:deterministicFiniteAutomaton, b:deterministicFiniteAutomaton, operation:String):deterministicFiniteAutomaton {
         //Generation of unified states
         unifiedAutomaton.states = (a.getAutomatonStates() + b.getAutomatonStates()) as MutableList<State>
         //generation of unified alphabet
         unifiedAutomaton.alphabet = generateUnifiedAlphabet(a.getAutomatonAlphabet(), b.getAutomatonAlphabet())
 
-        //New initial state generation
-        var newInitialState:State
-
-        when(operation) {
-            "subtraction" -> {
+        //If the received operation is different from intersection, union and subtraction, operation not supported
+        if (!operation.equals("intersection") && !operation.equals("union") && !operation.equals("subtraction")) {
+            throw Exception("Invalid Operation")
+        } else {
+            if (operation.equals("subtraction")) {
                 //subtraction acceptance states
                 for (state in a.states) {
                     if (state._isAcceptanceState) {
                         subAcceptanceStates.add(state._name)
                     }
                 }
-                newInitialState = newInitialState(a.getInitialState() as State, b.getInitialState() as State, "subtraction")
-            }
-            "union" -> {
-                newInitialState = newInitialState(a.getInitialState() as State, b.getInitialState() as State, "union")
-            } 
-            "intersection" -> {
-                newInitialState = newInitialState(a.getInitialState() as State, b.getInitialState() as State, "intersection")
-            }
-            else -> {
-                throw Exception("Invalid Operation")
             }
         }
+        //New initial state generation
+        var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State, operation)
         
         //Addition of generated initial state to a temp states list and to a state's name list
         statesList.add(newInitialState)
