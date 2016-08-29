@@ -44,7 +44,7 @@ fun main(arr : Array<String>){
     b.alphabet.add('a')
     b.alphabet.add('b')
 
-    var nfa = automatonOps().operation(a,b,"union")
+    var nfa = automatonOps().operation(a,b,"not")
 
     for(state in nfa.states){
         println(state._name)

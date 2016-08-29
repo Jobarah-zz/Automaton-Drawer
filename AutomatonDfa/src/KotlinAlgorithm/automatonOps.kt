@@ -84,7 +84,7 @@ class automatonOps {
                 }
             }
         }
-    }
+
 
     fun newInitialState(a:State, b:State, operation:String):State {
         var isAcceptanceState = false
@@ -123,7 +123,7 @@ class automatonOps {
         return unifiedAlphabet
     }
 
-    open fun operation(a:deterministicFiniteAutomaton, b:deterministicFiniteAutomaton, operation:String):deterministicFiniteAutomaton {
+    fun operation(a:deterministicFiniteAutomaton, b:deterministicFiniteAutomaton, operation:String):deterministicFiniteAutomaton {
         //Generation of unified states
         unifiedAutomaton.states = (a.getAutomatonStates() + b.getAutomatonStates()) as MutableList<State>
         //generation of unified alphabet
@@ -143,12 +143,14 @@ class automatonOps {
             }
         }
         //New initial state generation
-        var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State, operation)
-        
+        var newInitialState: State = newInitialState(a.getInitialState() as State, b.getInitialState() as State, operation)
+
         //Addition of generated initial state to a temp states list and to a state's name list
         statesList.add(newInitialState)
         existentStates.add(newInitialState._name)
-        
+
+        //this function receives an automaton, splits it's name and searches the destination of the split states and generates a new state
+        //then it applies recursion with the new state generated
         getDestinations(newInitialState, operation)
 
         var returnDfa = deterministicFiniteAutomaton()
@@ -156,4 +158,5 @@ class automatonOps {
         returnDfa.states = statesList
 
         return returnDfa
+    }
   }
