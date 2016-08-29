@@ -23,4 +23,13 @@ open class State{
     open fun addTransition(symbol:Char, destiny:String):Unit{
         _transitions.add(Transition(symbol,this.getName(),destiny))
     }
+
+    fun getDestinyStateName(symbol:Char):String? {
+        for(transition in _transitions){
+            if(transition._symbol.equals(symbol)){
+                return transition._destiny
+            }
+        }
+        return null
+    }
 }

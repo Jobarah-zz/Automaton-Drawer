@@ -32,7 +32,7 @@ open abstract class Automaton{
 
     open abstract fun evaluate(strEvString:String):Boolean
 
-    fun getDastinyState(stateName: String, symbol:Char):State? {
+    open fun getDestinyState(stateName: String, symbol:Char):State? {
         val estadoOrigen = getState(stateName) as State
         for(transition in estadoOrigen._transitions){
             if(transition._symbol == symbol){
@@ -48,5 +48,8 @@ open abstract class Automaton{
 
     open fun getAutomatonAlphabet(): MutableList<Char>{
         return alphabet
+    }
+    open fun getAutomatonStates(): MutableList<State> {
+        return this.states
     }
 }

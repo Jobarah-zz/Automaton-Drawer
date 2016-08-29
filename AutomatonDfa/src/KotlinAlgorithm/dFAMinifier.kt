@@ -1,4 +1,4 @@
-package KotlinAlgorithm;
+package KotlinAlgorithm
 import java.util.*
 
 /**
@@ -47,8 +47,8 @@ open class dFAMinifier() : deterministicFiniteAutomaton(){
             var estadoB = separado.last()
             var sonLoMismo = 0
             for(alfabetElem in alphabet){
-                var destinoA = getDastinyState(estadoA,alfabetElem) as State
-                var destinoB = getDastinyState(estadoB,alfabetElem) as State
+                var destinoA = getDestinyState(estadoA,alfabetElem) as State
+                var destinoB = getDestinyState(estadoB,alfabetElem) as State
                 if(destinoA._name == destinoB._name){
                     sonLoMismo++
                 }else{
