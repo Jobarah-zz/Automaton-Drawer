@@ -26,8 +26,8 @@ fun main(arr : Array<String>){
 
     state1._transitions.add(transition1)
     state1._transitions.add(transition2)
-    state2._transitions.add(transition1)
-    state2._transitions.add(transition2)
+    state2._transitions.add(transition3)
+    state2._transitions.add(transition4)
 
     statea._transitions.add(transitiona)
     statea._transitions.add(transitionb)
@@ -45,19 +45,20 @@ fun main(arr : Array<String>){
     b.alphabet.add('b')
 
     var nfa = automatonOps().union(a,b)
+
     for(state in nfa.states){
         println(state._name)
-        println(state._isAcceptanceState)
         for(transition in state._transitions) {
             print(transition._symbol)
             print(":")
             print(transition._destiny)
             print(",")
         }
-        println(' ')
+        println(" ")
+        println("----------")
     }
 
-    print(nfa.evaluate("ba"))
+    print(nfa.evaluate("bbaa"))
 
 //    var  dfa=a.convertToDFA()
 //    var states = dfa.states

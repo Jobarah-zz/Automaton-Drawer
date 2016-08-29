@@ -7,6 +7,7 @@ package KotlinAlgorithm;
 open abstract class Automaton{
     var states = mutableListOf<State>()
     var alphabet = mutableListOf<Char>()
+    var automatonName = ""
 
     open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
         states.add(State(name,isInitialState,isAcceptanceState))
@@ -22,9 +23,9 @@ open abstract class Automaton{
     }
 
     open fun getState(stateName:String): State?{
-        for (i in states.indices) {
-            if(states[i]._name.equals(stateName)){
-                return states[i]
+        for (state in states) {
+            if(state._name.equals(stateName)){
+                return state
             }
         }
         return null
@@ -52,4 +53,5 @@ open abstract class Automaton{
     open fun getAutomatonStates(): MutableList<State> {
         return this.states
     }
+
 }

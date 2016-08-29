@@ -10,14 +10,33 @@ import kotlin.comparisons.naturalOrder
 class automatonOps {
 
     //List of new States belonging to the union of both DFA's received as parameters
-    var statesList:MutableList<State> = mutableListOf(State())
+    var statesList:MutableList<State> = mutableListOf()
 
     //List to verify if a states exists already
     var existentStates:MutableList<String> = mutableListOf<String>()
 
     var unifiedAutomaton = deterministicFiniteAutomaton()
 
-    var unionAutomaton = deterministicFiniteAutomaton()
+     fun getValidTransition(symbol:Char, stateName: String):Boolean {
+        var evalState = getStateFromList(stateName)
+
+        for (transition in evalState!!._transitions) {
+            if (transition._symbol.equals(symbol)) {
+//                println(stateName+":"+symbol+"->"+transition._destiny)
+                return false
+            }
+        }
+        return true
+    }
+
+    fun getStateFromList(stateName:String):State? {
+        for(state in statesList) {
+            if (state._name.equals(stateName)) {
+                return state
+            }
+        }
+        return null
+    }
 
     fun isAcceptanceState(stateName:String):Boolean {
         var statesToVisit = stateName.split(",") as MutableList<String>
@@ -35,11 +54,12 @@ class automatonOps {
         //Iterate through the alphabet to get destinies with each symbol
         for(symbol in unifiedAutomaton.alphabet) {
             var destinationStateName = ""
-
+            var debuggingString = ""
             //for every old state that the name of the new state contains
             for(item in statesToVisit) {
                 var evalState = unifiedAutomaton.getState(item)
                 var nameToAppend = evalState!!.getDestinyStateName(symbol)
+                debuggingString += item+":"+symbol +"->"+ nameToAppend + "|"
 
                 if(!destinationStateName.equals("") && !nameToAppend.isNullOrEmpty())
                     destinationStateName += ","
@@ -49,16 +69,31 @@ class automatonOps {
             }
 
             if (!destinationStateName.equals("")) {
-                println(destinationStateName)
                 var newState = State(destinationStateName,false,isAcceptanceState(destinationStateName))
                 if(!existentStates.contains(destinationStateName)) {
-                    unionAutomaton.states.add(newState)
+                    statesList.add(newState)
                     existentStates.add(destinationStateName)
+
+                    //Debugging Purposes
+//                    println("---Transition Info-------")
+//                    println("("+state._name+"):"+symbol+"->("+destinationStateName+")")
+//                    println("-------End of Info-------")
+//                    println(" ")
+
                     state._transitions.add(Transition(symbol, state._name, destinationStateName))
                     getDestinations(newState)
                 } else {
-                    println(destinationStateName)
-                    unionAutomaton.getState(destinationStateName)!!._transitions.add(Transition(symbol, state._name, destinationStateName))
+                    //Debugging Purposes
+//                    println("---Transition Info-------")
+//                    println("("+state._name+"):"+symbol+"->("+destinationStateName+")")
+//                    println("---End of Info-----------")
+//                    println(" ")
+
+                    for (currentState in statesList) {
+                        if (currentState._name.equals(state._name)) {
+                            currentState._transitions.add(Transition(symbol, state._name, destinationStateName))
+                        }
+                    }
                 }
             }
         }
@@ -78,7 +113,6 @@ class automatonOps {
             for(symbolB in alphabetB) {
 
                 if (!alphabetA.contains(symbolB)) {
-
                     unifiedAlphabet.add(symbolB)
                 }
             }
@@ -93,40 +127,15 @@ class automatonOps {
         unifiedAutomaton.alphabet = generateUnifiedAlphabet(a.getAutomatonAlphabet(), b.getAutomatonAlphabet())
         //New initial state generation
         var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State)
-        //Addition of generated initial state
+        //Addition of generated initial state to a temp states list and to a state's name list
         statesList.add(newInitialState)
         existentStates.add(newInitialState._name)
-
+        //function that fills states list
         getDestinations(newInitialState)
 
         var returnDfa = deterministicFiniteAutomaton()
         returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
         returnDfa.states = statesList
-
-
-//        var statesToVisit = newInitialState._name.split(",") as MutableList<String>
-
-//            for(symbol in unifiedAlphabet) {
-//                var destinationStateName = ""
-//                var isAcceptance = false
-//                for(item in statesToVisit) {
-//                    var evalState = unifiedAutomaton.getState(item)
-//
-//                    if(!destinationStateName.equals(""))
-//                        destinationStateName += ","
-//
-//                   destinationStateName += evalState!!.getDestinyStateName(symbol) as String
-//                    if( evalState._isAcceptanceState)
-//                        isAcceptance = true
-//                }
-//                if (!destinationStateName.equals("")) {
-//                    var newState = State(destinationStateName,false,isAcceptance)
-//                    if(!existentStates.contains(destinationStateName)) {
-//                        statesList.add(newState)
-//                        existentStates.add(destinationStateName)
-//                    }
-//                }
-//            }
 
         return returnDfa
   }
