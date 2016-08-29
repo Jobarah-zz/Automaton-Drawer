@@ -11,7 +11,12 @@ class automatonOps {
     //List to verify if a states exists already
     var existentStates:MutableList<String> = mutableListOf<String>()
 
+    //temporary automaton to fill with states, pretty much implemented to use function getState
     var unifiedAutomaton = deterministicFiniteAutomaton()
+
+    //subtraction List of acceptance states
+    var subAcceptanceStates:MutableList<String> = mutableListOf()
+
 
     fun isAcceptanceState(stateName:String, operation: String):Boolean {
         var statesToVisit = stateName.split(",") as MutableList<String>
@@ -25,6 +30,14 @@ class automatonOps {
             "intersection"-> {
                 for (thisState in statesToVisit) {
                     if(!unifiedAutomaton.getState(thisState)!!._isAcceptanceState){
+                        return false
+                    }
+                }
+                return true
+            }
+            "subtraction"-> {
+                for (thisState in statesToVisit) {
+                    if (!subAcceptanceStates.contains(thisState)){
                         return false
                     }
                 }
@@ -96,6 +109,11 @@ class automatonOps {
                     isAcceptanceState = true
                 }
             }
+            "subtraction"-> {
+                    if (subAcceptanceStates.contains(a._name)){
+                        isAcceptanceState = true
+                    }
+            }
         }
 
         var newState = State(a._name +","+ b._name, true, isAcceptanceState)
@@ -146,6 +164,34 @@ class automatonOps {
         existentStates.add(newInitialState._name)
 
         getUnionDestinations(newInitialState, "intersection")
+
+        var returnDfa = deterministicFiniteAutomaton()
+        returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
+        returnDfa.states = statesList
+
+        return returnDfa
+    }
+
+    fun subtraction(a:deterministicFiniteAutomaton, b:deterministicFiniteAutomaton):deterministicFiniteAutomaton {
+        //Generation of unified states
+        unifiedAutomaton.states = (a.getAutomatonStates() + b.getAutomatonStates()) as MutableList<State>
+        //generation of unified alphabet
+        unifiedAutomaton.alphabet = generateUnifiedAlphabet(a.getAutomatonAlphabet(), b.getAutomatonAlphabet())
+        //New initial state generation
+        var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State, "subtraction")
+        //Addition of generated initial state to a temp states list and to a state's name list
+        statesList.add(newInitialState)
+        existentStates.add(newInitialState._name)
+
+
+        //subtraction acceptance states
+        for (state in a.states) {
+            if (state._isAcceptanceState) {
+                subAcceptanceStates.add(state._name)
+            }
+        }
+
+        getUnionDestinations(newInitialState, "subtraction")
 
         var returnDfa = deterministicFiniteAutomaton()
         returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
