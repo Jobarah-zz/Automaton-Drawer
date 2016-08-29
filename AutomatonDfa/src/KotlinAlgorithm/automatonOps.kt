@@ -47,7 +47,7 @@ class automatonOps {
         return false
     }
 
-    fun getUnionDestinations(state:State, operation: String) {
+    fun getDestinations(state:State, operation: String) {
         //Splitting the name of the state in case it's composed of two states ex: q0,qa
         var statesToVisit = state._name.split(",") as MutableList<String>
         //Iterate through the alphabet to get destinies with each symbol
@@ -78,7 +78,7 @@ class automatonOps {
 //                    println(" ")
 
                     state._transitions.add(Transition(symbol, state._name, destinationStateName))
-                    getUnionDestinations(newState, operation)
+                    getDestinations(newState, operation)
                 } else {
                     //Debugging Purposes
 //                    println("---Transition Info-------")
@@ -144,7 +144,7 @@ class automatonOps {
         statesList.add(newInitialState)
         existentStates.add(newInitialState._name)
         //function that fills states list
-        getUnionDestinations(newInitialState, "union")
+        getDestinations(newInitialState, "union")
 
         var returnDfa = deterministicFiniteAutomaton()
         returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
@@ -163,7 +163,7 @@ class automatonOps {
         statesList.add(newInitialState)
         existentStates.add(newInitialState._name)
 
-        getUnionDestinations(newInitialState, "intersection")
+        getDestinations(newInitialState, "intersection")
 
         var returnDfa = deterministicFiniteAutomaton()
         returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
@@ -191,7 +191,7 @@ class automatonOps {
             }
         }
 
-        getUnionDestinations(newInitialState, "subtraction")
+        getDestinations(newInitialState, "subtraction")
 
         var returnDfa = deterministicFiniteAutomaton()
         returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
