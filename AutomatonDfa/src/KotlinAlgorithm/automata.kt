@@ -48,6 +48,7 @@ fun main(arr : Array<String>){
 
     for(state in nfa.states){
         println(state._name)
+        println(state._isAcceptanceState)
         for(transition in state._transitions) {
             print(transition._symbol)
             print(":")
@@ -58,11 +59,6 @@ fun main(arr : Array<String>){
         println("----------")
     }
 
-    print(nfa.evaluate("bbaa"))
+    print(nfa.evaluate("a"))
 
-//    var  dfa=a.convertToDFA()
-//    var states = dfa.states
-//    for (state in states){
-//        println(state._name)
-//    }
 }

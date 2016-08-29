@@ -1,9 +1,5 @@
 package KotlinAlgorithm
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-import javax.xml.transform.sax.SAXTransformerFactory
-import kotlin.comparisons.naturalOrder
-
 /**
  * Created by Jobarah on 8/27/2016.
  */
@@ -17,49 +13,37 @@ class automatonOps {
 
     var unifiedAutomaton = deterministicFiniteAutomaton()
 
-     fun getValidTransition(symbol:Char, stateName: String):Boolean {
-        var evalState = getStateFromList(stateName)
-
-        for (transition in evalState!!._transitions) {
-            if (transition._symbol.equals(symbol)) {
-//                println(stateName+":"+symbol+"->"+transition._destiny)
-                return false
-            }
-        }
-        return true
-    }
-
-    fun getStateFromList(stateName:String):State? {
-        for(state in statesList) {
-            if (state._name.equals(stateName)) {
-                return state
-            }
-        }
-        return null
-    }
-
-    fun isAcceptanceState(stateName:String):Boolean {
+    fun isAcceptanceState(stateName:String, operation: String):Boolean {
         var statesToVisit = stateName.split(",") as MutableList<String>
-
-        for (thisState in statesToVisit) {
-            if(unifiedAutomaton.getState(thisState)!!._isAcceptanceState)
+        when(operation) {
+            "union"-> {
+                for (thisState in statesToVisit) {
+                    if(unifiedAutomaton.getState(thisState)!!._isAcceptanceState)
+                        return true
+                }
+            }
+            "intersection"-> {
+                for (thisState in statesToVisit) {
+                    if(!unifiedAutomaton.getState(thisState)!!._isAcceptanceState){
+                        return false
+                    }
+                }
                 return true
+            }
         }
         return false
     }
 
-    fun getDestinations(state:State) {
+    fun getUnionDestinations(state:State, operation: String) {
         //Splitting the name of the state in case it's composed of two states ex: q0,qa
         var statesToVisit = state._name.split(",") as MutableList<String>
         //Iterate through the alphabet to get destinies with each symbol
         for(symbol in unifiedAutomaton.alphabet) {
             var destinationStateName = ""
-            var debuggingString = ""
             //for every old state that the name of the new state contains
             for(item in statesToVisit) {
                 var evalState = unifiedAutomaton.getState(item)
                 var nameToAppend = evalState!!.getDestinyStateName(symbol)
-                debuggingString += item+":"+symbol +"->"+ nameToAppend + "|"
 
                 if(!destinationStateName.equals("") && !nameToAppend.isNullOrEmpty())
                     destinationStateName += ","
@@ -69,7 +53,7 @@ class automatonOps {
             }
 
             if (!destinationStateName.equals("")) {
-                var newState = State(destinationStateName,false,isAcceptanceState(destinationStateName))
+                var newState = State(destinationStateName,false,isAcceptanceState(destinationStateName, operation))
                 if(!existentStates.contains(destinationStateName)) {
                     statesList.add(newState)
                     existentStates.add(destinationStateName)
@@ -81,7 +65,7 @@ class automatonOps {
 //                    println(" ")
 
                     state._transitions.add(Transition(symbol, state._name, destinationStateName))
-                    getDestinations(newState)
+                    getUnionDestinations(newState, operation)
                 } else {
                     //Debugging Purposes
 //                    println("---Transition Info-------")
@@ -99,10 +83,21 @@ class automatonOps {
         }
     }
 
-    fun newInitialState(a:State, b:State):State {
+    fun newInitialState(a:State, b:State, operation:String):State {
         var isAcceptanceState = false
-        if(a._isAcceptanceState || b._isAcceptanceState)
-            isAcceptanceState = true
+        when(operation) {
+            "union"-> {
+                if(a._isAcceptanceState || b._isAcceptanceState) {
+                    isAcceptanceState = true
+                }
+            }
+            "intersection"-> {
+                if(a._isAcceptanceState && b._isAcceptanceState) {
+                    isAcceptanceState = true
+                }
+            }
+        }
+
         var newState = State(a._name +","+ b._name, true, isAcceptanceState)
         return newState
     }
@@ -126,12 +121,12 @@ class automatonOps {
         //generation of unified alphabet
         unifiedAutomaton.alphabet = generateUnifiedAlphabet(a.getAutomatonAlphabet(), b.getAutomatonAlphabet())
         //New initial state generation
-        var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State)
+        var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State, "union")
         //Addition of generated initial state to a temp states list and to a state's name list
         statesList.add(newInitialState)
         existentStates.add(newInitialState._name)
         //function that fills states list
-        getDestinations(newInitialState)
+        getUnionDestinations(newInitialState, "union")
 
         var returnDfa = deterministicFiniteAutomaton()
         returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
@@ -139,4 +134,23 @@ class automatonOps {
 
         return returnDfa
   }
+    fun intersection(a:deterministicFiniteAutomaton, b:deterministicFiniteAutomaton):deterministicFiniteAutomaton {
+        //Generation of unified states
+        unifiedAutomaton.states = (a.getAutomatonStates() + b.getAutomatonStates()) as MutableList<State>
+        //generation of unified alphabet
+        unifiedAutomaton.alphabet = generateUnifiedAlphabet(a.getAutomatonAlphabet(), b.getAutomatonAlphabet())
+        //New initial state generation
+        var newInitialState:State = newInitialState(a.getInitialState() as State, b.getInitialState() as State, "intersection")
+        //Addition of generated initial state to a temp states list and to a state's name list
+        statesList.add(newInitialState)
+        existentStates.add(newInitialState._name)
+
+        getUnionDestinations(newInitialState, "intersection")
+
+        var returnDfa = deterministicFiniteAutomaton()
+        returnDfa.alphabet = unifiedAutomaton.getAutomatonAlphabet()
+        returnDfa.states = statesList
+
+        return returnDfa
+    }
 }
