@@ -16,13 +16,13 @@ fun main(arr : Array<String>){
     var b = deterministicFiniteAutomaton()
 
     val statea = State("q0",true,true)
-    val stateb = State("q3",false,false)
+    val stateb = State("q1",false,false)
 
     var transitiona = Transition('a',"q0","q0")
-    var transitionb = Transition('b',"q0","q3")
+    var transitionb = Transition('b',"q0","q1")
     //------------------------------------------
-    var transitionc = Transition('a',"q3","q3")
-    var transitiond = Transition('b',"q3","q0")
+    var transitionc = Transition('a',"q1","q1")
+    var transitiond = Transition('b',"q1","q0")
 
     state1._transitions.add(transition1)
     state1._transitions.add(transition2)

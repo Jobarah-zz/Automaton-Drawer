@@ -28,7 +28,10 @@ class automatonOps {
     }
 
     fun generateUnifiedStates(statesA:MutableList<State>, statesB: MutableList<State>):MutableList<State> {
-        var unifiedStates:MutableList<State> = statesA
+        var unifiedStates:MutableList<State> = mutableListOf()
+        for (stateA in statesA) {
+            unifiedStates.add(stateA)
+        }
         var listOfStatesName:MutableList<String> = mutableListOf()
 
         for(state in unifiedStates) {
@@ -38,7 +41,7 @@ class automatonOps {
 
         for (stateB in statesB) {
             if (listOfStatesName.contains(stateB._name)) {
-                var newStateName = stateB._name + "-2"
+                var newStateName = stateB._name + "(2)"
                 updateStatesTransition(statesB, stateB._name, newStateName)
                 stateB._name = newStateName
             }
