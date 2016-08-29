@@ -100,7 +100,7 @@ class automatonOps {
                 }
             }
             "subtraction"-> {
-                    if (subAcceptanceStates.contains(a._name)){
+                    if (subAcceptanceStates.contains(a._name) && subAcceptanceStates.contains(b._name)){
                         isAcceptanceState = true
                     }
             }
