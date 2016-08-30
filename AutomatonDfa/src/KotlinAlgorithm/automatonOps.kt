@@ -193,4 +193,16 @@ class automatonOps {
 
         return returnDfa
     }
+
+    fun complement(automaton: deterministicFiniteAutomaton):deterministicFiniteAutomaton {
+        //swap acceptance states
+        for(state in automaton.states) {
+            if (state._isAcceptanceState) {
+                state._isAcceptanceState = false
+            } else {
+                state._isAcceptanceState = true
+            }
+        }
+        return deterministicFiniteAutomaton()
+    }
   }

@@ -2,7 +2,7 @@ package KotlinAlgorithm
 import java.util.*
 
 /**
- * Created by VirtualChus on 8/25/2016.
+ * Created by Jobarah on 8/25/2016.
  */
 
 open class dFAMinifier() : deterministicFiniteAutomaton(){
