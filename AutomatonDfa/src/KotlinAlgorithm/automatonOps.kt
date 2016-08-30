@@ -13,6 +13,7 @@ class automatonOps {
     var unifiedAutomaton = deterministicFiniteAutomaton()
     //subtraction List of acceptance states
     var subAcceptanceStates:MutableList<String> = mutableListOf()
+    var subSecondAutomatonAcceptance:MutableList<String> = mutableListOf()
 
     fun updateStatesTransition(statesList:MutableList<State>, oldStateName: String, newStateName: String) {
         for (state in statesList) {
@@ -46,6 +47,9 @@ class automatonOps {
                 stateB._name = newStateName
             }
             unifiedStates.add(stateB)
+            if (stateB._isAcceptanceState) {
+                subSecondAutomatonAcceptance.add(stateB._name)
+            }
         }
 
         return unifiedStates
@@ -78,7 +82,7 @@ class automatonOps {
                 }
             }
             "subtraction"-> {
-                if (subAcceptanceStates.contains(a._name) && subAcceptanceStates.contains(b._name)){
+                if (subAcceptanceStates.contains(a._name) && !b._isAcceptanceState){
                     isAcceptanceState = true
                 }
             }
@@ -106,12 +110,14 @@ class automatonOps {
                 return true
             }
             "subtraction"-> {
-                for (thisState in statesToVisit) {
-                    if (!subAcceptanceStates.contains(thisState)){
-                        return false
-                    }
+
+                if ((subAcceptanceStates.contains(statesToVisit[0]) && !subSecondAutomatonAcceptance.contains(statesToVisit[1])) || (subAcceptanceStates.contains(statesToVisit[1]) && !subSecondAutomatonAcceptance.contains(statesToVisit[0]))){
+                    return true
+                } else if (subAcceptanceStates.contains(statesToVisit[0]) && subAcceptanceStates.contains(statesToVisit[1])) {
+                    return true
                 }
-                return true
+
+                return false
             }
         }
         return false
@@ -181,6 +187,10 @@ class automatonOps {
         //Addition of generated initial state to a temp states list and to a state's name list
         statesList.add(newInitialState)
         existentStates.add(newInitialState._name)
+
+        for (state in subSecondAutomatonAcceptance) {
+            println(state)
+        }
         //this function receives an automaton, splits it's name and searches the destination of the split states and generates a new state
         //then it applies recursion with the new state generated
         getDestinations(newInitialState, operation)
