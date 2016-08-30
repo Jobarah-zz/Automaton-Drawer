@@ -205,6 +205,8 @@ class automatonOps {
     }
 
     fun complement(automaton: deterministicFiniteAutomaton):deterministicFiniteAutomaton {
+        //var complementAutomaton = automaton.clone()
+        var isSewerCreated = false
         //swap acceptance states
         for(state in automaton.states) {
             if (state._isAcceptanceState) {
@@ -213,6 +215,21 @@ class automatonOps {
                 state._isAcceptanceState = true
             }
         }
-        return deterministicFiniteAutomaton()
+        //verifying every state has a destiny with every symbol, create sewer if needed
+        for (state in automaton.states) {
+            for (symbol in automaton.alphabet) {
+                if (automaton.getDestinyState(state._name, symbol) == null) {
+                    if (isSewerCreated == false) {
+                        var sewer = State("sewer", false, true)
+                        for (_symbol in automaton.alphabet) {
+                            sewer.addTransition(_symbol, "sewer")
+                            isSewerCreated = true
+                        }
+                    }
+                    state.addTransition(symbol, "sewer")
+                }
+            }
+        }
+        return automaton
     }
   }

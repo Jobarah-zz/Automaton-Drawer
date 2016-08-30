@@ -34,8 +34,8 @@ open abstract class Automaton{
     open abstract fun evaluate(strEvString:String):Boolean
 
     open fun getDestinyState(stateName: String, symbol:Char):State? {
-        val estadoOrigen = getState(stateName) as State
-        for(transition in estadoOrigen._transitions){
+        val originState = getState(stateName) as State
+        for(transition in originState._transitions){
             if(transition._symbol == symbol){
                 return getState(transition._destiny)
             }
