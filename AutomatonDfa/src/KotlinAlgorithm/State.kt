@@ -1,5 +1,9 @@
 package KotlinAlgorithm;
 
+/**
+ * Created by Jobarah on 7/25/2016.
+ */
+
 import java.util.*
 
 open class State{
