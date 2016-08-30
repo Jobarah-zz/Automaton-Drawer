@@ -204,11 +204,28 @@ class automatonOps {
         return returnDfa
     }
 
+    open fun cloneDfa(automaton: deterministicFiniteAutomaton):deterministicFiniteAutomaton {
+        var clonedAutomaton = deterministicFiniteAutomaton()
+
+        for (state in automaton.states) {
+            var clonedState = State(state._name, state._initialState, state._isAcceptanceState)
+            for (transition in state._transitions) {
+                clonedState.addTransition(transition._symbol, transition._destiny)
+            }
+            clonedAutomaton.states.add(clonedState)
+        }
+
+        for (symbol in automaton.alphabet) {
+            clonedAutomaton.alphabet.add(symbol)
+        }
+        return clonedAutomaton
+    }
+
     fun complement(automaton: deterministicFiniteAutomaton):deterministicFiniteAutomaton {
-        //var complementAutomaton = automaton.clone()
+        var complementAutomaton = cloneDfa(automaton)
         var isSewerCreated = false
         //swap acceptance states
-        for(state in automaton.states) {
+        for(state in complementAutomaton.states) {
             if (state._isAcceptanceState) {
                 state._isAcceptanceState = false
             } else {
@@ -216,12 +233,12 @@ class automatonOps {
             }
         }
         //verifying every state has a destiny with every symbol, create sewer if needed
-        for (state in automaton.states) {
-            for (symbol in automaton.alphabet) {
-                if (automaton.getDestinyState(state._name, symbol) == null) {
+        for (state in complementAutomaton.states) {
+            for (symbol in complementAutomaton.alphabet) {
+                if (complementAutomaton.getDestinyState(state._name, symbol) == null) {
                     if (isSewerCreated == false) {
                         var sewer = State("sewer", false, true)
-                        for (_symbol in automaton.alphabet) {
+                        for (_symbol in complementAutomaton.alphabet) {
                             sewer.addTransition(_symbol, "sewer")
                             isSewerCreated = true
                         }
@@ -230,6 +247,6 @@ class automatonOps {
                 }
             }
         }
-        return automaton
+        return complementAutomaton
     }
   }

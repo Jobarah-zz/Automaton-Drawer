@@ -44,7 +44,6 @@ fun main(arr : Array<String>){
     b.alphabet.add('a')
     b.alphabet.add('b')
 
-    println(a.evaluate("aa"))
     var nfa = automatonOps().complement(a)
 
     for(state in nfa.states){
@@ -60,5 +59,6 @@ fun main(arr : Array<String>){
         println("----------")
     }
 
-    println(nfa.evaluate("aa"))
+    println(nfa.evaluate("aaa"))
+    println(a.evaluate("aa"))
 }
