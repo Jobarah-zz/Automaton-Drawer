@@ -42,6 +42,20 @@ open abstract class Automaton {
         }
         return null
     }
+    open fun getDestinyStates(state:State, symbol: String):MutableList<State> {
+        var destinies:MutableList<State> = mutableListOf()
+
+        for (transition in state._transitions) {
+            if (transition._symbol.equals(symbol)) {
+                var stateToAdd = getState(transition._destiny)
+                if (stateToAdd != null) {
+                    destinies.add(stateToAdd)
+                }
+            }
+        }
+        return destinies
+    }
+
     open fun clearAutomaton(){
         states.clear()
         alphabet.clear()

@@ -4,8 +4,12 @@
 
 import com.mxgraph.model.mxCell
 import com.mxgraph.swing.mxGraphComponent
+import com.mxgraph.util.mxConstants
 import com.mxgraph.util.mxRectangle
 import com.mxgraph.view.mxGraph
+import com.mxgraph.view.mxStylesheet
+import com.sun.javafx.geom.Curve
+import com.sun.javafx.geom.Edge
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.value.ObservableValue
@@ -23,6 +27,7 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import javafx.stage.Stage
+import java.util.*
 
 fun main(args: Array<String>) {
     Application.launch(Ui::class.java)
@@ -248,6 +253,9 @@ class Ui: Application() {
         stage.scene = scene
         stage.isResizable = false
         stage.show()
+        graph.model.beginUpdate()
+        graph.model.endUpdate()
+        applyEdgeDefaults()
     }
 
     private fun  mxGraph.update(block: () -> Any) {
@@ -369,6 +377,7 @@ class Ui: Application() {
                 var mxCellToInsert = getEdge(symbolTextField.text, originComboBox.value, destinyComboBox.value)
                 if (mxCellToInsert == null) {
                     var edge = graph.insertEdge(parent, null, symbolTextField.text, getNode(originComboBox.value), getNode(destinyComboBox.value)) as mxCell
+                    //edge.put(mxConstants.STYLE_ROUNDED, true);
                     edges.add(edge)
                 } else {
                     var alert = Alert(Alert.AlertType.INFORMATION)
@@ -536,5 +545,23 @@ class Ui: Application() {
         alert.headerText = null
         alert.contentText = "There can only be one initial state!"
         alert.showAndWait()
+    }
+
+    private fun applyEdgeDefaults() {
+        // Settings for edges
+        val edge = HashMap<String, Any>()
+        edge.put(mxConstants.STYLE_ROUNDED, true)
+        edge.put(mxConstants.STYLE_ORTHOGONAL, false)
+        edge.put(mxConstants.STYLE_EDGE, "elbowEdgeStyle")
+        edge.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR)
+        edge.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_CLASSIC)
+        edge.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE)
+        edge.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER)
+        edge.put(mxConstants.STYLE_STROKECOLOR, "#000000") // default is #6482B9
+        edge.put(mxConstants.STYLE_FONTCOLOR, "#446299")
+
+        val edgeStyle = mxStylesheet()
+        edgeStyle.setDefaultEdgeStyle(edge)
+        graph.stylesheet = edgeStyle
     }
 }
