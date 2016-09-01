@@ -227,7 +227,7 @@ class Ui: Application() {
         //--------------------stage to draw automaton------------
 
         graph.update {}
-        graph.minimumGraphSize = mxRectangle(0.0,0.0,800.0,scene.height)
+        graph.minimumGraphSize = mxRectangle(0.0,0.0,750.0,scene.height-23)
         val graphComponent = mxGraphComponent(graph)
         graph.isAllowLoops = true
         graph.isAllowDanglingEdges = false
@@ -259,8 +259,6 @@ class Ui: Application() {
         stage.scene = scene
         stage.isResizable = false
         stage.show()
-        graph.model.beginUpdate()
-        graph.model.endUpdate()
         applyEdgeDefaults()
     }
 
@@ -276,7 +274,7 @@ class Ui: Application() {
 
     fun logic() {
         createStateButton.onMouseClicked = EventHandler<MouseEvent> {
-            insertState(stateNameTextField.text, initialComboBox.value, acceptanceComboBox.value)
+            insertState(stateNameTextField.text, initialComboBox.value.toLowerCase(), acceptanceComboBox.value.toLowerCase())
         }
         deleteStateButton.onMouseClicked = EventHandler<MouseEvent> {
             deleteState()
@@ -307,17 +305,17 @@ class Ui: Application() {
     }
 
     private fun drawAutomaton(automaton: Automaton) {
-        graph.clearSelection()
+        graph.removeCells(graph.getChildVertices(graph.defaultParent))
         nodes.clear()
         edges.clear()
+        graph.refresh()
+        graph.update {  }
         for (state in automaton.states) {
             insertState(state._name, state._initialState.toString(), state._isAcceptanceState.toString())
         }
-
         for (state in automaton.states) {
             for (transition in state._transitions) {
                 createTransition(transition._symbol, transition._origin, transition._destiny)
-                println(state._name+":"+transition._symbol+"->"+transition._destiny)
             }
         }
     }
@@ -327,9 +325,9 @@ class Ui: Application() {
         if (stateName != "") {
 
             if (getNode(stateName) == null) {
-                if(isAcceptance == "True" && isInitial != "True") {
+                if(isAcceptance == "true" && isInitial != "true") {
                     style = "shape=doubleEllipse;fillColor=#22A7F0"
-                } else if (isAcceptance == "True" && isInitial == "True") {
+                } else if (isAcceptance == "true" && isInitial == "true") {
                     if (!initialStateExists()) {
                         style = "shape=doubleEllipse;fillColor=#4ECDC4"
                     }
@@ -337,7 +335,7 @@ class Ui: Application() {
                         alertDuplicateInitialState()
                         return
                     }
-                } else if(isInitial == "True" && isAcceptance != "True"){
+                } else if(isInitial == "true" && isAcceptance != "true"){
                     if (!initialStateExists()) {
                         style = "shape=ellipse;fillColor=#4ECDC4"
                     }
@@ -368,6 +366,8 @@ class Ui: Application() {
             alert.showAndWait()
         }
         clearStatesForm()
+        graph.refresh()
+        graph.update {  }
     }
 
     fun deleteState() {
@@ -390,6 +390,8 @@ class Ui: Application() {
             return
         }
         clearStatesForm()
+        graph.refresh()
+        graph.update {  }
     }
 
     fun clearStatesForm() {
@@ -473,6 +475,8 @@ class Ui: Application() {
             return
         }
         clearTransitionsForm()
+        graph.refresh()
+        graph.update {  }
     }
 
     fun clearTransitionsForm() {
