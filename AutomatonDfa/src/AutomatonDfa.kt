@@ -29,8 +29,8 @@ class MainApplication : Application() {
 
         val graph = mxGraph()
         var automaton:nonDeterministicAutomatonEpsilon = nonDeterministicAutomatonEpsilon()
-        automaton.alphabet.add('0')
-        automaton.alphabet.add('1')
+        automaton.alphabet.add("0")
+        automaton.alphabet.add("1")
         var NFA:Automaton = nonDeterministicFiniteAutomaton()
         var DFA:deterministicFiniteAutomaton = deterministicFiniteAutomaton()
 
@@ -154,19 +154,19 @@ class MainApplication : Application() {
                 if(comboTransition0.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "0", nodes[statesCombo.items.indexOf(verEdit)], nodes[comboTransition0.items.indexOf(ct0Opcion)])
                     var state: State? = automaton.getState(nodes[statesCombo.items.indexOf(verEdit)].value.toString())
-                    state!!._transitions.add(Transition('0',nodes[statesCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct0Opcion)].value.toString()))
+                    state!!._transitions.add(Transition("0",nodes[statesCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition0.items.indexOf(ct0Opcion)].value.toString()))
                 }
 
                 if(comboTransition1.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "1", nodes[statesCombo.items.indexOf(verEdit)], nodes[comboTransition1.items.indexOf(ct1Opcion)])
                     var state: State? = automaton.getState(nodes[statesCombo.items.indexOf(verEdit)].value.toString())
-                    state!!._transitions.add(Transition('1',nodes[statesCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition1.items.indexOf(ct1Opcion)].value.toString()))
+                    state!!._transitions.add(Transition("1",nodes[statesCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition1.items.indexOf(ct1Opcion)].value.toString()))
                 }
 
                 if(comboTransition2.selectionModel.selectedIndex >=0){
                     graph.insertEdge(parent, null, "e", nodes[statesCombo.items.indexOf(verEdit)], nodes[comboTransition2.items.indexOf(ct2Opcion)])
                     var state: State? = automaton.getState(nodes[statesCombo.items.indexOf(verEdit)].value.toString())
-                    state!!._transitions.add(Transition('e',nodes[statesCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition2.items.indexOf(ct2Opcion)].value.toString()))
+                    state!!._transitions.add(Transition("e",nodes[statesCombo.items.indexOf(verEdit)].value.toString(),nodes[comboTransition2.items.indexOf(ct2Opcion)].value.toString()))
                 }
             }
             graph.refresh()
@@ -236,7 +236,7 @@ class MainApplication : Application() {
                 DFA.states.add(State(initVertex._name,true,initVertex._isAcceptanceState))
                 while(nuevosVertex.count() > 0){
                     val vertexActual = nuevosVertex[0]
-                    val mapaNombres: MutableMap<Char,String> = mutableMapOf()
+                    val mapaNombres: MutableMap<String,String> = mutableMapOf()
 
                     for (p in DFA.alphabet.indices){
                         val separados = vertexActual._name.split(",")

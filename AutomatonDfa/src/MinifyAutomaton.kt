@@ -115,20 +115,20 @@ class MinifyAutomaton: Application() {
                     cont2++
                 }
                 for(transicion in ((automata.getState(verEdit))as State)._transitions){
-                    if(transicion._symbol != agregarAlfabeto[0]){
+                    if(transicion._symbol != agregarAlfabeto[0].toString()){
                         graph.insertEdge(parent, null, transicion._symbol, miLista[miCombo.items.indexOf(verEdit)], miLista[ct0.items.indexOf(transicion._destiny)])
                     }else{
-                        transicion._symbol = agregarAlfabeto[0]
+                        transicion._symbol = agregarAlfabeto[0].toString()
                     }
                 }
                 graph.refresh()
-                if(!automata.alphabet.contains(agregarAlfabeto[0])){
-                    automata.alphabet.add(agregarAlfabeto[0])
+                if(!automata.alphabet.contains(agregarAlfabeto[0].toString())){
+                    automata.alphabet.add(agregarAlfabeto[0].toString())
                 }
                 if(ct0.selectionModel.selectedIndex > -1){
                     graph.insertEdge(parent, null, agregarAlfabeto[0], miLista[miCombo.items.indexOf(verEdit)], miLista[ct0.items.indexOf(ct0Opcion)])
                     var state:State? = automata.getState(miLista[miCombo.items.indexOf(verEdit)].value.toString())
-                    state!!._transitions.add(Transition(agregarAlfabeto[0],miLista[miCombo.items.indexOf(verEdit)].value.toString(),miLista[ct0.items.indexOf(ct0Opcion)].value.toString()))
+                    state!!._transitions.add(Transition(agregarAlfabeto[0].toString(),miLista[miCombo.items.indexOf(verEdit)].value.toString(),miLista[ct0.items.indexOf(ct0Opcion)].value.toString()))
                 }
             }
         }

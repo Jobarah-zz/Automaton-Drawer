@@ -5,16 +5,12 @@
     .hbox {
         -fx-background-color: #2f4f4f;
         -fx-border-color: #2e8b57;
-        -fx-border-right-width: 2px;
-    }
-    #hbox-custom {
-
+        -fx-border-width: 2px;
     }
     .button {
         -fx-background-color: #2b2b2b;
         -fx-color: #16a085;
     }
-
     .scene {
         -fx-background-color: #95a5a6;
     }

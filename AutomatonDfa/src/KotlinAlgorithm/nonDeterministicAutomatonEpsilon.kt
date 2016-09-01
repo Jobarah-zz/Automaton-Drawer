@@ -23,7 +23,7 @@ package KotlinAlgorithm
         }
     }
 
-    open fun getReachableStates(closureStates:MutableList<State>, alphabetItem:Char):MutableList<State>{
+    open fun getReachableStates(closureStates:MutableList<State>, alphabetItem:String):MutableList<State>{
         var  reachableStates:MutableList<State> = mutableListOf()
         for(state in closureStates){
             for (transition in state._transitions){

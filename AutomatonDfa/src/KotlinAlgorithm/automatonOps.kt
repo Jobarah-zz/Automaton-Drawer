@@ -55,8 +55,8 @@ class automatonOps {
         return unifiedStates
     }
 
-    fun generateUnifiedAlphabet(alphabetA:MutableList<Char>, alphabetB: MutableList<Char>):MutableList<Char> {
-        var unifiedAlphabet:MutableList<Char> = alphabetA
+    fun generateUnifiedAlphabet(alphabetA:MutableList<String>, alphabetB: MutableList<String>):MutableList<String> {
+        var unifiedAlphabet:MutableList<String> = alphabetA
 
         for(symbolB in alphabetB) {
 

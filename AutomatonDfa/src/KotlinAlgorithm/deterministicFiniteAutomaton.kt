@@ -8,16 +8,19 @@ open class deterministicFiniteAutomaton() : Automaton(){
         var eval = strEvString.toCharArray()
         var currentState: State? = getInitialState()
         if(currentState!=null){
-            for (charater in eval) {
-                if(alphabet.contains(charater)){
+            for (character in eval) {
+                if(!alphabet.contains(character.toString())) {
+                    return false
+                } else {
+                    println(character.toString())
                     for (transition in currentState!!._transitions) {
-                        if(transition._symbol==charater){
+                        if(transition._symbol.equals(character.toString())){
                             currentState = getState(transition._destiny)
                         }
                     }
                 }
             }
-            if(currentState!!._isAcceptanceState){
+            if(currentState != null && currentState!!._isAcceptanceState){
                 return true
             }else {
                 return false
@@ -26,7 +29,4 @@ open class deterministicFiniteAutomaton() : Automaton(){
         return false
     }
 
-    fun minimize() {
-
-    }
 }

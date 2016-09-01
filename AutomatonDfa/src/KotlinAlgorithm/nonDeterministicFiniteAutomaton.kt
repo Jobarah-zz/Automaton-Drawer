@@ -18,7 +18,7 @@ class nonDeterministicFiniteAutomaton :Automaton(){
             for (currState in currentStates)
             {
                 for (transition in currentState!!._transitions) {
-                    if (character == transition._symbol)
+                    if (character.toString() == transition._symbol)
                         currentStatesFiltered.add(getState(transition._destiny) as State)
                 }
             }

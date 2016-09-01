@@ -4,9 +4,9 @@ package KotlinAlgorithm;
  * Created by Jobarah on 7/25/2016.
  */
 
-open abstract class Automaton{
+open abstract class Automaton {
     var states = mutableListOf<State>()
-    var alphabet = mutableListOf<Char>()
+    var alphabet = mutableListOf<String>()
     var automatonName = ""
 
     open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
@@ -33,7 +33,7 @@ open abstract class Automaton{
 
     open abstract fun evaluate(strEvString:String):Boolean
 
-    open fun getDestinyState(stateName: String, symbol:Char):State? {
+    open fun getDestinyState(stateName: String, symbol: String):State? {
         val originState = getState(stateName) as State
         for(transition in originState._transitions){
             if(transition._symbol == symbol){
@@ -47,7 +47,7 @@ open abstract class Automaton{
         alphabet.clear()
     }
 
-    open fun getAutomatonAlphabet(): MutableList<Char>{
+    open fun getAutomatonAlphabet(): MutableList<String>{
         return alphabet
     }
     open fun getAutomatonStates(): MutableList<State> {

@@ -7,22 +7,22 @@ fun main(arr : Array<String>){
     val state1 = State("q0",true,true)
     val state2 = State("q1",false,false)
 
-    var transition1 = Transition('a',"q0","q1")
-    var transition2 = Transition('b',"q0","q0")
+    var transition1 = Transition("a","q0","q1")
+    var transition2 = Transition("b","q0","q0")
     //------------------------------------------
-    var transition3 = Transition('a',"q1","q0")
-    var transition4 = Transition('b',"q1","q1")
+    var transition3 = Transition("a","q1","q0")
+    var transition4 = Transition("b","q1","q1")
 //=====================================================
     var b = deterministicFiniteAutomaton()
 
     val statea = State("q0",true,true)
     val stateb = State("q1",false,false)
 
-    var transitiona = Transition('a',"q0","q0")
-    var transitionb = Transition('b',"q0","q1")
+    var transitiona = Transition("a","q0","q0")
+    var transitionb = Transition("b","q0","q1")
     //------------------------------------------
-    var transitionc = Transition('a',"q1","q1")
-    var transitiond = Transition('b',"q1","q0")
+    var transitionc = Transition("a","q1","q1")
+    var transitiond = Transition("b","q1","q0")
 
     state1._transitions.add(transition1)
     state1._transitions.add(transition2)
@@ -36,13 +36,13 @@ fun main(arr : Array<String>){
 
     a.states.add(state1)
     a.states.add(state2)
-    a.alphabet.add('a')
-    a.alphabet.add('b')
+    a.alphabet.add("a")
+    a.alphabet.add("b")
 
     b.states.add(statea)
     b.states.add(stateb)
-    b.alphabet.add('a')
-    b.alphabet.add('b')
+    b.alphabet.add("a")
+    b.alphabet.add("b")
 
     var nfa = automatonOps().complement(a)
 
