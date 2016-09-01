@@ -290,32 +290,40 @@ class Ui: Application() {
         var style = "shape=ellipse;fillColor=white"
         if (stateNameTextField.text != "") {
 
+            if (getNode(stateNameTextField.text) == null) {
+                if(acceptanceComboBox.value == "True" && initialComboBox.value != "True"){
+                    style = "shape=doubleEllipse;fillColor=#22A7F0"
+                } else if (acceptanceComboBox.value == "True" && initialComboBox.value == "True") {
+                    if (!initialStateExists()) {
+                        style = "shape=doubleEllipse;fillColor=#4ECDC4"
+                    }
+                    else {
+                        alertDuplicateInitialState()
+                        return
+                    }
+                } else if(initialComboBox.value == "True" && acceptanceComboBox.value != "True"){
+                    if (!initialStateExists()) {
+                        style = "shape=ellipse;fillColor=#4ECDC4"
+                    }
+                    else {
+                        alertDuplicateInitialState()
+                        return
+                    }
+                }
 
-            if(acceptanceComboBox.value == "True" && initialComboBox.value != "True"){
-                style = "shape=doubleEllipse;fillColor=#22A7F0"
-            } else if (acceptanceComboBox.value == "True" && initialComboBox.value == "True") {
-                if (!initialStateExists()) {
-                    style = "shape=doubleEllipse;fillColor=#4ECDC4"
-                }
-                else {
-                    alertDuplicateInitialState()
-                    return
-                }
-            } else if(initialComboBox.value == "True" && acceptanceComboBox.value != "True"){
-                if (!initialStateExists()) {
-                    style = "shape=ellipse;fillColor=#4ECDC4"
-                }
-                else {
-                    alertDuplicateInitialState()
-                    return
-                }
+                val vertex = graph.insertVertex(parent, null, stateNameTextField.text, 150.0, 150.0, 50.00, 50.00, style) as mxCell
+                nodes.add(vertex)
+                originComboBox.items.add(stateNameTextField.text)
+                destinyComboBox.items.add(stateNameTextField.text)
+                deleteStateComboBox.items.add(stateNameTextField.text)
+            } else {
+                val alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "State Addition"
+                alert.headerText = null
+                alert.contentText = "State name cannot be repeated!"
+                alert.showAndWait()
+                return
             }
-
-            val vertex = graph.insertVertex(parent, null, stateNameTextField.text, 150.0, 150.0, 50.00, 50.00, style) as mxCell
-            nodes.add(vertex)
-            originComboBox.items.add(stateNameTextField.text)
-            destinyComboBox.items.add(stateNameTextField.text)
-            deleteStateComboBox.items.add(stateNameTextField.text)
         } else {
             val alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "State Creation"
