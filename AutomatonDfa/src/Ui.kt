@@ -2,17 +2,17 @@
  * Created by jenamorado on 8/30/16.
  */
 
+import KotlinAlgorithm.Automaton
+import KotlinAlgorithm.automatonOps
+import KotlinAlgorithm.deterministicFiniteAutomaton
 import com.mxgraph.model.mxCell
 import com.mxgraph.swing.mxGraphComponent
 import com.mxgraph.util.mxConstants
 import com.mxgraph.util.mxRectangle
 import com.mxgraph.view.mxGraph
 import com.mxgraph.view.mxStylesheet
-import com.sun.javafx.geom.Curve
-import com.sun.javafx.geom.Edge
 import javafx.application.Application
 import javafx.application.Platform
-import javafx.beans.value.ObservableValue
 import javafx.embed.swing.SwingNode
 import javafx.event.EventHandler
 import javafx.geometry.Insets
@@ -59,6 +59,10 @@ class Ui: Application() {
     var destinyComboBox = ComboBox<String>()
     var operationComboBox = ComboBox<String>()
     var createTransitionButton = Button("Ok")
+
+    //operations gridPane
+    var convertToDfaButton = Button("Ok")
+    var complementButton = Button("Ok")
 
 
     //graph components
@@ -173,14 +177,16 @@ class Ui: Application() {
         alphabetPane.getStyleClass().add("button")
 
         //operations gridPane
+        convertToDfaButton.setPrefSize(133.0, 20.0)
+        complementButton.setPrefSize(133.0, 20.0)
         val operationsPane = TitledPane()
         val operationsGrid = GridPane()
         operationsGrid.setVgap(4.0)
         operationsGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
-//        alphabetGrid.add(Label("Alphabet: "), 0, 0)
-//        alphabetGrid.add(alphabetTextField, 1, 0)
-//        alphabetGrid.add(Label("Split by ','"), 0, 1)
-//        alphabetGrid.add(Label("Define Alphabet: "), 0, 2)
+        operationsGrid.add(Label("Convert to DFA: "), 0, 0)
+        operationsGrid.add(convertToDfaButton, 1, 0)
+        operationsGrid.add(Label("Complement: "), 0, 1)
+        operationsGrid.add(complementButton, 1, 1)
 //        alphabetGrid.add(createAlphabetButton,1,2)
         operationsPane.content = operationsGrid
         operationsPane.text = "Automaton Operations"
@@ -193,7 +199,7 @@ class Ui: Application() {
         originComboBox.setPrefSize(175.0,20.0)
         destinyComboBox.setPrefSize(175.0, 20.0)
         operationComboBox.setPrefSize(175.0, 20.0)
-        createTransitionButton.setPrefSize(117.0, 20.0)
+        createTransitionButton.setPrefSize(175.0, 20.0)
         val transitionsPane = TitledPane()
         val transitionGrid = GridPane()
         transitionGrid.setVgap(4.0)
@@ -270,13 +276,13 @@ class Ui: Application() {
 
     fun logic() {
         createStateButton.onMouseClicked = EventHandler<MouseEvent> {
-            insertState()
+            insertState(stateNameTextField.text, initialComboBox.value, acceptanceComboBox.value)
         }
         deleteStateButton.onMouseClicked = EventHandler<MouseEvent> {
             deleteState()
         }
         createTransitionButton.onMouseClicked = EventHandler<MouseEvent> {
-            createTransition()
+            createTransition(symbolTextField.text, originComboBox.value, destinyComboBox.value)
         }
         createAlphabetButton.onMouseClicked = EventHandler<MouseEvent> {
             generateAlphabet()
@@ -284,16 +290,46 @@ class Ui: Application() {
         evaluateAutomatonButton.onMouseClicked = EventHandler<MouseEvent> {
             evaluateAutomaton()
         }
+        complementButton.onMouseClicked = EventHandler<MouseEvent> {
+            complementAutomaton(generateAutomaton() as deterministicFiniteAutomaton)
+        }
     }
 
-    fun insertState() {
-        var style = "shape=ellipse;fillColor=white"
-        if (stateNameTextField.text != "") {
+    private fun  generateAutomaton(): Automaton? {
+        return AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
+    }
 
-            if (getNode(stateNameTextField.text) == null) {
-                if(acceptanceComboBox.value == "True" && initialComboBox.value != "True"){
+    private fun complementAutomaton(automaton: deterministicFiniteAutomaton) {
+        var automatonToComplement = automatonOps().complement(automaton)
+        if (automatonToComplement != null) {
+                drawAutomaton(automatonToComplement)
+        }
+    }
+
+    private fun drawAutomaton(automaton: Automaton) {
+        graph.clearSelection()
+        nodes.clear()
+        edges.clear()
+        for (state in automaton.states) {
+            insertState(state._name, state._initialState.toString(), state._isAcceptanceState.toString())
+        }
+
+        for (state in automaton.states) {
+            for (transition in state._transitions) {
+                createTransition(transition._symbol, transition._origin, transition._destiny)
+                println(state._name+":"+transition._symbol+"->"+transition._destiny)
+            }
+        }
+    }
+
+    fun insertState(stateName: String, isInitial: String, isAcceptance: String) {
+        var style = "shape=ellipse;fillColor=white"
+        if (stateName != "") {
+
+            if (getNode(stateName) == null) {
+                if(isAcceptance == "True" && isInitial != "True") {
                     style = "shape=doubleEllipse;fillColor=#22A7F0"
-                } else if (acceptanceComboBox.value == "True" && initialComboBox.value == "True") {
+                } else if (isAcceptance == "True" && isInitial == "True") {
                     if (!initialStateExists()) {
                         style = "shape=doubleEllipse;fillColor=#4ECDC4"
                     }
@@ -301,7 +337,7 @@ class Ui: Application() {
                         alertDuplicateInitialState()
                         return
                     }
-                } else if(initialComboBox.value == "True" && acceptanceComboBox.value != "True"){
+                } else if(isInitial == "True" && isAcceptance != "True"){
                     if (!initialStateExists()) {
                         style = "shape=ellipse;fillColor=#4ECDC4"
                     }
@@ -311,11 +347,11 @@ class Ui: Application() {
                     }
                 }
 
-                val vertex = graph.insertVertex(parent, null, stateNameTextField.text, 150.0, 150.0, 50.00, 50.00, style) as mxCell
+                val vertex = graph.insertVertex(parent, null, stateName, 150.0, 150.0, 50.00, 50.00, style) as mxCell
                 nodes.add(vertex)
-                originComboBox.items.add(stateNameTextField.text)
-                destinyComboBox.items.add(stateNameTextField.text)
-                deleteStateComboBox.items.add(stateNameTextField.text)
+                originComboBox.items.add(stateName)
+                destinyComboBox.items.add(stateName)
+                deleteStateComboBox.items.add(stateName)
             } else {
                 val alert = Alert(Alert.AlertType.INFORMATION)
                 alert.title = "State Addition"
@@ -363,8 +399,8 @@ class Ui: Application() {
         deleteStateComboBox.value = ""
     }
 
-    fun createTransition() {
-        if (symbolTextField.text.length >1) {
+    fun createTransition(symbol: String, origin: String, destiny: String) {
+        if (symbol.length >1) {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Transition Creation"
             alert.headerText = null
@@ -372,7 +408,7 @@ class Ui: Application() {
             alert.showAndWait()
             return
         }
-        if (!alphabet.contains(symbolTextField.text) && !symbolTextField.text.equals("e") ) {
+        if (!alphabet.contains(symbol) && !symbol.equals("e") ) {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Transition Creation"
             alert.headerText = null
@@ -380,11 +416,11 @@ class Ui: Application() {
             alert.showAndWait()
             return
         }
-        if (symbolTextField.text != "" && originComboBox.value != "" && destinyComboBox.value != "") {
+        if (symbol != "" && origin != "" && destiny != "") {
             if (operationComboBox.value == "Create") {
-                var mxCellToInsert = getEdge(symbolTextField.text, originComboBox.value, destinyComboBox.value)
+                var mxCellToInsert = getEdge(symbol, origin, destiny)
                 if (mxCellToInsert == null) {
-                    var edge = graph.insertEdge(parent, null, symbolTextField.text, getNode(originComboBox.value), getNode(destinyComboBox.value)) as mxCell
+                    var edge = graph.insertEdge(parent, null, symbol, getNode(origin), getNode(destiny)) as mxCell
                     //edge.put(mxConstants.STYLE_ROUNDED, true);
                     edges.add(edge)
                 } else {
@@ -396,7 +432,7 @@ class Ui: Application() {
                     return
                 }
             } else {
-                var mxCellToDelete = getEdge(symbolTextField.text, originComboBox.value, destinyComboBox.value)
+                var mxCellToDelete = getEdge(symbol, origin, destiny)
                 if (mxCellToDelete != null) {
                     mxCellToDelete!!.removeFromParent()
                     graph.removeSelectionCell(mxCellToDelete)
@@ -412,7 +448,7 @@ class Ui: Application() {
                 }
             }
         }
-        if(symbolTextField.text == "") {
+        if(symbol == "") {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Transition Creation"
             alert.headerText = null
@@ -420,7 +456,7 @@ class Ui: Application() {
             alert.showAndWait()
             return
         }
-        if (originComboBox.value == "") {
+        if (origin == "") {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Transition Creation"
             alert.headerText = null
@@ -428,7 +464,7 @@ class Ui: Application() {
             alert.showAndWait()
             return
         }
-        if (destinyComboBox.value == "") {
+        if (destiny == "") {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Transition Creation"
             alert.headerText = null
@@ -462,6 +498,7 @@ class Ui: Application() {
         }
         return null
     }
+
 
     fun evaluateAutomaton() {
         if (alphabet.size < 1) {

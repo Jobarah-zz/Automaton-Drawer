@@ -242,6 +242,7 @@ class automatonOps {
                             sewer.addTransition(_symbol, "sewer")
                             isSewerCreated = true
                         }
+                        complementAutomaton.states.add(sewer)
                     }
                     state.addTransition(symbol, "sewer")
                 }
