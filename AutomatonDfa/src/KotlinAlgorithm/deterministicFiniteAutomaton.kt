@@ -6,21 +6,18 @@ package KotlinAlgorithm
 open class deterministicFiniteAutomaton() : Automaton(){
     override fun evaluate(strEvString:String):Boolean{
         var eval = stringToCharList(strEvString)
-        var currentState: State? = getInitialState()
+        var currentState:State = getInitialState() as State
         if(currentState!=null){
             for (character in eval) {
-                if(!alphabet.contains(character.toString())) {
-                    return false
-                } else {
-                    println(character.toString())
+                if(alphabet.contains(character.toString())) {
                     for (transition in currentState!!._transitions) {
                         if(transition._symbol.equals(character.toString())){
-                            currentState = getState(transition._destiny)
+                            currentState = getState(transition._destiny) as State
                         }
                     }
                 }
             }
-            if(currentState != null && currentState!!._isAcceptanceState){
+            if(currentState!!._isAcceptanceState){
                 return true
             }else {
                 return false

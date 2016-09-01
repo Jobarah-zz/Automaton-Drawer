@@ -167,6 +167,20 @@ class Ui: Application() {
         alphabetPane.text = "Alphabet"
         alphabetPane.getStyleClass().add("button")
 
+        //operations gridPane
+        val operationsPane = TitledPane()
+        val operationsGrid = GridPane()
+        operationsGrid.setVgap(4.0)
+        operationsGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
+//        alphabetGrid.add(Label("Alphabet: "), 0, 0)
+//        alphabetGrid.add(alphabetTextField, 1, 0)
+//        alphabetGrid.add(Label("Split by ','"), 0, 1)
+//        alphabetGrid.add(Label("Define Alphabet: "), 0, 2)
+//        alphabetGrid.add(createAlphabetButton,1,2)
+        operationsPane.content = operationsGrid
+        operationsPane.text = "Automaton Operations"
+        operationsPane.getStyleClass().add("button")
+
         //transition accordion grid
         originComboBox.value = ""
         destinyComboBox.value = ""
@@ -196,7 +210,7 @@ class Ui: Application() {
         transitionsPane.getStyleClass().add("button")
 
         val accordion = Accordion()
-        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, alphabetPane)
+        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, alphabetPane, operationsPane)
         //-------------End of Accordion components--------------
      //------------------Hbox Components---------------------
         //--------------------stage to draw automaton------------
@@ -352,8 +366,18 @@ class Ui: Application() {
         }
         if (symbolTextField.text != "" && originComboBox.value != "" && destinyComboBox.value != "") {
             if (operationComboBox.value == "Create") {
-                var edge = graph.insertEdge(parent, null, symbolTextField.text, getNode(originComboBox.value), getNode(destinyComboBox.value)) as mxCell
-                edges.add(edge)
+                var mxCellToInsert = getEdge(symbolTextField.text, originComboBox.value, destinyComboBox.value)
+                if (mxCellToInsert == null) {
+                    var edge = graph.insertEdge(parent, null, symbolTextField.text, getNode(originComboBox.value), getNode(destinyComboBox.value)) as mxCell
+                    edges.add(edge)
+                } else {
+                    var alert = Alert(Alert.AlertType.INFORMATION)
+                    alert.title = "Transition Addition"
+                    alert.headerText = null
+                    alert.contentText = "Transition already exists!"
+                    alert.showAndWait()
+                    return
+                }
             } else {
                 var mxCellToDelete = getEdge(symbolTextField.text, originComboBox.value, destinyComboBox.value)
                 if (mxCellToDelete != null) {

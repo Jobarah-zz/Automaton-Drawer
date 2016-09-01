@@ -63,6 +63,11 @@ class AutomatonGenerator(automatonType: String) {
                     generateStateTransition(newState, edges)
                     statesList.add(newState)
                 }
+                else -> {
+                    var newState = State(item.value as String, false, false)
+                    generateStateTransition(newState, edges)
+                    statesList.add(newState)
+                }
             }
         }
         return statesList

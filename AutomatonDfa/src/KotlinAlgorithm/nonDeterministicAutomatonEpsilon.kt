@@ -37,7 +37,7 @@ package KotlinAlgorithm
         return reachableStates
     }
 
-    open fun convertToNFA():nonDeterministicFiniteAutomaton{
+    open fun convertToNFA():nonDeterministicFiniteAutomaton {
         var nfa:nonDeterministicFiniteAutomaton = nonDeterministicFiniteAutomaton()
         var acceptanceStates = mutableListOf<String>()
         nfa.alphabet = alphabet
