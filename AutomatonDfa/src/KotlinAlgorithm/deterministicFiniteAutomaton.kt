@@ -5,7 +5,7 @@ package KotlinAlgorithm
  */
 open class deterministicFiniteAutomaton() : Automaton(){
     override fun evaluate(strEvString:String):Boolean{
-        var eval = strEvString.toCharArray()
+        var eval = stringToCharList(strEvString)
         var currentState: State? = getInitialState()
         if(currentState!=null){
             for (character in eval) {
@@ -29,4 +29,14 @@ open class deterministicFiniteAutomaton() : Automaton(){
         return false
     }
 
+    fun stringToCharList(string:String):MutableList<Char> {
+        var stringList = string.toCharArray()
+        var charList:MutableList<Char> = mutableListOf()
+
+        for (char in stringList) {
+            charList.add(char)
+        }
+
+        return charList
+    }
 }
