@@ -61,4 +61,20 @@ fun main(arr : Array<String>){
 
     println(nfa.evaluate("aaa"))
     println(a.evaluate("aa"))
+
+    var ntest = nonDeterministicFiniteAutomaton()
+    ntest.addState("q0", true, false)
+    ntest.addState("q1", false, false)
+    ntest.addState("q2", false, false)
+    ntest.addState("q3", false, true)
+    ntest.addState("q4", false, false)
+    ntest.states[0].addTransition("0", "q1")
+    ntest.states[0].addTransition("0", "q2")
+    ntest.states[0].addTransition("0", "q3")
+    ntest.states[3].addTransition("1", "q4")
+
+    ntest.alphabet.add("0")
+    ntest.alphabet.add("1")
+    var dfa = ntest.convertToDFA()
+    println(dfa.evaluate("0"))
 }

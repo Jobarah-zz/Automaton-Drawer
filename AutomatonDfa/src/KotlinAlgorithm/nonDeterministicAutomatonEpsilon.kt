@@ -8,7 +8,7 @@ package KotlinAlgorithm
     var epsilonClosure = mutableListOf<State>()
 
     override fun evaluate(strEvString:String):Boolean{
-        return true
+        return convertToNFA().convertToDFA().evaluate(strEvString)
     }
     open fun getClosure(state:State){
         if(!evaluatedStates.contains(state._name)){

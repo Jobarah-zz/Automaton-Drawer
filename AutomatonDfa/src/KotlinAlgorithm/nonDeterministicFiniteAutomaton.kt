@@ -7,32 +7,7 @@ class nonDeterministicFiniteAutomaton :Automaton(){
     var evaluatedStates:MutableList<String> = mutableListOf<String>()
     var epsilonClosure = mutableListOf<State>()
     override fun evaluate(strEvString:String):Boolean{
-        var eval = strEvString.toCharArray()
-        var currentStates = mutableListOf<State>()
-        var currentState: State? = getInitialState()
-        if (currentState != null)
-            currentStates.add(currentState)
-
-        for (character in eval) {
-            val currentStatesFiltered = mutableListOf<State>()
-            for (currState in currentStates)
-            {
-                for (transition in currentState!!._transitions) {
-                    if (character.toString() == transition._symbol)
-                        currentStatesFiltered.add(getState(transition._destiny) as State)
-                }
-            }
-            currentStates = currentStatesFiltered
-        }
-
-        for (state in currentStates)
-        {
-            if (state._isAcceptanceState)
-            {
-                return true
-            }
-        }
-        return false
+        return convertToDFA().evaluate(strEvString)
     }
 
     open fun getClosure(state:State){
@@ -64,15 +39,21 @@ class nonDeterministicFiniteAutomaton :Automaton(){
     open fun convertToDFA(): deterministicFiniteAutomaton{
         var dfa: deterministicFiniteAutomaton = deterministicFiniteAutomaton()
         var dfaStates: MutableList<State> = mutableListOf()
+        var initialState = this.getInitialState()
+        var statesNames: MutableList<String> = mutableListOf()
+        if (initialState != null) {
+            dfaStates.add(State(initialState._name, initialState._initialState, initialState._isAcceptanceState))
+            statesNames.add(initialState._name)
+        }
         for(state in this.states){
-            for(symbol in alphabet){
+            for(symbol in this.alphabet){
                 var newStateName = ""
                 var newState:State = State()
                 for(transition in state._transitions){
-                    if(newStateName.isEmpty()){
+                    if(newStateName.isEmpty() && transition._symbol.equals(symbol)){
                         newStateName += transition._destiny
                     }else{
-                        if(!newStateName.contains(transition._destiny)){
+                        if(!newStateName.contains(transition._destiny) && transition._symbol.equals(symbol)){
                             newStateName += "," + transition._destiny
                         }
                     }
@@ -82,30 +63,45 @@ class nonDeterministicFiniteAutomaton :Automaton(){
                         newState._isAcceptanceState = true
                     }
                 }
-                    if(!newState._name.isEmpty()){
-                        if(dfaStates.isEmpty()){
-                            newState._name = newStateName
-                            dfaStates.add(newState)
-                        }else{
-                            for(state1 in dfaStates){
-                                if(!state1._name.equals(newState._name)){
-                                    newState._name = newStateName
-                                    dfaStates.add(newState)
-                                }
-                            }
-                        }
-                    }
+                if (!statesNames.contains(newStateName) && !newStateName.equals("")) {
+                    newState._name = newStateName
+                    dfaStates.add(newState)
+                    statesNames.add(newStateName)
+                }
             }
         }
 
-        var statesToAdd:MutableList<State> = dfaStates.distinct() as MutableList<State>
+        var statesToAdd = dfaStates
 
         for(newState in statesToAdd){
-            dfa.addState(newState._name, newState._initialState, newState._isAcceptanceState)
+            generateTransitions(newState)
         }
+
+        dfa.states = statesToAdd
+        dfa.alphabet = alphabet
 
         return dfa
     }
 
-
+    fun generateTransitions(state:State) {
+        var statesNames = state._name.split(",")
+        for (stateName in statesNames) {
+            var originalState = getState(stateName)
+            for (symbol in alphabet) {
+                var destiny = ""
+                for (transition in originalState!!._transitions) {
+                    if(destiny.isEmpty() && transition._symbol.equals(symbol)){
+                        destiny += transition._destiny
+                    }else{
+                        if(!destiny.contains(transition._destiny) && transition._symbol.equals(symbol)){
+                            destiny += "," + transition._destiny
+                        }
+                    }
+                }
+                if (!destiny.isEmpty()) {
+                    state.addTransition(symbol, destiny)
+                }
+            }
+        }
+    }
 }
