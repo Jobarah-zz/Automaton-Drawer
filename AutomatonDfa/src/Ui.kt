@@ -187,8 +187,8 @@ class Ui: Application() {
         alphabetPane.getStyleClass().add("button")
 
         //operations gridPane
-        convertToDfaButton.setPrefSize(133.0, 20.0)
-        complementButton.setPrefSize(133.0, 20.0)
+        convertToDfaButton.setPrefSize(130.0, 20.0)
+        complementButton.setPrefSize(130.0, 20.0)
         val operationsPane = TitledPane()
         val operationsGrid = GridPane()
         operationsGrid.setVgap(4.0)
@@ -231,8 +231,8 @@ class Ui: Application() {
         transitionsPane.getStyleClass().add("button")
 
         //Additional Operations
-        clearAutomatonButton.setPrefSize(133.0, 20.0)
-        exportAsPngButton.setPrefSize(133.0, 20.0)
+        clearAutomatonButton.setPrefSize(121.0, 20.0)
+        exportAsPngButton.setPrefSize(121.0, 20.0)
         val additionalOpetationPane = TitledPane()
         val additionalOperationsGrid = GridPane()
         additionalOperationsGrid.setVgap(4.0)
@@ -316,10 +316,10 @@ class Ui: Application() {
             evaluateAutomaton()
         }
         complementButton.onMouseClicked = EventHandler<MouseEvent> {
-            complementAutomaton(generateAutomaton() as deterministicFiniteAutomaton)
+            complementAutomaton(generateAutomaton())
         }
         convertToDfaButton.onMouseClicked = EventHandler<MouseEvent> {
-            convertToDfa(generateAutomaton() as Automaton)
+            convertToDfa(generateAutomaton())
         }
         exportAsPngButton.onMouseClicked = EventHandler<MouseEvent> {
             exportImage()
@@ -333,10 +333,26 @@ class Ui: Application() {
         return AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
     }
 
-    private fun complementAutomaton(automaton: deterministicFiniteAutomaton) {
-        var automatonToComplement = automatonOps().complement(automaton)
-        if (automatonToComplement != null) {
-                drawAutomaton(automatonToComplement)
+    private fun complementAutomaton(automaton: Automaton?) {
+        if (automaton != null) {
+            if (automaton is deterministicFiniteAutomaton) {
+                var automatonToComplement = automatonOps().complement(automaton)
+                if (automatonToComplement != null) {
+                    drawAutomaton(automatonToComplement)
+                }
+            } else {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Complement Automaton"
+                alert.headerText = null
+                alert.contentText = "Method can only be applied to DFA"
+                alert.showAndWait()
+            }
+        } else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Complement Automaton"
+            alert.headerText = null
+            alert.contentText = "No automaton found"
+            alert.showAndWait()
         }
     }
 
@@ -344,13 +360,18 @@ class Ui: Application() {
         if (graph.getChildVertices(graph.defaultParent).size > 0) {
 
             val fileChooser = FileChooser()
-            fileChooser.setTitle("Save Image")
+            fileChooser.setTitle("Save Automaton")
             val file = fileChooser.showSaveDialog(thisStage)
             if (file != null) {
                 try {
                     val image = mxCellRenderer.createBufferedImage(graph, null, 1.0, java.awt.Color.WHITE , true, null)
                     ImageIO.write(image, "png", File(file.path + ".png"))
                 } catch (ex: IOException) {
+                    var alert = Alert(Alert.AlertType.INFORMATION)
+                    alert.title = "Automaton Export"
+                    alert.headerText = null
+                    alert.contentText = "Exporting not able to complete due to: " + ex.message
+                    alert.showAndWait()
                     println(ex.message)
                 }
 
@@ -359,16 +380,31 @@ class Ui: Application() {
         }
     }
 
-    private fun convertToDfa(automaton: Automaton) {
-        if (automaton is nonDeterministicFiniteAutomaton) {
+    private fun convertToDfa(automaton: Automaton?) {
+        if (automaton != null ) {
+            if (automaton is nonDeterministicFiniteAutomaton) {
 
-            var dfa = (automaton).convertToDFA()
-            drawAutomaton(dfa)
-        }
-        else if (automaton is nonDeterministicAutomatonEpsilon){
+                var dfa = (automaton).convertToDFA()
+                drawAutomaton(dfa)
+            }
+            else if (automaton is nonDeterministicAutomatonEpsilon){
 
-            var dfa = ((automaton).convertToNFA()).convertToDFA()
-            drawAutomaton(dfa)
+                var dfa = ((automaton).convertToNFA()).convertToDFA()
+                drawAutomaton(dfa)
+            }
+            else {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Convert to DFA"
+                alert.headerText = null
+                alert.contentText = "Can only convert from NFA or ε-NFA"
+                alert.showAndWait()
+            }
+        } else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Convert to DFA"
+            alert.headerText = null
+            alert.contentText = "No automaton found"
+            alert.showAndWait()
         }
     }
 
@@ -380,7 +416,6 @@ class Ui: Application() {
         graph.update {  }
         clearStatesForm()
         clearTransitionsForm()
-        deleteStateComboBox.items.clear()
     }
 
     private fun drawAutomaton(automaton: Automaton) {
@@ -474,6 +509,7 @@ class Ui: Application() {
         initialComboBox.value = "False"
         stateNameTextField.text = ""
         deleteStateComboBox.value = ""
+        deleteStateComboBox.items.clear()
     }
 
     fun createTransition(symbol: String, origin: String, destiny: String) {
@@ -556,7 +592,9 @@ class Ui: Application() {
 
     fun clearTransitionsForm() {
         originComboBox.value = ""
+        originComboBox.items.clear()
         destinyComboBox.value = ""
+        destinyComboBox.items.clear()
         symbolTextField.text = ""
     }
 
