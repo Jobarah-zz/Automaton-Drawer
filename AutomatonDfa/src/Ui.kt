@@ -231,7 +231,7 @@ class Ui: Application() {
         val graphComponent = mxGraphComponent(graph)
         graph.isAllowLoops = true
         graph.isAllowDanglingEdges = false
-        graph.isEdgeLabelsMovable = false
+        graph.isEdgeLabelsMovable = true
         graph.isCellsResizable = false
         //--------------------End of stage to draw automaton-----
 
