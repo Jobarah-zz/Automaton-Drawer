@@ -68,4 +68,14 @@ open abstract class Automaton {
         return this.states
     }
 
+    fun stringToCharList(string:String):MutableList<String> {
+        var stringList = string.toCharArray()
+        var charList:MutableList<String> = mutableListOf()
+
+        for (char in stringList) {
+            charList.add(char.toString())
+        }
+
+        return charList
+    }
 }

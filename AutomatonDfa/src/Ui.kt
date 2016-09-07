@@ -2,23 +2,24 @@
  * Created by jenamorado on 8/30/16.
  */
 
-import KotlinAlgorithm.Automaton
-import KotlinAlgorithm.automatonOps
-import KotlinAlgorithm.deterministicFiniteAutomaton
+import KotlinAlgorithm.*
 import com.mxgraph.model.mxCell
 import com.mxgraph.swing.mxGraphComponent
+import com.mxgraph.util.mxCellRenderer
 import com.mxgraph.util.mxConstants
 import com.mxgraph.util.mxRectangle
 import com.mxgraph.view.mxGraph
 import com.mxgraph.view.mxStylesheet
 import javafx.application.Application
 import javafx.application.Platform
+import javafx.embed.swing.SwingFXUtils
 import javafx.embed.swing.SwingNode
 import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.scene.Group
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.image.Image
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
@@ -26,8 +27,12 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
+import javafx.stage.FileChooser
 import javafx.stage.Stage
+import java.io.File
+import java.io.IOException
 import java.util.*
+import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
     Application.launch(Ui::class.java)
@@ -69,11 +74,17 @@ class Ui: Application() {
     val graph = mxGraph()
     val parent = graph.defaultParent
 
+    //Additional Functionalities
+    val exportAsPngButton = Button("Ok")
+    val clearAutomatonButton = Button("Ok")
+
     var nodes:MutableList<mxCell> = mutableListOf()
     var edges:MutableList<mxCell> = mutableListOf()
 
-    override fun start(stage: Stage) {
+    var thisStage:Stage = Stage()
 
+    override fun start(stage: Stage) {
+        thisStage = stage
 //====================Scene components==========================================================
         //Main container inside scene
         val root = GridPane()
@@ -109,7 +120,7 @@ class Ui: Application() {
         automatonGrid.add(Label("Type: "), 0, 0)
         automatonGrid.add(automatonTypeComboBox, 1, 0)
         automatonTypeComboBox.value = "dfa"
-        automatonTypeComboBox.items.addAll("dfa", "nfa", "nfae")
+        automatonTypeComboBox.items.addAll("dfa", "nfa", "ε-nfa", "pda")
         automatonGrid.add(Label("Value"), 0, 1)
         automatonGrid.add(stringToEvaluateTextField, 1, 1)
         automatonGrid.add(Label("Evaluate "), 0, 2)
@@ -177,8 +188,8 @@ class Ui: Application() {
         alphabetPane.getStyleClass().add("button")
 
         //operations gridPane
-        convertToDfaButton.setPrefSize(133.0, 20.0)
-        complementButton.setPrefSize(133.0, 20.0)
+        convertToDfaButton.setPrefSize(130.0, 20.0)
+        complementButton.setPrefSize(130.0, 20.0)
         val operationsPane = TitledPane()
         val operationsGrid = GridPane()
         operationsGrid.setVgap(4.0)
@@ -220,8 +231,24 @@ class Ui: Application() {
         transitionsPane.text = "Transition"
         transitionsPane.getStyleClass().add("button")
 
+        //Additional Operations
+        clearAutomatonButton.setPrefSize(121.0, 20.0)
+        exportAsPngButton.setPrefSize(121.0, 20.0)
+        val additionalOpetationPane = TitledPane()
+        val additionalOperationsGrid = GridPane()
+        additionalOperationsGrid.setVgap(4.0)
+        additionalOperationsGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
+        additionalOperationsGrid.add(Label("Clear Automaton: "), 0, 0)
+        additionalOperationsGrid.add(clearAutomatonButton, 1, 0)
+        additionalOperationsGrid.add(Label("Export as PNG: "), 0, 1)
+        additionalOperationsGrid.add(exportAsPngButton, 1, 1)
+//        alphabetGrid.add(createAlphabetButton,1,2)
+        additionalOpetationPane.content = additionalOperationsGrid
+        additionalOpetationPane.text = "Additional Operations"
+        additionalOpetationPane.getStyleClass().add("button")
+
         val accordion = Accordion()
-        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, alphabetPane, operationsPane)
+        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, alphabetPane, operationsPane, additionalOpetationPane)
         //-------------End of Accordion components--------------
      //------------------Hbox Components---------------------
         //--------------------stage to draw automaton------------
@@ -231,7 +258,7 @@ class Ui: Application() {
         val graphComponent = mxGraphComponent(graph)
         graph.isAllowLoops = true
         graph.isAllowDanglingEdges = false
-        graph.isEdgeLabelsMovable = true
+        graph.isEdgeLabelsMovable = false
         graph.isCellsResizable = false
         //--------------------End of stage to draw automaton-----
 
@@ -248,6 +275,7 @@ class Ui: Application() {
         g.children.add(accordion)
         container.children.add(hb)
 
+
      //------------------End of Hbox Components--------------
 //==============================================================================================
 
@@ -255,11 +283,14 @@ class Ui: Application() {
         root.add(menuBar, 0, 0)
         root.add(container, 0, 1)
 
-        logic()
         stage.scene = scene
         stage.isResizable = false
+        stage.icons.add(Image("ad.png"))
+        stage.title = "Automaton Drawer 1.0"
         stage.show()
         applyEdgeDefaults()
+        logic()
+
     }
 
     private fun  mxGraph.update(block: () -> Any) {
@@ -289,7 +320,16 @@ class Ui: Application() {
             evaluateAutomaton()
         }
         complementButton.onMouseClicked = EventHandler<MouseEvent> {
-            complementAutomaton(generateAutomaton() as deterministicFiniteAutomaton)
+            complementAutomaton(generateAutomaton())
+        }
+        convertToDfaButton.onMouseClicked = EventHandler<MouseEvent> {
+            convertToDfa(generateAutomaton())
+        }
+        exportAsPngButton.onMouseClicked = EventHandler<MouseEvent> {
+            exportImage()
+        }
+        clearAutomatonButton.onMouseClicked = EventHandler<MouseEvent> {
+            clearAutomaton()
         }
     }
 
@@ -297,19 +337,110 @@ class Ui: Application() {
         return AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
     }
 
-    private fun complementAutomaton(automaton: deterministicFiniteAutomaton) {
-        var automatonToComplement = automatonOps().complement(automaton)
-        if (automatonToComplement != null) {
-                drawAutomaton(automatonToComplement)
+    private fun complementAutomaton(automaton: Automaton?) {
+        if (automaton!!.states.size >= 1) {
+            if (automaton is deterministicFiniteAutomaton) {
+                var automatonToComplement = automatonOps().complement(automaton)
+                if (automatonToComplement != null) {
+                    drawAutomaton(automatonToComplement)
+                }
+            } else {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Complement Automaton"
+                alert.headerText = null
+                alert.contentText = "Method can only be applied to DFA"
+                alert.showAndWait()
+            }
+        } else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Complement Automaton"
+            alert.headerText = null
+            alert.contentText = "No automaton found"
+            alert.showAndWait()
+        }
+    }
+
+    private fun exportImage() {
+        if (graph.getChildVertices(graph.defaultParent).size > 0) {
+
+            val fileChooser = FileChooser()
+            fileChooser.setTitle("Save Automaton")
+            val file = fileChooser.showSaveDialog(thisStage)
+            if (file != null) {
+                try {
+                    val image = mxCellRenderer.createBufferedImage(graph, null, 1.0, java.awt.Color.WHITE , true, null)
+                    ImageIO.write(image, "png", File(file.path + ".png"))
+                } catch (ex: IOException) {
+                    var alert = Alert(Alert.AlertType.INFORMATION)
+                    alert.title = "Automaton Export"
+                    alert.headerText = null
+                    alert.contentText = "Exporting not able to complete due to: " + ex.message
+                    alert.showAndWait()
+                    println(ex.message)
+                }
+
+            }
+
+        } else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Automaton Export"
+            alert.headerText = null
+            alert.contentText = "There is no automaton drawn to export!"
+            alert.showAndWait()
+        }
+    }
+
+    private fun convertToDfa(automaton: Automaton?) {
+        if (automaton != null ) {
+            if (automaton is nonDeterministicFiniteAutomaton) {
+
+                var dfa = (automaton).convertToDFA()
+                drawAutomaton(dfa)
+            }
+            else if (automaton is nonDeterministicAutomatonEpsilon){
+
+                var dfa = ((automaton).convertToNFA()).convertToDFA()
+                drawAutomaton(dfa)
+            }
+            else {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Convert to DFA"
+                alert.headerText = null
+                alert.contentText = "Can only convert from NFA or ε-NFA"
+                alert.showAndWait()
+            }
+        } else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Convert to DFA"
+            alert.headerText = null
+            alert.contentText = "No automaton found"
+            alert.showAndWait()
+        }
+    }
+
+    fun clearAutomaton() {
+        if (graph.getChildVertices(graph.defaultParent).size > 0) {
+            graph.removeCells(graph.getChildVertices(graph.defaultParent))
+            nodes.clear()
+            edges.clear()
+            graph.refresh()
+            graph.update {  }
+            deleteStateComboBox.items.clear()
+            originComboBox.items.clear()
+            destinyComboBox.items.clear()
+            clearStatesForm()
+            clearTransitionsForm()
+        }else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Clear Automaton"
+            alert.headerText = null
+            alert.contentText = "There is no automaton to clear!"
+            alert.showAndWait()
         }
     }
 
     private fun drawAutomaton(automaton: Automaton) {
-        graph.removeCells(graph.getChildVertices(graph.defaultParent))
-        nodes.clear()
-        edges.clear()
-        graph.refresh()
-        graph.update {  }
+        clearAutomaton()
         for (state in automaton.states) {
             insertState(state._name, state._initialState.toString(), state._isAcceptanceState.toString())
         }
@@ -402,21 +533,23 @@ class Ui: Application() {
     }
 
     fun createTransition(symbol: String, origin: String, destiny: String) {
-        if (symbol.length >1) {
-            var alert = Alert(Alert.AlertType.INFORMATION)
-            alert.title = "Transition Creation"
-            alert.headerText = null
-            alert.contentText = "Symbol must be a single character!"
-            alert.showAndWait()
-            return
-        }
-        if (!alphabet.contains(symbol) && !symbol.equals("e") ) {
-            var alert = Alert(Alert.AlertType.INFORMATION)
-            alert.title = "Transition Creation"
-            alert.headerText = null
-            alert.contentText = "Symbol must be in the alphabet!"
-            alert.showAndWait()
-            return
+        if (!automatonTypeComboBox.value.equals("pda")) {
+            if (symbol.length >1) {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Transition Creation"
+                alert.headerText = null
+                alert.contentText = "Symbol must be a single character!"
+                alert.showAndWait()
+                return
+            }
+            if (!alphabet.contains(symbol) && !symbol.equals("e") ) {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Transition Creation"
+                alert.headerText = null
+                alert.contentText = "Symbol must be in the alphabet!"
+                alert.showAndWait()
+                return
+            }
         }
         if (symbol != "" && origin != "" && destiny != "") {
             if (operationComboBox.value == "Create") {
@@ -523,16 +656,21 @@ class Ui: Application() {
         }
         var automaton = AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
         if ( automaton != null && automaton!!.states.size >=1) {
+            for (state in automaton.states) {
+                for (transition in state._transitions) {
+                    println(state._name+":"+transition._symbol+"->"+transition._destiny)
+                }
+            }
             var result = automaton!!.evaluate(stringToEvaluateTextField.text)
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Automaton Evaluation"
             alert.headerText = null
             if (result == true) {
-                alert.contentText = "Automaton has reached an acceptance state!"
+                alert.contentText = "String is accepted!"
                 alert.showAndWait()
                 return
             } else {
-                alert.contentText = "Automaton does not reach an acceptance state with provided value!"
+                alert.contentText = "String is not an accepted value!"
                 alert.showAndWait()
                 return
             }

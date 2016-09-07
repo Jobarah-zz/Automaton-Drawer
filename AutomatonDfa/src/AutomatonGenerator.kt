@@ -9,7 +9,7 @@ class AutomatonGenerator(automatonType: String) {
     var _automatonType = automatonType
 
     fun generateAutomaton(nodes:MutableList<mxCell>, edges:MutableList<mxCell>, alphabet:MutableList<String>):Automaton? {
-        if (!_automatonType.equals("dfa") && !_automatonType.equals("nfa") && !_automatonType.equals("nfae")) {
+        if (!_automatonType.equals("dfa") && !_automatonType.equals("nfa") && !_automatonType.equals("ε-nfa") && !_automatonType.equals("pda")) {
             throw Exception("Invalid Automaton Type!")
         }
         when (_automatonType) {
@@ -25,8 +25,14 @@ class AutomatonGenerator(automatonType: String) {
                 newAutomaton.alphabet = alphabet
                 return  newAutomaton
             }
-            "nfae" -> {
+            "ε-nfa" -> {
                 var newAutomaton = nonDeterministicAutomatonEpsilon()
+                newAutomaton.states = generateStates(nodes, edges)
+                newAutomaton.alphabet = alphabet
+                return  newAutomaton
+            }
+            "pda" -> {
+                var newAutomaton = PushDownAutomata()
                 newAutomaton.states = generateStates(nodes, edges)
                 newAutomaton.alphabet = alphabet
                 return  newAutomaton

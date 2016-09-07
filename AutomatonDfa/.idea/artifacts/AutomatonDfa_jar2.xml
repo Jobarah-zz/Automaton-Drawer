@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="AutomatonDfa:jar2">
+  <artifact type="jar" build-on-make="true" name="AutomatonDfa:jar2">
     <output-path>$PROJECT_DIR$/out/artifacts/AutomatonDfa_jar2</output-path>
     <root id="archive" name="AutomatonDfa.jar">
       <element id="module-output" name="AutomatonDfa" />

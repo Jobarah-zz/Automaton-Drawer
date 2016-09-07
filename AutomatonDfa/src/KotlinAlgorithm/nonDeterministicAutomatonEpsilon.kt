@@ -8,14 +8,14 @@ package KotlinAlgorithm
     var epsilonClosure = mutableListOf<State>()
 
     override fun evaluate(strEvString:String):Boolean{
-        return true
+        return convertToNFA().evaluate(strEvString)
     }
     open fun getClosure(state:State){
         if(!evaluatedStates.contains(state._name)){
             epsilonClosure.add( state )
             evaluatedStates.add( state._name )
             for(transition in state._transitions){
-                if(transition._symbol.equals('e')){
+                if(transition._symbol.equals("e")){
                     var nextState = getState(transition._destiny) as State
                     getClosure( nextState )
                 }
