@@ -1,13 +1,15 @@
 
 package KotlinAlgorithm;
+
+import java.io.Serializable
+
 /**
  * Created by Jobarah on 7/25/2016.
  */
 
-open abstract class Automaton {
+open abstract class Automaton: Serializable {
     var states = mutableListOf<State>()
     var alphabet = mutableListOf<String>()
-    var automatonName = ""
 
     open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
         states.add(State(name,isInitialState,isAcceptanceState))

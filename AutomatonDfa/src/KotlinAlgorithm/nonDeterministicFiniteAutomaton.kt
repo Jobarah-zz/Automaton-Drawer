@@ -8,6 +8,8 @@ import java.util.*
 class nonDeterministicFiniteAutomaton :Automaton(){
     var evaluatedStates:MutableList<String> = mutableListOf<String>()
     var epsilonClosure = mutableListOf<State>()
+    var type = "nfa"
+
     override fun evaluate(strEvString:String):Boolean{
         val characters = strEvString.toCharArray()
         var currentState = getInitialState()

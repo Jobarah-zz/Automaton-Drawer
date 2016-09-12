@@ -4,6 +4,8 @@ package KotlinAlgorithm
  * Created by Jobarah on 7/31/2016.
  */
 open class deterministicFiniteAutomaton() : Automaton(){
+    var type = "dfa"
+
     override fun evaluate(strEvString:String):Boolean{
         var eval = stringToCharList(strEvString)
         var consumedCount = stringToCharList(strEvString)

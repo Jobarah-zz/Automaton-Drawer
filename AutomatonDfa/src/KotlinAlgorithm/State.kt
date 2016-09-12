@@ -4,9 +4,10 @@ package KotlinAlgorithm;
  * Created by Jobarah on 7/25/2016.
  */
 
+import java.io.Serializable
 import java.util.*
 
-open class State{
+open class State: Serializable {
     var _name = ""
     var _transitions = mutableListOf<Transition>()
     var _initialState = false

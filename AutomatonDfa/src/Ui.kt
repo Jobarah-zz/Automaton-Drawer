@@ -29,8 +29,7 @@ import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import java.io.File
-import java.io.IOException
+import java.io.*
 import java.util.*
 import javax.imageio.ImageIO
 
@@ -102,7 +101,38 @@ class Ui: Application() {
         val fileMenu = Menu("File")
         fileMenu.getStyleClass().add("fileMenu")
         val newMenuItem = MenuItem("Open")
+        newMenuItem.setOnAction ({
+            var automatonToDraw = loadAutomaton()
+            if (automatonToDraw != null) {
+                alphabet = automatonToDraw.alphabet
+                drawAutomaton(automatonToDraw)
+            }
+        })
+
         val saveMenuItem = MenuItem("Save")
+        saveMenuItem.setOnAction({
+            var fileChooser = FileChooser()
+            fileChooser.setTitle("Save Automaton")
+            val file = fileChooser.showSaveDialog(thisStage)
+            if (file != null) {
+                try {
+                    val rval = FileOutputStream(file.path+".ser")
+                    val out = ObjectOutputStream(rval)
+                    out.writeObject(generateAutomaton())
+                    out.close()
+                    rval.close()
+
+                } catch (ex: IOException) {
+                    var alert = Alert(Alert.AlertType.INFORMATION)
+                    alert.title = "Automaton Export"
+                    alert.headerText = null
+                    alert.contentText = "Exporting not able to complete due to: " + ex.message
+                    alert.showAndWait()
+                    println(ex.message)
+                }
+
+            }
+        })
         val exitMenuItem = MenuItem("Exit")
         exitMenuItem.setOnAction({ actionEvent -> Platform.exit() })
         fileMenu.getItems().addAll(newMenuItem, saveMenuItem, SeparatorMenuItem(), exitMenuItem)
@@ -419,7 +449,6 @@ class Ui: Application() {
     }
 
     fun clearAutomaton() {
-        if (graph.getChildVertices(graph.defaultParent).size > 0) {
             graph.removeCells(graph.getChildVertices(graph.defaultParent))
             nodes.clear()
             edges.clear()
@@ -430,13 +459,6 @@ class Ui: Application() {
             destinyComboBox.items.clear()
             clearStatesForm()
             clearTransitionsForm()
-        }else {
-            var alert = Alert(Alert.AlertType.INFORMATION)
-            alert.title = "Clear Automaton"
-            alert.headerText = null
-            alert.contentText = "There is no automaton to clear!"
-            alert.showAndWait()
-        }
     }
 
     private fun drawAutomaton(automaton: Automaton) {
@@ -654,7 +676,14 @@ class Ui: Application() {
             alert.showAndWait()
             return
         }
-        var automaton = AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
+        var edgesToAdd:MutableList<mxCell> = mutableListOf()
+        for (item in nodes) {
+            var transitions =  graph.getOutgoingEdges(item)
+            for (ougoingTrans in transitions) {
+                edgesToAdd.add(ougoingTrans as mxCell)
+            }
+        }
+        var automaton = AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edgesToAdd, alphabet)
         if ( automaton != null && automaton!!.states.size >=1) {
             for (state in automaton.states) {
                 for (transition in state._transitions) {
@@ -734,6 +763,31 @@ class Ui: Application() {
         alert.showAndWait()
     }
 
+    fun loadAutomaton(): Automaton? {
+        var fileChooser = FileChooser()
+        fileChooser.setTitle("Load Automaton")
+        val file = fileChooser.showOpenDialog(thisStage)
+        if (file != null) {
+            try {
+                val fileInput = FileInputStream(file.path)
+                val input = ObjectInputStream(fileInput)
+                val loadedAutomaton = input.readObject() as Automaton
+                input.close()
+                fileInput.close()
+                return  loadedAutomaton
+
+            } catch (ex: IOException) {
+                var alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Automaton Import"
+                alert.headerText = null
+                alert.contentText = "Importing not able to complete due to: " + ex.message
+                alert.showAndWait()
+                println(ex.message)
+            }
+        }
+        return null
+    }
+
     private fun applyEdgeDefaults() {
         // Settings for edges
         val edge = HashMap<String, Any>()
@@ -743,7 +797,7 @@ class Ui: Application() {
         edge.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR)
         edge.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_CLASSIC)
         edge.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE)
-        edge.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER)
+        edge.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT)
         edge.put(mxConstants.STYLE_STROKECOLOR, "#000000") // default is #6482B9
         edge.put(mxConstants.STYLE_FONTCOLOR, "#446299")
 

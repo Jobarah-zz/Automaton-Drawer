@@ -109,63 +109,108 @@ fun main(arr : Array<String>){
 //
 //    println(pda.evaluate("aaaabbbb"))
 
-    var nfae = nonDeterministicAutomatonEpsilon()
-    var state0 = State("0", true, false)
-    state0.addTransition("e","1")
-    state0.addTransition("e","3")
+//    var nfae = nonDeterministicAutomatonEpsilon()
+//    var state0 = State("0", true, false)
+//    state0.addTransition("e","1")
+//    state0.addTransition("e","3")
+//
+//    var state1 = State("1", false, false)
+//    state1.addTransition("b", "2")
+//
+//    var state2 = State("2", false, false)
+//    state2.addTransition("e", "5")
+//
+//    var state3 = State("3", false, false)
+//    state3.addTransition("a", "4")
+//
+//    var state4 = State("4", false, false)
+//    state4.addTransition("e", "5")
+//
+//    var state5 = State("5", false, false)
+//    state5.addTransition("e", "0")
+//
+//    var state6 = State("6", false, false)
+//    state6.addTransition("b","7")
+//
+//    var state7 = State("7", false, false)
+//    state6.addTransition("c","8")
+//
+//    var state8 = State("8", false, false)
+//    state6.addTransition("d","9")
+//
+//    var state9 = State("9", false, true)
+//
+//    nfae.states.add(state0)
+//    nfae.states.add(state1)
+//    nfae.states.add(state2)
+//    nfae.states.add(state3)
+//    nfae.states.add(state4)
+//    nfae.states.add(state5)
+//    nfae.states.add(state6)
+//    nfae.states.add(state7)
+//    nfae.states.add(state8)
+//    nfae.states.add(state9)
+//
+//    nfae.alphabet.add("a")
+//    nfae.alphabet.add("b")
+//    nfae.alphabet.add("c")
+//    nfae.alphabet.add("d")
+//
+//
+//    var nfa = nfae.convertToNFA()
+//    println(nfa.states.size)
+//
+//    for (state in nfa.states) {
+////        println(state._name+"has transitions"+state._transitions.size)
+//        for(transition in state._transitions) {
+//            println(state._name+":"+transition._symbol+"->"+transition._destiny)
+//        }
+//    }
 
-    var state1 = State("1", false, false)
-    state1.addTransition("b", "2")
+//    var automata = nonDeterministicAutomatonEpsilon()
+//    automata.alphabet.add("a")
+//    automata.alphabet.add("b")
+//    automata.alphabet.add("c")
+//    automata.alphabet.add("d")
+//
+//    automata.addState("0",true,false)
+//    automata.addState("1",false,false)
+//    automata.addState("2",false,false)
+//    automata.addState("3",false,false)
+//    automata.addState("4",false,false)
+//    automata.addState("5",false,false)
+//    automata.addState("6",false,false)
+//    automata.addState("7",false,false)
+//    automata.addState("8",false,false)
+//    automata.addState("9",false,true)
+//
+//    automata.states[0].addTransition("e","1")
+//    automata.states[0].addTransition("e","3")
+//    automata.states[1].addTransition("b","2")
+//    automata.states[2].addTransition("e","5")
+//    automata.states[3].addTransition("a","4")
+//    automata.states[4].addTransition("e","5")
+//    automata.states[5].addTransition("e","6")
+//    automata.states[5].addTransition("e","0")
+//    automata.states[6].addTransition("b","7")
+//    automata.states[7].addTransition("c","8")
+//    automata.states[8].addTransition("d","9")
+//
+//    println(automata.evaluate("bbcd"))
+//
+//    var transformado = automata.convertToNFA().convertToDFA()
+//
+//    for(min in transformado.states){
+//        for(arista in min._transitions){
+//            println(min._name + " con salida " + arista._symbol + " hacia " + arista._destiny + " es aceptado: " + min._isAcceptanceState)
+//        }
+//    }
 
-    var state2 = State("2", false, false)
-    state2.addTransition("e", "5")
+    var turingMachine = turingMachine()
+    turingMachine.addState("q0", true, false)
+    turingMachine.addState("q1", false, true)
 
-    var state3 = State("3", false, false)
-    state3.addTransition("a", "4")
-
-    var state4 = State("4", false, false)
-    state4.addTransition("e", "5")
-
-    var state5 = State("5", false, false)
-    state5.addTransition("e", "0")
-
-    var state6 = State("6", false, false)
-    state6.addTransition("b","7")
-
-    var state7 = State("7", false, false)
-    state6.addTransition("c","8")
-
-    var state8 = State("8", false, false)
-    state6.addTransition("d","9")
-
-    var state9 = State("9", false, true)
-
-    nfae.states.add(state0)
-    nfae.states.add(state1)
-    nfae.states.add(state2)
-    nfae.states.add(state3)
-    nfae.states.add(state4)
-    nfae.states.add(state5)
-    nfae.states.add(state6)
-    nfae.states.add(state7)
-    nfae.states.add(state8)
-    nfae.states.add(state9)
-
-    nfae.alphabet.add("a")
-    nfae.alphabet.add("b")
-    nfae.alphabet.add("c")
-    nfae.alphabet.add("d")
-
-
-    var nfa = nfae.convertToNFA()
-    println(nfa.states.size)
-
-    for (state in nfa.states) {
-//        println(state._name+"has transitions"+state._transitions.size)
-        for(transition in state._transitions) {
-            println(state._name+":"+transition._symbol+"->"+transition._destiny)
-        }
-    }
-
+    turingMachine.states[0].addTransition("(1,x/R)","q1")
+    println(turingMachine.evaluate("1"))
 
 }

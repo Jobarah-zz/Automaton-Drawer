@@ -6,6 +6,7 @@ package KotlinAlgorithm
  class nonDeterministicAutomatonEpsilon: Automaton() {
     var evaluatedStates:MutableList<String> = mutableListOf<String>()
     var epsilonClosure = mutableListOf<State>()
+    var type = "nfae"
 
     override fun evaluate(strEvString:String):Boolean{
         return convertToNFA().evaluate(strEvString)
