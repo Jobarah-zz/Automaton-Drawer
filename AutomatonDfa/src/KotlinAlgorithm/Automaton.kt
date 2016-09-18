@@ -10,6 +10,7 @@ import java.io.Serializable
 open abstract class Automaton: Serializable {
     var states = mutableListOf<State>()
     var alphabet = mutableListOf<String>()
+    abstract var type:String
 
     open fun addState(name:String,isInitialState:Boolean,isAcceptanceState:Boolean):Unit{
         states.add(State(name,isInitialState,isAcceptanceState))
@@ -80,4 +81,17 @@ open abstract class Automaton: Serializable {
 
         return charList
     }
+
+    fun addTransition(initialState: String, destinyState: String, symbol: String): Boolean {
+        var stateA = getState(initialState)
+        var stateB = getState(destinyState)
+
+        if (stateA != null && stateB != null) {
+            stateA.addTransition(symbol, stateB._name)
+            return true
+        }
+        return false
+    }
+
+
 }

@@ -5,7 +5,7 @@ package KotlinAlgorithm
  */
 class turingMachine: Automaton() {
 
-    var type = "turing"
+    override var type = "Turing Machine"
 
     override fun evaluate(strEvString:String): Boolean {
         var ribbon = "B"+strEvString+"B"
@@ -18,29 +18,36 @@ class turingMachine: Automaton() {
         if (currentState != null) {
             while (!currentState!!._isAcceptanceState) {
                 if (currentState != null) {
+                    var transitionsSize = currentState._transitions.size
+                    var transitionCount = 0
                     for (transition in currentState!!._transitions) {
 
                         if (getSymbol(transition._symbol).equals(_ribbon[index])) {
                             if (getDirection(transition._symbol).equals("L")) {
-                                index -= index
-
+                                index -= 1
                                 if (index >= 0) {
-                                    _ribbon[index] = getWriteSybol(transition._symbol)
+                                    _ribbon[index+1] = getWriteSybol(transition._symbol)
                                     currentState = getState(transition._destiny)
+                                    break
                                 } else {
                                     return false
                                 }
                             } else if (getDirection(transition._symbol).equals("R")) {
-                                index += index
+                                index += 1
 
                                 if (index <= _ribbon.size - 1) {
-                                    _ribbon[index] = getWriteSybol(transition._symbol)
+                                    _ribbon[index-1] = getWriteSybol(transition._symbol)
                                     currentState = getState(transition._destiny)
+                                    break
                                 } else {
                                     return false
                                 }
                             }
                         }
+                        transitionCount++
+                    }
+                    if (transitionCount == transitionsSize) {
+                        return false
                     }
                 }
             }

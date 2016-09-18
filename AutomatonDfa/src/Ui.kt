@@ -12,7 +12,6 @@ import com.mxgraph.view.mxGraph
 import com.mxgraph.view.mxStylesheet
 import javafx.application.Application
 import javafx.application.Platform
-import javafx.embed.swing.SwingFXUtils
 import javafx.embed.swing.SwingNode
 import javafx.event.EventHandler
 import javafx.geometry.Insets
@@ -67,6 +66,10 @@ class Ui: Application() {
     //operations gridPane
     var convertToDfaButton = Button("Ok")
     var complementButton = Button("Ok")
+    var subtractionButton = Button("Ok")
+    var intersectionButton = Button("Ok")
+    var unionButton = Button("Ok")
+    var minifyButton = Button("Ok")
 
 
     //graph components
@@ -105,6 +108,7 @@ class Ui: Application() {
             var automatonToDraw = loadAutomaton()
             if (automatonToDraw != null) {
                 alphabet = automatonToDraw.alphabet
+                automatonTypeComboBox.value = automatonToDraw.type
                 drawAutomaton(automatonToDraw)
             }
         })
@@ -150,7 +154,7 @@ class Ui: Application() {
         automatonGrid.add(Label("Type: "), 0, 0)
         automatonGrid.add(automatonTypeComboBox, 1, 0)
         automatonTypeComboBox.value = "dfa"
-        automatonTypeComboBox.items.addAll("dfa", "nfa", "ε-nfa", "pda")
+        automatonTypeComboBox.items.addAll("dfa", "nfa", "ε-nfa", "pda", "Turing Machine")
         automatonGrid.add(Label("Value"), 0, 1)
         automatonGrid.add(stringToEvaluateTextField, 1, 1)
         automatonGrid.add(Label("Evaluate "), 0, 2)
@@ -220,6 +224,9 @@ class Ui: Application() {
         //operations gridPane
         convertToDfaButton.setPrefSize(130.0, 20.0)
         complementButton.setPrefSize(130.0, 20.0)
+        subtractionButton.setPrefSize(130.0, 20.0)
+        unionButton.setPrefSize(130.0, 20.0)
+        intersectionButton.setPrefSize(130.0, 20.0)
         val operationsPane = TitledPane()
         val operationsGrid = GridPane()
         operationsGrid.setVgap(4.0)
@@ -228,6 +235,14 @@ class Ui: Application() {
         operationsGrid.add(convertToDfaButton, 1, 0)
         operationsGrid.add(Label("Complement: "), 0, 1)
         operationsGrid.add(complementButton, 1, 1)
+        operationsGrid.add(Label("Subtraction: "), 0, 2)
+        operationsGrid.add(subtractionButton, 1, 2)
+        operationsGrid.add(Label("Union: "), 0, 3)
+        operationsGrid.add(unionButton, 1, 3)
+        operationsGrid.add(Label("Intersection: "), 0, 4)
+        operationsGrid.add(intersectionButton, 1, 4)
+        operationsGrid.add(Label("Minify : "), 0, 5)
+        operationsGrid.add(minifyButton, 1, 5)
 //        alphabetGrid.add(createAlphabetButton,1,2)
         operationsPane.content = operationsGrid
         operationsPane.text = "Automaton Operations"
@@ -361,8 +376,62 @@ class Ui: Application() {
         clearAutomatonButton.onMouseClicked = EventHandler<MouseEvent> {
             clearAutomaton()
         }
+        subtractionButton.onMouseClicked = EventHandler<MouseEvent> {
+            automatonsOperations("subtraction")
+        }
+        unionButton.onMouseClicked = EventHandler<MouseEvent> {
+            automatonsOperations("union")
+        }
+        intersectionButton.onMouseClicked = EventHandler<MouseEvent> {
+            automatonsOperations("intersection")
+        }
+        minifyButton.onMouseClicked = EventHandler<MouseEvent> {
+            minify()
+        }
     }
 
+    fun minify() {
+        var automaton = generateAutomaton()
+        if (automaton is nonDeterministicFiniteAutomaton) { // same as !(obj is String)
+            var automata = automaton.convertToDFA().minimize()
+            clearAutomaton()
+            drawAutomaton(automata)
+        }
+        else if (automaton is nonDeterministicAutomatonEpsilon){
+            var automata = automaton.convertToNFA().convertToDFA().minimize()
+            clearAutomaton()
+            drawAutomaton(automata)
+        } else if (automaton is deterministicFiniteAutomaton) {
+            var automata = automaton.minimize()
+            clearAutomaton()
+            drawAutomaton(automata)
+        }
+    }
+    fun automatonsOperations(operation: String) {
+        if (automatonTypeComboBox.value.equals("dfa")) {
+            var automatonA = generateAutomaton() as deterministicFiniteAutomaton
+
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Automatons Operation"
+            alert.headerText = null
+            alert.contentText = "Second Automaton must be loaded"
+            alert.showAndWait()
+
+            val automatonB = loadAutomaton() as deterministicFiniteAutomaton
+
+            if (automatonA != null && automatonB != null) {
+                 var newAutomaton = automatonOps().operation(automatonA, automatonB, operation)
+                clearAutomaton()
+                drawAutomaton(newAutomaton)
+            }
+        } else {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Automatons Operations"
+            alert.headerText = null
+            alert.contentText = "Automatons must both be dfa type!"
+            alert.showAndWait()
+        }
+    }
     private fun  generateAutomaton(): Automaton? {
         return AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
     }
@@ -424,7 +493,7 @@ class Ui: Application() {
         if (automaton != null ) {
             if (automaton is nonDeterministicFiniteAutomaton) {
 
-                var dfa = (automaton).convertToDFA()
+                val dfa = (automaton).convertToDFA()
                 drawAutomaton(dfa)
             }
             else if (automaton is nonDeterministicAutomatonEpsilon){
@@ -439,6 +508,7 @@ class Ui: Application() {
                 alert.contentText = "Can only convert from NFA or ε-NFA"
                 alert.showAndWait()
             }
+            automatonTypeComboBox.value = "dfa"
         } else {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Convert to DFA"
@@ -555,7 +625,7 @@ class Ui: Application() {
     }
 
     fun createTransition(symbol: String, origin: String, destiny: String) {
-        if (!automatonTypeComboBox.value.equals("pda")) {
+        if (!automatonTypeComboBox.value.equals("pda") && !automatonTypeComboBox.value.equals("Turing Machine")) {
             if (symbol.length >1) {
                 var alert = Alert(Alert.AlertType.INFORMATION)
                 alert.title = "Transition Creation"
@@ -678,12 +748,14 @@ class Ui: Application() {
         }
         var edgesToAdd:MutableList<mxCell> = mutableListOf()
         for (item in nodes) {
-            var transitions =  graph.getOutgoingEdges(item)
+            var transitions =  graph.getEdges(item)
             for (ougoingTrans in transitions) {
-                edgesToAdd.add(ougoingTrans as mxCell)
+                if (!edgesToAdd.contains(ougoingTrans as mxCell)) {
+                    edgesToAdd.add(ougoingTrans)
+                }
             }
         }
-        var automaton = AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edgesToAdd, alphabet)
+        var automaton = AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes, edges, alphabet)
         if ( automaton != null && automaton!!.states.size >=1) {
             for (state in automaton.states) {
                 for (transition in state._transitions) {

@@ -6,8 +6,14 @@ import java.io.Serializable
  * Created by Jobarah on 7/25/2016.
  */
 
-open class Transition(symbol: String, origin:String, destiny:String): Serializable {
-	var _symbol = symbol
-	var _origin = origin
-	var _destiny = destiny
+open class Transition(): Serializable {
+	var _symbol = ""
+	var _origin = ""
+	var _destiny = ""
+
+	constructor(symbol: String, origin:String, destiny:String) :this(){
+		_symbol = symbol
+		_origin = origin
+		_destiny = destiny
+	}
 }

@@ -12,6 +12,7 @@ open class State: Serializable {
     var _transitions = mutableListOf<Transition>()
     var _initialState = false
     var _isAcceptanceState = false
+    var destiniesCount = 0
 
     constructor(){
     }

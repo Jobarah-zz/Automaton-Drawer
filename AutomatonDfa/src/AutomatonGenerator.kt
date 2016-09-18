@@ -9,7 +9,7 @@ class AutomatonGenerator(automatonType: String) {
     var _automatonType = automatonType
 
     fun generateAutomaton(nodes:MutableList<mxCell>, edges:MutableList<mxCell>, alphabet:MutableList<String>):Automaton? {
-        if (!_automatonType.equals("dfa") && !_automatonType.equals("nfa") && !_automatonType.equals("ε-nfa") && !_automatonType.equals("pda")) {
+        if (!_automatonType.equals("dfa") && !_automatonType.equals("nfa") && !_automatonType.equals("ε-nfa") && !_automatonType.equals("pda") &&  !_automatonType.equals("Turing Machine")) {
             throw Exception("Invalid Automaton Type!")
         }
         when (_automatonType) {
@@ -33,6 +33,12 @@ class AutomatonGenerator(automatonType: String) {
             }
             "pda" -> {
                 var newAutomaton = PushDownAutomata()
+                newAutomaton.states = generateStates(nodes, edges)
+                newAutomaton.alphabet = alphabet
+                return  newAutomaton
+            }
+            "Turing Machine" -> {
+                var newAutomaton = turingMachine()
                 newAutomaton.states = generateStates(nodes, edges)
                 newAutomaton.alphabet = alphabet
                 return  newAutomaton

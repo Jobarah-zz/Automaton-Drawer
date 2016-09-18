@@ -6,7 +6,7 @@ package KotlinAlgorithm
 class PushDownAutomata: Automaton() {
 
     var stack = Stack()
-    var type = "pda"
+    override var type = "pda"
 
     override fun evaluate(strEvString:String):Boolean {
         var strToEval = stringToCharList(strEvString)

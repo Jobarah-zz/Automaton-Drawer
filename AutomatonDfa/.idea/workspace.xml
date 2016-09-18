@@ -26,93 +26,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Ui.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Ui.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Ui.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="116" column="26" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
+            <state relative-caret-position="13804">
+              <caret line="493" column="63" selection-start-line="493" selection-start-column="63" selection-end-line="493" selection-end-column="63" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
+                <element signature="e#46#966#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AutomatonGenerator.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AutomatonGenerator.kt">
+      <file leaf-file-name="AutomatonDfa.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/AutomatonDfa.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-28">
-              <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+            <state relative-caret-position="364">
+              <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Automaton.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Automaton.kt">
+      <file leaf-file-name="AutomatonRegex.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/AutomatonRegex.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nonDeterministicAutomatonEpsilon.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicAutomatonEpsilon.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nonDeterministicFiniteAutomaton.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicFiniteAutomaton.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="turingMachine.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PushDownAutomata.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/PushDownAutomata.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dFAMinifier.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/dFAMinifier.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="deterministicFiniteAutomaton.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="4872">
+              <caret line="174" column="40" selection-start-line="174" selection-start-column="40" selection-end-line="174" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -121,8 +62,68 @@
       <file leaf-file-name="Transition.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Transition.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+            <state relative-caret-position="448">
+              <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RegexState.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/RegexState.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="196">
+              <caret line="7" column="26" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="State.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/State.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RegEx.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/RegEx.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2716">
+              <caret line="164" column="31" selection-start-line="164" selection-start-column="31" selection-end-line="164" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="automatonOps.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/automatonOps.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3244">
+              <caret line="111" column="29" selection-start-line="111" selection-start-column="29" selection-end-line="111" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AutomatonGenerator.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AutomatonGenerator.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="10" column="58" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="58" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Automaton.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Automaton.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="364">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -147,22 +148,32 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/Stack.kt" />
-        <option value="$PROJECT_DIR$/src/AutomatonGenerator.kt" />
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/Grammar.kt" />
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/contextFreeGrammar.kt" />
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/turingMachineTransition.kt" />
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/turingMachineState.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/automata.kt" />
+        <option value="$PROJECT_DIR$/src/AutomatonGenerator.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicFiniteAutomaton.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/PushDownAutomata.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicAutomatonEpsilon.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/Automaton.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/RegEx.kt" />
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/State.kt" />
         <option value="$PROJECT_DIR$/src/KotlinAlgorithm/Transition.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/Automaton.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicFiniteAutomaton.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicAutomatonEpsilon.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/PushDownAutomata.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt" />
-        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/RegexState.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/automata.kt" />
+        <option value="$PROJECT_DIR$/src/KotlinAlgorithm/AutomatonRegex.kt" />
         <option value="$PROJECT_DIR$/src/Ui.kt" />
       </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
     </option>
   </component>
   <component name="ProjectFrameBounds">
@@ -196,7 +207,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -230,26 +240,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AutomatonDfa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AutomatonDfa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KotlinAlgorithm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -593,7 +586,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29393306" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4089958" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -686,55 +679,25 @@
           <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/Ui.kt</url>
-          <line>692</line>
+          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/automatonOps.kt</url>
+          <line>113</line>
           <properties />
-          <option name="timeStamp" value="68" />
+          <option name="timeStamp" value="98" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>17</line>
+          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt</url>
+          <line>135</line>
           <properties />
-          <option name="timeStamp" value="69" />
+          <option name="timeStamp" value="106" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>18</line>
+          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt</url>
+          <line>49</line>
           <properties />
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>19</line>
-          <properties />
-          <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>20</line>
-          <properties />
-          <option name="timeStamp" value="72" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>33</line>
-          <properties />
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>24</line>
-          <properties />
-          <option name="timeStamp" value="75" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt</url>
-          <line>22</line>
-          <properties />
-          <option name="timeStamp" value="76" />
+          <option name="timeStamp" value="109" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="77" />
+      <option name="time" value="110" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -743,53 +706,13 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicFiniteAutomaton.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AutomatonGenerator.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
-          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/State.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="5" />
-          <folding>
-            <element signature="e#71#117#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/PushDownAutomata.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1652">
-          <caret line="59" column="79" selection-start-line="59" selection-start-column="79" selection-end-line="59" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/automata.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2772">
-          <caret line="99" column="47" selection-start-line="99" selection-start-column="47" selection-end-line="99" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Ui.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17612">
           <caret line="661" column="9" selection-start-line="661" selection-start-column="9" selection-end-line="661" selection-end-column="9" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#46#966#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -828,7 +751,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1092">
           <caret line="40" column="19" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -836,9 +758,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="392">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="5" />
-          <folding>
-            <element signature="e#71#117#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -863,6 +782,7 @@
           <caret line="656" column="112" selection-start-line="656" selection-start-column="112" selection-end-line="656" selection-end-column="112" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#46#966#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -901,7 +821,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1092">
           <caret line="40" column="19" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -909,9 +828,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="392">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="5" />
-          <folding>
-            <element signature="e#71#117#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -936,6 +852,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#46#966#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -954,6 +871,7 @@
           <caret line="338" column="10" selection-start-line="338" selection-start-column="10" selection-end-line="338" selection-end-column="10" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#46#966#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -972,6 +890,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#46#966#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -995,20 +914,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MinifyAutomaton.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2940">
-          <caret line="123" column="22" selection-start-line="123" selection-start-column="22" selection-end-line="123" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AutomatonDfa.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachineRibbon.kt" />
     <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/contextFreeGrammar.kt">
       <provider selected="true" editor-type-id="text-editor">
@@ -1027,35 +932,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachineState.kt" />
     <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachineTransition.kt" />
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/automata.kt">
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/dFAMinifier.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
+        <state relative-caret-position="-4931">
+          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/State.kt">
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
-          <folding>
-            <element signature="e#71#117#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Transition.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+        <state relative-caret-position="196">
+          <caret line="7" column="40" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Automaton.kt">
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
+        <state relative-caret-position="168">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1063,15 +958,7 @@
     <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicFiniteAutomaton.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
-          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicAutomatonEpsilon.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1079,50 +966,116 @@
     <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/PushDownAutomata.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
-          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="20" />
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/dFAMinifier.kt">
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/nonDeterministicAutomatonEpsilon.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+        <state relative-caret-position="224">
+          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/deterministicFiniteAutomaton.kt">
+    <entry file="file://$PROJECT_DIR$/src/org/unitec/regularexpresion/parser.java" />
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/automata.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="168">
+          <caret line="6" column="39" selection-start-line="6" selection-start-column="39" selection-end-line="6" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/turingMachine.kt">
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Automaton.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/automatonOps.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3244">
+          <caret line="111" column="29" selection-start-line="111" selection-start-column="29" selection-end-line="111" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/RegEx.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2716">
+          <caret line="164" column="31" selection-start-line="164" selection-start-column="31" selection-end-line="164" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/State.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/RegexState.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
-          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+          <caret line="7" column="26" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/Transition.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MinifyAutomaton.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2887">
+          <caret line="73" column="37" selection-start-line="73" selection-start-column="37" selection-end-line="73" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/KotlinAlgorithm/AutomatonRegex.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4872">
+          <caret line="174" column="40" selection-start-line="174" selection-start-column="40" selection-end-line="174" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AutomatonGenerator.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-28">
-          <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        <state relative-caret-position="168">
+          <caret line="10" column="58" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="58" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Ui.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="116" column="26" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
+        <state relative-caret-position="13804">
+          <caret line="493" column="63" selection-start-line="493" selection-start-column="63" selection-end-line="493" selection-end-column="63" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#46#966#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AutomatonDfa.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>

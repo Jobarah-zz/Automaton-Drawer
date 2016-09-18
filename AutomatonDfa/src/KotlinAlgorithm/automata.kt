@@ -3,47 +3,48 @@ package KotlinAlgorithm;
  * Created by Jobarah on 7/25/2016.
  */
 fun main(arr : Array<String>){
-//    var a =  deterministicFiniteAutomaton()
-//    val state1 = State("q0",true,true)
-//    val state2 = State("q1",false,false)
-//
-//    var transition1 = Transition("a","q0","q1")
-//    var transition2 = Transition("b","q0","q0")
-//    //------------------------------------------
-//    var transition3 = Transition("a","q1","q0")
-//    var transition4 = Transition("b","q1","q1")
-////=====================================================
-//    var b = deterministicFiniteAutomaton()
-//
-//    val statea = State("q0",true,true)
-//    val stateb = State("q1",false,false)
-//
-//    var transitiona = Transition("a","q0","q0")
-//    var transitionb = Transition("b","q0","q1")
-//    //------------------------------------------
-//    var transitionc = Transition("a","q1","q1")
-//    var transitiond = Transition("b","q1","q0")
-//
-//    state1._transitions.add(transition1)
-//    state1._transitions.add(transition2)
-//    state2._transitions.add(transition3)
-//    state2._transitions.add(transition4)
-//
-//    statea._transitions.add(transitiona)
-//    statea._transitions.add(transitionb)
-//    stateb._transitions.add(transitionc)
-//    stateb._transitions.add(transitiond)
-//
-//    a.states.add(state1)
-//    a.states.add(state2)
-//    a.alphabet.add("a")
-//    a.alphabet.add("b")
-//
-//    b.states.add(statea)
-//    b.states.add(stateb)
-//    b.alphabet.add("a")
-//    b.alphabet.add("b")
-//
+    var a =  deterministicFiniteAutomaton()
+    val state1 = State("q0",true,false)
+    val state2 = State("q1",false,true)
+
+    var transition1 = Transition("a","q0","q1")
+    var transition2 = Transition("b","q0","q0")
+    //------------------------------------------
+    var transition3 = Transition("a","q1","q0")
+    var transition4 = Transition("b","q1","q1")
+
+    state1._transitions.add(transition1)
+    state1._transitions.add(transition2)
+    state2._transitions.add(transition3)
+    state2._transitions.add(transition4)
+//=====================================================
+    var b = deterministicFiniteAutomaton()
+
+    val statea = State("q0",true,true)
+    val stateb = State("q1",false,false)
+
+    var transitiona = Transition("a","q0","q0")
+    var transitionb = Transition("b","q0","q1")
+    //------------------------------------------
+    var transitionc = Transition("a","q1","q1")
+    var transitiond = Transition("b","q1","q0")
+
+
+    statea._transitions.add(transitiona)
+    statea._transitions.add(transitionb)
+    stateb._transitions.add(transitionc)
+    stateb._transitions.add(transitiond)
+
+    a.states.add(state1)
+    a.states.add(state2)
+    a.alphabet.add("a")
+    a.alphabet.add("b")
+
+    b.states.add(statea)
+    b.states.add(stateb)
+    b.alphabet.add("a")
+    b.alphabet.add("b")
+
 ////    var nfa = automatonOps().complement(a)
 ////
 ////    for(state in nfa.states){
@@ -206,11 +207,32 @@ fun main(arr : Array<String>){
 //        }
 //    }
 
-    var turingMachine = turingMachine()
-    turingMachine.addState("q0", true, false)
-    turingMachine.addState("q1", false, true)
+//    var turingMachine = turingMachine()
+//    turingMachine.alphabet.add("0")
+//    turingMachine.alphabet.add("1")
+//    turingMachine.addState("q0", true, false)
+//    turingMachine.addState("q1", false, false)
+//    turingMachine.addState("q2", false, true)
+//
+//    turingMachine.states[0].addTransition("(0,0/R)","q0")
+//    turingMachine.states[0].addTransition("(1,1/R)","q0")
+//    turingMachine.states[0].addTransition("(B,B/L)","q1")
+//
+//    turingMachine.states[1].addTransition("(0,0/R)","q2")
+//
+//
+//    println(turingMachine.evaluate("0"))
 
-    turingMachine.states[0].addTransition("(1,x/R)","q1")
-    println(turingMachine.evaluate("1"))
+//    var regExp = RegEx()
+//    regExp.expresionRegular = "((0+10)*] + [(0+10)*1] + [(0+10)*11(1+01)*] + [(0+10)*11(1+01)*0)"
+//    var nfa = regExp.transformarNFAe()
+//
+//    regExp.printAutomata()
+
+
+    var reg = AutomatonRegex()
+    var regex = reg.ParseDFAToRegex(a.states)
+    print(regex)
+
 
 }
