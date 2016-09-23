@@ -1,90 +1,92 @@
 package KotlinAlgorithm
 
+import jdk.nashorn.internal.ir.Symbol
+import kotlin.system.measureTimeMillis
+
 /**
  * Created by Jobarah on 9/4/2016.
  */
 class PushDownAutomata: Automaton() {
 
-    var stack = Stack()
     override var type = "pda"
+    val EPSILON = "E"
 
     override fun evaluate(strEvString:String):Boolean {
-        var strToEval = stringToCharList(strEvString)
-        var currentState = getInitialState()
-        var counter = 0
-        var subStr = stringToCharList(strEvString)
-        if (currentState != null) {
-            for (character in strToEval) {
-                for (transition in currentState!!._transitions) {
-                    var _symbol = getTransitionSymbol(transition._symbol)
-                    var pushValues = getTransitionPushValues(transition._symbol)
-                    if (stack.stack.isEmpty() && getPopSymbol(transition._symbol).equals("Z0")) {
+        var stack = Stack()
+        stack.push("Z0")
+        var initialState = getInitialState()
+        if (initialState != null) {
+            return traversePda(strEvString.toMutableList(), initialState, initialState._transitions[0], stack, strEvString.length*2, 0)
+        }
+        return false
+    }
 
-                        if (pushValues.contains("Z0")) {
-                            pushValues = pushValues.removeSuffix("Z0")
-                            pushValues = pushValues.removePrefix("Z0")
-                        }
-                        for (item in pushValues) {
-                            stack.push(item.toString())
-                        }
-                        var destination = getState(currentState.getDestinyStateName(transition._symbol).toString())
-                        if (destination != null) {
-                            currentState = destination
-                        }
+    fun traversePda(str: MutableList<Char>, state: State, initialTransition: Transition, stack: Stack, depthLimit: Int, currentDepth: Int) :Boolean {
 
-                        ++counter
-                        subStr.removeAt(subStr.size-1)
+        var movementPossible = false
+        var destinyState = ""
+        var transitionSymbol = ""
+        var popSymbol = ""
+        var pushSymbol = ""
+        var trans:Transition = initialTransition
 
-                        break
-                    } else if (_symbol.equals(character) && !stack.stack.isEmpty() && !pushValues.contains("E") && !getPopSymbol(transition._symbol).equals("Z0") && stack.stack[stack.stack.size-1].equals(getPopSymbol(transition._symbol))) {
-                        var pushValues = getTransitionPushValues(transition._symbol)
-                        stack.pop()
-                        for (item in pushValues) {
-                            stack.push(item.toString())
-                        }
-                        var destination = getState(currentState.getDestinyStateName(transition._symbol).toString())
-                        if (destination != null) {
-                            currentState = destination
-                        }
-                        ++counter
-                        subStr.removeAt(subStr.size-1)
-                        break
-                    } else if (pushValues.contains("E") && !stack.stack.isEmpty() && _symbol.equals(character) && stack.stack[stack.stack.size-1].equals(getPopSymbol(transition._symbol))) {
-                        stack.pop()
-                        var destination = getState(currentState.getDestinyStateName(transition._symbol).toString())
-                        if (destination != null) {
-                            currentState = destination
-                        }
-                        ++counter
-                        subStr.removeAt(subStr.size-1)
-                        break
-                    } else if (_symbol.equals("E") && alphabet.contains("E")) {
-//                        if (stack.stack.isEmpty() && getPopSymbol(transition._symbol).equals("Z0")) {
-//
-//                            if (pushValues.contains("Z0")) {
-//                                pushValues = pushValues.removeSuffix("Z0")
-//                                pushValues = pushValues.removePrefix("Z0")
-//                            }
-//                            for (item in pushValues) {
-//                                stack.push(item.toString())
-//                            }
-//                            var destination = getState(currentState.getDestinyStateName(transition._symbol).toString())
-//                            if (destination != null) {
-//                                currentState = destination
-//                            }
-//                            ++counter
-//                            break
-//                        }
-                    }
-                }
+        if (currentDepth == depthLimit) {
+            if (trans == initialTransition) {
+
             }
         }
 
-        println("counter value is: "+counter+" subStr: "+subStr)
-        if (isAcceptancePDA() && currentState!!._isAcceptanceState) {
+
+        for (transition in state._transitions) {
+            if (getTransitionSymbol(transition._symbol).equals(str[0]) || getTransitionSymbol(transition._symbol).equals(EPSILON)) {
+                if (currentDepth>0) {
+                    if (transition._symbol == trans._symbol) {
+                        continue
+                    }
+                }
+                movementPossible = true
+                destinyState = transition._destiny
+                transitionSymbol = getTransitionSymbol(transition._symbol)
+                popSymbol = getPopSymbol(transition._symbol)
+                pushSymbol = getTransitionPushValues(transition._symbol)
+                trans = transition
+                break
+            }
+        }
+
+
+        if (str.isEmpty() && !stack.isEmpty() || (!str.isEmpty() && stack.isEmpty())) {
+            return false
+        }
+
+        if (str.isEmpty() && stack.isEmpty() && state._isAcceptanceState) {
             return true
-        } else if (!isAcceptancePDA() && stack.stack.isEmpty() && counter == strToEval.size) {
-            return true
+        }
+
+        if (movementPossible) {
+            var nextState = getState(destinyState)
+
+            if (!transitionSymbol.equals(EPSILON)) {
+                str.removeAt(0)
+            }
+
+            if (!popSymbol.equals(EPSILON)) {
+                if (popSymbol.equals(stack.at(0))) {
+                    stack.pop()
+                }
+            }
+
+            if (!pushSymbol.equals(EPSILON) && !pushSymbol.equals("Z0")) {
+                if (pushSymbol.contains("Z0"))
+                    pushSymbol = pushSymbol.replace("Z0", "")
+                for (item in pushSymbol) {
+                    stack.push(item.toString())
+                }
+            }
+
+            if (nextState != null) {
+                return traversePda(str, nextState, trans, stack, depthLimit, currentDepth+1)
+            }
         }
 
         return false
@@ -108,8 +110,17 @@ class PushDownAutomata: Automaton() {
         return pushVal.toString()
     }
     fun getTransitionPushValues(str:String):  String {
-        var removedParenthesisStr = str.removeSurrounding("(",")")
-        var pushVal = removedParenthesisStr.subSequence(removedParenthesisStr.lastIndexOf("/",removedParenthesisStr.length, false)+1, removedParenthesisStr.length)
+        var pushVal = str.subSequence(str.lastIndexOf("/",str.length, false)+1, str.lastIndexOf(")",str.length, false))
         return pushVal.toString()
     }
+
+    fun isTransitionExistent(state: State, symbol: String) :Boolean {
+        for (transition in state._transitions) {
+            if (getTransitionSymbol(transition._symbol).equals(symbol)) {
+                return true
+            }
+        }
+        return false
+    }
+
 }

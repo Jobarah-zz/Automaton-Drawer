@@ -82,7 +82,7 @@ open abstract class Automaton: Serializable {
         return charList
     }
 
-    fun addTransition(initialState: String, destinyState: String, symbol: String): Boolean {
+    open fun addTransition(initialState: String, destinyState: String, symbol: String): Boolean {
         var stateA = getState(initialState)
         var stateB = getState(destinyState)
 
@@ -93,5 +93,21 @@ open abstract class Automaton: Serializable {
         return false
     }
 
+    open fun changeName(oldName:String, newName:String){
+        if(getState(oldName) != null){
+            for(vertex in states){
+                for(transicion in vertex._transitions){
+                    if(transicion._destiny == oldName){
+                        transicion._destiny = newName
+                    }
+                    if(transicion._origin == oldName){
+                        transicion._origin = newName
+                    }
+                }
+            }
+            var verticeCambiar = getState(oldName)
+            verticeCambiar!!._name = newName
+        }
+    }
 
 }

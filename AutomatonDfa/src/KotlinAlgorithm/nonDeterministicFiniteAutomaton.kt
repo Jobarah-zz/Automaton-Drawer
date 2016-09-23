@@ -92,66 +92,73 @@ class nonDeterministicFiniteAutomaton :Automaton(){
     }
     open fun convertToDFA(): deterministicFiniteAutomaton{
         var automata2 = deterministicFiniteAutomaton()
-        val listaDeAceptados: MutableList<String> = mutableListOf() //Para saber cuando un nuevo estado es de aceptacion
+        val listaDeAceptados: MutableList<String> = mutableListOf()
         for (t in states.indices){
             if(states[t]._isAcceptanceState){
                 listaDeAceptados.add(states[t]._name)
             }
         }
-        var nuevosVertex: MutableList<State> = mutableListOf() //Para ir haciendo pop
-        val initVertex = getInitialState() as State //Tomar estado inicial
-        nuevosVertex.add(State(initVertex._name,true,initVertex._isAcceptanceState)) //Agregar estado inicial
-        var contadorIndices = 0
-        val mapaIndices: MutableMap<String,Int> = mutableMapOf()
-        mapaIndices.put(initVertex._name,contadorIndices)
-        contadorIndices++
+        var newStates: MutableList<State> = mutableListOf()
+        val initVertex = getInitialState() as State
+        getClosure(initVertex)
+        for (state in epsilonClosure) {
+            if (state._isAcceptanceState) {
+                initVertex._isAcceptanceState = true
+                break
+            }
+        }
+        newStates.add(State(initVertex._name,true,initVertex._isAcceptanceState))
+        var indexesCounter = 0
+        val indexesMap: MutableMap<String,Int> = mutableMapOf()
+        indexesMap.put(initVertex._name,indexesCounter)
+        indexesCounter++
 
-        automata2.alphabet = getAutomatonAlphabet() //Extraer el alfabeto del automata AFN
+        automata2.alphabet = getAutomatonAlphabet()
         automata2.states.add(State(initVertex._name,true,initVertex._isAcceptanceState))
-        while(nuevosVertex.count() > 0){
-            val vertexActual = nuevosVertex[0]
-            val mapaNombres: MutableMap<String,String> = mutableMapOf() //Valores con sus nodos
+        while(newStates.count() > 0){
+            val currentState = newStates[0]
+            val namesMap: MutableMap<String,String> = mutableMapOf()
             for (p in automata2.alphabet.indices){
-                val separados = vertexActual._name.split(",")
-                for (w in separados.indices){
-                    val subVertexActual = getState(separados[w]) as State
-                    for (o in subVertexActual._transitions.indices){
-                        if(subVertexActual._transitions[o]._symbol == automata2.alphabet[p]){
-                            if(mapaNombres.containsKey(automata2.alphabet[p])){
-                                val miStr = (mapaNombres.get(automata2.alphabet[p])) as String
-                                val cortado = miStr.split(",")
-                                if(!cortado.contains(subVertexActual._transitions[o]._destiny))
-                                    mapaNombres.set(automata2.alphabet[p],miStr + "," + subVertexActual._transitions[o]._destiny)
+                val split = currentState._name.split(",")
+                for (w in split.indices){
+                    val subCurrentState = getState(split[w]) as State
+                    for (o in subCurrentState._transitions.indices){
+                        if(subCurrentState._transitions[o]._symbol == automata2.alphabet[p]){
+                            if(namesMap.containsKey(automata2.alphabet[p])){
+                                val _str = (namesMap.get(automata2.alphabet[p])) as String
+                                val brokenDown = _str.split(",")
+                                if(!brokenDown.contains(subCurrentState._transitions[o]._destiny))
+                                    namesMap.set(automata2.alphabet[p],_str + "," + subCurrentState._transitions[o]._destiny)
                             }else{
-                                mapaNombres.put(automata2.alphabet[p], subVertexActual._transitions[o]._destiny)
+                                namesMap.put(automata2.alphabet[p], subCurrentState._transitions[o]._destiny)
                             }
                         }
                     }
                 }
             }
-            val contador1 = mapaNombres.count()
-            var contador2 = 0
-            var misNombres = mapaNombres.entries
-            while(contador1>contador2){
-                val miStr = misNombres.elementAt(contador2).value
-                val nombreV = yaExisteString(automata2,miStr)
-                if(!yaExisteBoolean(automata2, miStr)){
-                    val isAccept = esVertexAceptable(listaDeAceptados,nombreV)
-                    mapaIndices.put(nombreV,contadorIndices)
-                    contadorIndices++
-                    automata2.states.add(State(nombreV,false,isAccept))
-                    nuevosVertex.add(State(nombreV,false,isAccept))
+            val counter1 = namesMap.count()
+            var counter2 = 0
+            var names = namesMap.entries
+            while(counter1>counter2){
+                val thisStr = names.elementAt(counter2).value
+                val stateName = existsString(automata2,thisStr)
+                if(!existsBoolean(automata2, thisStr)){
+                    val isAccept = isAcceptanceVertex(listaDeAceptados,stateName)
+                    indexesMap.put(stateName,indexesCounter)
+                    indexesCounter++
+                    automata2.states.add(State(stateName,false,isAccept))
+                    newStates.add(State(stateName,false,isAccept))
                 }
-                var state:State? = automata2.getState(vertexActual._name)
-                state!!._transitions.add(Transition(misNombres.elementAt(contador2).key.toString(),vertexActual._name,nombreV))
-                contador2++
+                var state:State? = automata2.getState(currentState._name)
+                state!!._transitions.add(Transition(names.elementAt(counter2).key.toString(),currentState._name,stateName))
+                counter2++
             }
-            nuevosVertex.removeAt(0)
+            newStates.removeAt(0)
         }
         return automata2
     }
 
-    open fun yaExisteString(miAFD:deterministicFiniteAutomaton, miStr:String):String{
+    open fun existsString(miAFD:deterministicFiniteAutomaton, miStr:String):String{
         for (i in miAFD.states.indices){
             val strCompare = miAFD.states[i]._name
             val miArr = strCompare.split(",")
@@ -191,26 +198,26 @@ class nonDeterministicFiniteAutomaton :Automaton(){
         }
     }
 
-    open fun esVertexAceptable(misVertexAceptables:kotlin.collections.MutableList<String>, str:String): Boolean{
-        val loQueComparo = str.split(",")
-        for (i in misVertexAceptables.indices){
-            if(loQueComparo.contains(misVertexAceptables[i])){
+    open fun isAcceptanceVertex(acceptanceStates:kotlin.collections.MutableList<String>, str:String): Boolean{
+        val toCompare = str.split(",")
+        for (i in acceptanceStates.indices){
+            if(toCompare.contains(acceptanceStates[i])){
                 return true
             }
         }
         return false
     }
 
-    open fun yaExisteBoolean(miAFD:deterministicFiniteAutomaton, miStr:String):Boolean{
-        for (i in miAFD.states.indices){
-            val strCompare = miAFD.states[i]._name
-            val miArr = strCompare.split(",")
-            val miArr2 = miStr.split(",")
-            if(miArr.count() == miArr2.count()){
+    open fun existsBoolean(nfa:deterministicFiniteAutomaton, miStr:String):Boolean{
+        for (i in nfa.states.indices){
+            val strCompare = nfa.states[i]._name
+            val firstArray = strCompare.split(",")
+            val secondArray = miStr.split(",")
+            if(firstArray.count() == secondArray.count()){
                 val set1 = HashSet<String>()
-                set1.addAll(miArr)
+                set1.addAll(firstArray)
                 val set2 = HashSet<String>()
-                set2.addAll(miArr2)
+                set2.addAll(secondArray)
                 if(set1.equals(set2)){
                     return true
                 }
@@ -218,4 +225,5 @@ class nonDeterministicFiniteAutomaton :Automaton(){
         }
         return false
     }
+
 }

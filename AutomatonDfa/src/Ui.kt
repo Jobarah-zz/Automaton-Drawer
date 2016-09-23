@@ -336,6 +336,12 @@ class Ui: Application() {
         applyEdgeDefaults()
         logic()
 
+        var test = RegEx()
+        var nfa = test.regexToNfae("(a+b)*")
+        automatonTypeComboBox.value = "ε-nfa"
+        alphabet.add("b")
+        alphabet.add("a")
+        drawAutomaton(nfa)
     }
 
     private fun  mxGraph.update(block: () -> Any) {
@@ -498,7 +504,7 @@ class Ui: Application() {
             }
             else if (automaton is nonDeterministicAutomatonEpsilon){
 
-                var dfa = ((automaton).convertToNFA()).convertToDFA()
+                var dfa = ((automaton).transformToDfa())
                 drawAutomaton(dfa)
             }
             else {

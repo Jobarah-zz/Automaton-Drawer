@@ -38,4 +38,23 @@ open class State: Serializable {
         }
         return null
     }
+
+    fun getDestiniesNames(symbol: String) :MutableList<String>{
+        var destinies:MutableList<String> = mutableListOf()
+        for(transition in _transitions){
+            if(transition._symbol.equals(symbol)){
+                destinies.add(transition._destiny)
+            }
+        }
+        return destinies
+    }
+
+    fun containsTransitionWithSymbol(symbol: String) :Boolean {
+        for (transition in _transitions) {
+            if (transition._symbol.equals(symbol)) {
+                return true
+            }
+        }
+        return false
+    }
 }

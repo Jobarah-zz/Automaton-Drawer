@@ -15,6 +15,14 @@ class Stack{
         stack.removeAt(stack.size-1)
     }
 
+    fun isEmpty() :Boolean {
+        return stack.isEmpty()
+    }
+
+    fun at(index: Int) :String{
+        return stack[index]
+    }
+
 
 
 }

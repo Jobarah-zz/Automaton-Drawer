@@ -3,47 +3,47 @@ package KotlinAlgorithm;
  * Created by Jobarah on 7/25/2016.
  */
 fun main(arr : Array<String>){
-    var a =  deterministicFiniteAutomaton()
-    val state1 = State("q0",true,false)
-    val state2 = State("q1",false,true)
-
-    var transition1 = Transition("a","q0","q1")
-    var transition2 = Transition("b","q0","q0")
-    //------------------------------------------
-    var transition3 = Transition("a","q1","q0")
-    var transition4 = Transition("b","q1","q1")
-
-    state1._transitions.add(transition1)
-    state1._transitions.add(transition2)
-    state2._transitions.add(transition3)
-    state2._transitions.add(transition4)
-//=====================================================
-    var b = deterministicFiniteAutomaton()
-
-    val statea = State("q0",true,true)
-    val stateb = State("q1",false,false)
-
-    var transitiona = Transition("a","q0","q0")
-    var transitionb = Transition("b","q0","q1")
-    //------------------------------------------
-    var transitionc = Transition("a","q1","q1")
-    var transitiond = Transition("b","q1","q0")
-
-
-    statea._transitions.add(transitiona)
-    statea._transitions.add(transitionb)
-    stateb._transitions.add(transitionc)
-    stateb._transitions.add(transitiond)
-
-    a.states.add(state1)
-    a.states.add(state2)
-    a.alphabet.add("a")
-    a.alphabet.add("b")
-
-    b.states.add(statea)
-    b.states.add(stateb)
-    b.alphabet.add("a")
-    b.alphabet.add("b")
+//    var a =  deterministicFiniteAutomaton()
+//    val state1 = State("q0",true,false)
+//    val state2 = State("q1",false,true)
+//
+//    var transition1 = Transition("a","q0","q1")
+//    var transition2 = Transition("b","q0","q0")
+//    //------------------------------------------
+//    var transition3 = Transition("a","q1","q0")
+//    var transition4 = Transition("b","q1","q1")
+//
+//    state1._transitions.add(transition1)
+//    state1._transitions.add(transition2)
+//    state2._transitions.add(transition3)
+//    state2._transitions.add(transition4)
+////=====================================================
+//    var b = deterministicFiniteAutomaton()
+//
+//    val statea = State("q0",true,true)
+//    val stateb = State("q1",false,false)
+//
+//    var transitiona = Transition("a","q0","q0")
+//    var transitionb = Transition("b","q0","q1")
+//    //------------------------------------------
+//    var transitionc = Transition("a","q1","q1")
+//    var transitiond = Transition("b","q1","q0")
+//
+//
+//    statea._transitions.add(transitiona)
+//    statea._transitions.add(transitionb)
+//    stateb._transitions.add(transitionc)
+//    stateb._transitions.add(transitiond)
+//
+//    a.states.add(state1)
+//    a.states.add(state2)
+//    a.alphabet.add("a")
+//    a.alphabet.add("b")
+//
+//    b.states.add(statea)
+//    b.states.add(stateb)
+//    b.alphabet.add("a")
+//    b.alphabet.add("b")
 
 ////    var nfa = automatonOps().complement(a)
 ////
@@ -230,9 +230,42 @@ fun main(arr : Array<String>){
 //    regExp.printAutomata()
 
 
-    var reg = AutomatonRegex()
-    var regex = reg.ParseDFAToRegex(a.states)
-    print(regex)
+//    var reg = AutomatonRegex()
+//    var regex = reg.ParseDFAToRegex(a.states)
+//    print(regex)
+
+
+    var test = RegEx()
+    var nfa = test.regexToNfae("b*")
+
+
+//    test.expresionRegular = "((0+10)*)+((0+10)*1)+((0+10)*11(1+01)*)+((0+10)*11(1+01)*0)"
+////    var nfa = test.transformarNFAe()
+    var count = 0
+    for (state in nfa.states) {
+        count++
+//        println(state._name+state._initialState+state._isAcceptanceState)
+        for (transition in state._transitions) {
+            println(transition._origin+":"+transition._symbol + " -> " + transition._destiny)
+        }
+    }
+    println(count)
+    println(nfa.evaluate("b"))
+//    test.printAutomata()
+
+//    var pda = PushDownAutomata()
+//    pda.addState("q0", true, false)
+//    pda.addState("q1", false, false)
+//    pda.addState("q2", false, true)
+//    pda.states[0].addTransition("(E,Z0/sZ0)", "q1")
+//    pda.states[1].addTransition("(E,s/s1s0s)", "q1")
+//    pda.states[1].addTransition("(E,s/s0s1s)", "q1")
+//    pda.states[1].addTransition("(E,s/E)", "q1")
+//    pda.states[1].addTransition("(1,1/E)", "q1")
+//    pda.states[1].addTransition("(0,0/E)", "q1")
+//    pda.states[1].addTransition("(E,Z0/Z0)", "q2")
+//
+//    println(pda.evaluate("10"))
 
 
 }

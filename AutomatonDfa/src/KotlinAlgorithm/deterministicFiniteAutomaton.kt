@@ -33,7 +33,7 @@ open class deterministicFiniteAutomaton() : Automaton(){
         return false
     }
 
-    fun minimize(): deterministicFiniteAutomaton{
+    fun minimize(): deterministicFiniteAutomaton {
         var returnDfa = deterministicFiniteAutomaton()
         var states:MutableList<State> = mutableListOf()
         var acceptanceStates:MutableList<State> = mutableListOf()
@@ -48,10 +48,10 @@ open class deterministicFiniteAutomaton() : Automaton(){
         }
 
         var equivalentStates:MutableList<MutableList<State>> = mutableListOf()
-        if (states.isNotEmpty()){
+        if (states.isNotEmpty()) {
             equivalentStates.add(states)
         }
-        if (acceptanceStates.isNotEmpty()){
+        if (acceptanceStates.isNotEmpty()) {
             equivalentStates.add(acceptanceStates)
         }
 
@@ -72,7 +72,7 @@ open class deterministicFiniteAutomaton() : Automaton(){
             for (equivalentState in equivalentStates) {
                 stateReferenceList.add(mutableListOf<State>())
                 stateReferenceList.last().add(equivalentState.first())
-                for (stateItem in equivalentState){
+                for (stateItem in equivalentState) {
                     if (stateItem._name != equivalentState[0]._name) {
                         var equivalent = true
                         for (symbol in symbols) {
@@ -136,7 +136,7 @@ open class deterministicFiniteAutomaton() : Automaton(){
         return returnDfa
     }
 
-    fun statesAreEquivalent(stateA:State, stateB:State, equivalentStates:MutableList<MutableList<State>>):Boolean{
+    fun statesAreEquivalent(stateA:State, stateB:State, equivalentStates:MutableList<MutableList<State>>):Boolean {
         if (stateA._name == stateB._name) {
             return true
         }

@@ -43,6 +43,15 @@ class turingMachine: Automaton() {
                                     return false
                                 }
                             }
+                        } else if (getDirection(transition._symbol).equals("-")) {
+
+                            if (index <= _ribbon.size - 1) {
+                                _ribbon[index] = getWriteSybol(transition._symbol)
+                                currentState = getState(transition._destiny)
+                                break
+                            } else {
+                                return false
+                            }
                         }
                         transitionCount++
                     }
