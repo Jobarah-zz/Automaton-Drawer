@@ -12,8 +12,10 @@ import org.unitec.regularexpresion.tree.*
 class RegEx {
     var EPSILON = "e"
     var currentStateIndex = 0
+    var _regExp = ""
 
     open fun regexToNfae(regex: String):nonDeterministicAutomatonEpsilon {
+        _regExp = regex
         var rootNode: Node = RegularExpressionParser().Parse(regex)
         return generateNfae(rootNode)
     }
@@ -98,6 +100,16 @@ class RegEx {
                 throw Exception("not implemented")
             }
         }
+    }
+
+    fun  generateAlphabet(): MutableList<String> {
+        var newAlphabet:MutableList<String> = mutableListOf()
+        for (item in _regExp) {
+            if (item != '(' && item != ')' && item != '+' && item != '.' && item != '*') {
+                newAlphabet.add(item.toString())
+            }
+        }
+        return newAlphabet
     }
 
 }

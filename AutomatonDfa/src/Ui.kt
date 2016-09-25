@@ -337,10 +337,10 @@ class Ui: Application() {
         logic()
 
         var test = RegEx()
-        var nfa = test.regexToNfae("(a+b)*")
+        var nfa = test.regexToNfae("(0+1.0)*.1+(0+1.0)*.1.1.(1+0.1)*+(0+1.0)*.1.1.(1+0.1)*.0+(0+1.0)*")
         automatonTypeComboBox.value = "ε-nfa"
-        alphabet.add("b")
-        alphabet.add("a")
+        alphabet.add("0")
+        alphabet.add("1")
         drawAutomaton(nfa)
     }
 
