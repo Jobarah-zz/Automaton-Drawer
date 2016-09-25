@@ -22,6 +22,7 @@ import javafx.scene.image.Image
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
@@ -39,7 +40,11 @@ fun main(args: Array<String>) {
 class Ui: Application() {
 
     //Automaton gridPane
+    var automatonType = ""
     val automatonTypeComboBox = ComboBox<String>()
+    var alphabetTextField = TextField()
+    var alphabet:MutableList<String> = mutableListOf()
+    var instantiateAutomatonButton = Button("Ok")
     var stringToEvaluateTextField = TextField()
     var evaluateAutomatonButton = Button("Ok")
 
@@ -51,10 +56,6 @@ class Ui: Application() {
     val deleteStateComboBox = ComboBox<String>()
     var deleteStateButton = Button("Ok")
 
-    //Alphabet gridPane
-    var alphabetTextField = TextField()
-    var createAlphabetButton = Button("Ok")
-    var alphabet:MutableList<String> = mutableListOf()
 
     //Transition gridPane
     var symbolTextField = TextField()
@@ -70,6 +71,11 @@ class Ui: Application() {
     var intersectionButton = Button("Ok")
     var unionButton = Button("Ok")
     var minifyButton = Button("Ok")
+    var toRegexButton = Button("Ok")
+
+    //regex gridPane
+    var regexToNfaeTextField = TextField()
+    var regexToNfaeButton = Button("Ok")
 
 
     //graph components
@@ -149,16 +155,17 @@ class Ui: Application() {
         val automatonGrid = GridPane()
         automatonGrid.setVgap(4.0)
         automatonGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
-        automatonTypeComboBox.setPrefSize(175.0,20.0)
-        evaluateAutomatonButton.setPrefSize(175.0, 20.0)
+        automatonTypeComboBox.setPrefSize(165.0,20.0)
+        alphabetTextField.setPrefSize(165.0, 20.0)
+        instantiateAutomatonButton.setPrefSize(165.0, 20.0)
         automatonGrid.add(Label("Type: "), 0, 0)
         automatonGrid.add(automatonTypeComboBox, 1, 0)
         automatonTypeComboBox.value = "dfa"
         automatonTypeComboBox.items.addAll("dfa", "nfa", "ε-nfa", "pda", "Turing Machine")
-        automatonGrid.add(Label("Value"), 0, 1)
-        automatonGrid.add(stringToEvaluateTextField, 1, 1)
-        automatonGrid.add(Label("Evaluate "), 0, 2)
-        automatonGrid.add(evaluateAutomatonButton, 1, 2)
+        automatonGrid.add(Label("Alphabet"), 0, 1)
+        automatonGrid.add(alphabetTextField, 1, 1)
+        automatonGrid.add(Label("Instantiate "), 0, 2)
+        automatonGrid.add(instantiateAutomatonButton, 1, 2)
         automatonPane.text = "Automaton"
         automatonPane.content = automatonGrid
         automatonPane.getStyleClass().add("button")
@@ -205,21 +212,33 @@ class Ui: Application() {
         statesPane.content = grid
         statesPane.getStyleClass().add("button")
 
-        //alphabet accordion grid
-        alphabetTextField.setPrefSize(95.0,20.0)
-        createAlphabetButton.setPrefSize(125.0, 20.0)
-        val alphabetPane = TitledPane()
-        val alphabetGrid = GridPane()
-        alphabetGrid.setVgap(4.0)
-        alphabetGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
-        alphabetGrid.add(Label("Alphabet: "), 0, 0)
-        alphabetGrid.add(alphabetTextField, 1, 0)
-        alphabetGrid.add(Label("Split by ','"), 0, 1)
-        alphabetGrid.add(Label("Define Alphabet: "), 0, 2)
-        alphabetGrid.add(createAlphabetButton,1,2)
-        alphabetPane.content = alphabetGrid
-        alphabetPane.text = "Alphabet"
-        alphabetPane.getStyleClass().add("button")
+
+        //evaluate accordion grid
+        evaluateAutomatonButton.setPrefSize(175.0,20.0)
+        val evaluateAutomatonPane = TitledPane()
+        val evaluateGrid = GridPane()
+        evaluateGrid.setVgap(4.0)
+        evaluateGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
+        evaluateGrid.add(Label("Value: "), 0, 0)
+        evaluateGrid.add(stringToEvaluateTextField, 1, 0)
+        evaluateGrid.add(Label("Evaluate: "), 0, 2)
+        evaluateGrid.add(evaluateAutomatonButton, 1, 2)
+        evaluateAutomatonPane.content = evaluateGrid
+        evaluateAutomatonPane.text = "Evaluate"
+        evaluateAutomatonPane.getStyleClass().add("button")
+
+        regexToNfaeButton.setPrefSize(175.0,20.0)
+        val regextToNfaePane = TitledPane()
+        val regexGrid = GridPane()
+        regexGrid.setVgap(4.0)
+        regexGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
+        regexGrid.add(Label("Regex: "), 0, 0)
+        regexGrid.add(regexToNfaeTextField, 1, 0)
+        regexGrid.add(Label("Convert: "), 0, 2)
+        regexGrid.add(regexToNfaeButton, 1, 2)
+        regextToNfaePane.content = regexGrid
+        regextToNfaePane.text = "Regex To ε-nfa"
+        regextToNfaePane.getStyleClass().add("button")
 
         //operations gridPane
         convertToDfaButton.setPrefSize(130.0, 20.0)
@@ -227,6 +246,8 @@ class Ui: Application() {
         subtractionButton.setPrefSize(130.0, 20.0)
         unionButton.setPrefSize(130.0, 20.0)
         intersectionButton.setPrefSize(130.0, 20.0)
+        minifyButton.setPrefSize(130.0, 20.0)
+        toRegexButton.setPrefSize(130.0, 20.0)
         val operationsPane = TitledPane()
         val operationsGrid = GridPane()
         operationsGrid.setVgap(4.0)
@@ -243,6 +264,8 @@ class Ui: Application() {
         operationsGrid.add(intersectionButton, 1, 4)
         operationsGrid.add(Label("Minify : "), 0, 5)
         operationsGrid.add(minifyButton, 1, 5)
+        operationsGrid.add(Label("Convert To RegEx"),0,6)
+        operationsGrid.add(toRegexButton, 1, 6)
 //        alphabetGrid.add(createAlphabetButton,1,2)
         operationsPane.content = operationsGrid
         operationsPane.text = "Automaton Operations"
@@ -293,7 +316,7 @@ class Ui: Application() {
         additionalOpetationPane.getStyleClass().add("button")
 
         val accordion = Accordion()
-        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, alphabetPane, operationsPane, additionalOpetationPane)
+        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, evaluateAutomatonPane, operationsPane, additionalOpetationPane, regextToNfaePane)
         //-------------End of Accordion components--------------
      //------------------Hbox Components---------------------
         //--------------------stage to draw automaton------------
@@ -338,7 +361,7 @@ class Ui: Application() {
 
         var test = RegEx()
         var nfa = test.regexToNfae("(0+1.0)*.1+(0+1.0)*.1.1.(1+0.1)*+(0+1.0)*.1.1.(1+0.1)*.0+(0+1.0)*")
-        automatonTypeComboBox.value = "ε-nfa"
+        automatonType = "ε-nfa"
         alphabet.add("0")
         alphabet.add("1")
         drawAutomaton(nfa)
@@ -364,7 +387,9 @@ class Ui: Application() {
         createTransitionButton.onMouseClicked = EventHandler<MouseEvent> {
             createTransition(symbolTextField.text, originComboBox.value, destinyComboBox.value)
         }
-        createAlphabetButton.onMouseClicked = EventHandler<MouseEvent> {
+        instantiateAutomatonButton.onMouseClicked = EventHandler<MouseEvent> {
+            clearAutomaton()
+            automatonType = automatonTypeComboBox.value
             generateAlphabet()
         }
         evaluateAutomatonButton.onMouseClicked = EventHandler<MouseEvent> {
@@ -394,6 +419,76 @@ class Ui: Application() {
         minifyButton.onMouseClicked = EventHandler<MouseEvent> {
             minify()
         }
+        regexToNfaeButton.onMouseClicked = EventHandler<MouseEvent> {
+            regexToAutomaton()
+        }
+        toRegexButton.onMouseClicked = EventHandler<MouseEvent> {
+            convertToRegex()
+        }
+    }
+
+    private fun convertToRegex() {
+        var automatonToConvert = generateAutomaton()
+        var regexGenerator = AutomatonRegex()
+        var output = ""
+        if (automatonType != "ε-nfa" && automatonType != "nfa" && automatonType != "dfa") {
+            var alert = Alert(Alert.AlertType.INFORMATION)
+            alert.title = "Automatons To RegEx"
+            alert.headerText = null
+            alert.contentText = "Automatons must be dfa, nfa or ε-nfa type!"
+            alert.showAndWait()
+            return
+        }
+        else if (automatonType == "ε-nfa") {
+            var automaton = generateAutomaton() as nonDeterministicAutomatonEpsilon
+            automatonToConvert = automaton.transformToDfa()
+            output = regexGenerator.ParseDFAToRegex(automatonToConvert!!.states)
+        }else if (automatonType == "nfa") {
+            var automaton = generateAutomaton() as nonDeterministicFiniteAutomaton
+            automatonToConvert = automaton.convertToDFA()
+            output = regexGenerator.ParseDFAToRegex(automatonToConvert!!.states)
+        } else {
+            output = regexGenerator.ParseDFAToRegex(automatonToConvert!!.states)
+        }
+
+        scrollableDialog(output)
+//        consoleOutput.isVisible = true
+    }
+
+    private fun scrollableDialog(text:String) {
+        val alert = Alert(Alert.AlertType.INFORMATION)
+        alert.title = "Regex"
+        alert.headerText = "Regular Expression"
+
+        val label = Label("The generated Regular Expression is: ")
+
+        val textArea = TextArea(text)
+        textArea.isEditable = false
+        textArea.isWrapText = true
+
+        textArea.maxWidth = java.lang.Double.MAX_VALUE
+        textArea.maxHeight = java.lang.Double.MAX_VALUE
+        GridPane.setVgrow(textArea, Priority.ALWAYS)
+        GridPane.setHgrow(textArea, Priority.ALWAYS)
+
+        val expContent = GridPane()
+        expContent.maxWidth = java.lang.Double.MAX_VALUE
+        expContent.add(label, 0, 0)
+        expContent.add(textArea, 0, 1)
+
+// Set expandable Exception into the dialog pane.
+        alert.dialogPane.expandableContent = expContent
+
+        alert.showAndWait()
+    }
+
+    private fun regexToAutomaton() {
+        var RegexConverter = RegEx()
+        var automaton = RegexConverter.regexToNfae(regexToNfaeTextField.text)
+        alphabet = RegexConverter.generateAlphabet()
+        clearAutomaton()
+        drawAutomaton(automaton)
+        automatonType = "ε-nfa"
     }
 
     fun minify() {
@@ -439,7 +534,7 @@ class Ui: Application() {
         }
     }
     private fun  generateAutomaton(): Automaton? {
-        return AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes,edges, alphabet)
+        return AutomatonGenerator(automatonType).generateAutomaton(nodes,edges, alphabet)
     }
 
     private fun complementAutomaton(automaton: Automaton?) {
