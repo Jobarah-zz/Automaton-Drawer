@@ -235,22 +235,22 @@ fun main(arr : Array<String>){
 //    print(regex)
 
 
-    var test = RegEx()
-    var nfa = test.regexToNfae("b*")
-
-
-//    test.expresionRegular = "((0+10)*)+((0+10)*1)+((0+10)*11(1+01)*)+((0+10)*11(1+01)*0)"
-////    var nfa = test.transformarNFAe()
-    var count = 0
-    for (state in nfa.states) {
-        count++
-//        println(state._name+state._initialState+state._isAcceptanceState)
-        for (transition in state._transitions) {
-            println(transition._origin+":"+transition._symbol + " -> " + transition._destiny)
-        }
-    }
-    println(count)
-    println(nfa.evaluate("b"))
+//    var test = RegEx()
+//    var nfa = test.regexToNfae("b*")
+//
+//
+////    test.expresionRegular = "((0+10)*)+((0+10)*1)+((0+10)*11(1+01)*)+((0+10)*11(1+01)*0)"
+//////    var nfa = test.transformarNFAe()
+//    var count = 0
+//    for (state in nfa.states) {
+//        count++
+////        println(state._name+state._initialState+state._isAcceptanceState)
+//        for (transition in state._transitions) {
+//            println(transition._origin+":"+transition._symbol + " -> " + transition._destiny)
+//        }
+//    }
+//    println(count)
+//    println(nfa.evaluate("b"))
 //    test.printAutomata()
 
 //    var pda = PushDownAutomata()
@@ -267,5 +267,8 @@ fun main(arr : Array<String>){
 //
 //    println(pda.evaluate("10"))
 
+    var gramarProd = "C-ABCV"
+    var key = gramarProd.split('-')
+    println(key)
 
 }

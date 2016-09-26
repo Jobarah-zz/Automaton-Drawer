@@ -10,6 +10,7 @@ import com.mxgraph.util.mxConstants
 import com.mxgraph.util.mxRectangle
 import com.mxgraph.view.mxGraph
 import com.mxgraph.view.mxStylesheet
+import com.sun.org.apache.xpath.internal.operations.Bool
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.embed.swing.SwingNode
@@ -77,6 +78,11 @@ class Ui: Application() {
     var regexToNfaeTextField = TextField()
     var regexToNfaeButton = Button("Ok")
 
+    //Grammar to PDA
+    var branchTextField = TextField()
+    var addBranchButton = Button("Ok")
+    var grammarToPdaButton = Button("Ok")
+
 
     //graph components
     val graph = mxGraph()
@@ -88,6 +94,7 @@ class Ui: Application() {
 
     var nodes:MutableList<mxCell> = mutableListOf()
     var edges:MutableList<mxCell> = mutableListOf()
+    var grammarMap: MutableMap<Char,MutableList<String>> = mutableMapOf()
 
     var thisStage:Stage = Stage()
 
@@ -115,7 +122,8 @@ class Ui: Application() {
             if (automatonToDraw != null) {
                 alphabet = automatonToDraw.alphabet
                 automatonTypeComboBox.value = automatonToDraw.type
-                drawAutomaton(automatonToDraw)
+                automatonType = automatonToDraw.type
+                drawAutomaton(automatonToDraw, false)
             }
         })
 
@@ -140,7 +148,6 @@ class Ui: Application() {
                     alert.showAndWait()
                     println(ex.message)
                 }
-
             }
         })
         val exitMenuItem = MenuItem("Exit")
@@ -240,6 +247,25 @@ class Ui: Application() {
         regextToNfaePane.text = "Regex To ε-nfa"
         regextToNfaePane.getStyleClass().add("button")
 
+
+        grammarToPdaButton.setPrefSize(135.0,20.0)
+        addBranchButton.setPrefSize(135.0,20.0)
+        branchTextField.setPrefSize(135.0,20.0)
+        val grammarToPdaPane = TitledPane()
+        val grammarGrid = GridPane()
+        regexGrid.setVgap(4.0)
+        grammarGrid.padding = Insets(5.0, 5.0, 5.0, 5.0)
+        grammarGrid.add(Label("Branch: "), 0, 0)
+        grammarGrid.add(branchTextField, 1, 0)
+        grammarGrid.add(Label("Add Branch: "), 0, 2)
+        grammarGrid.add(addBranchButton, 1, 2)
+        grammarGrid.add(Label("Convert to PDA: "), 0, 3)
+        grammarGrid.add(grammarToPdaButton, 1, 3)
+        grammarGrid.setVgap(4.0)
+        grammarToPdaPane.content = grammarGrid
+        grammarToPdaPane.text = "CFG to PDA"
+        grammarToPdaPane.getStyleClass().add("button")
+
         //operations gridPane
         convertToDfaButton.setPrefSize(130.0, 20.0)
         complementButton.setPrefSize(130.0, 20.0)
@@ -316,7 +342,7 @@ class Ui: Application() {
         additionalOpetationPane.getStyleClass().add("button")
 
         val accordion = Accordion()
-        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, evaluateAutomatonPane, operationsPane, additionalOpetationPane, regextToNfaePane)
+        accordion.panes.addAll(automatonPane, statesPane, transitionsPane, evaluateAutomatonPane, operationsPane, regextToNfaePane, grammarToPdaPane, additionalOpetationPane)
         //-------------End of Accordion components--------------
      //------------------Hbox Components---------------------
         //--------------------stage to draw automaton------------
@@ -359,12 +385,12 @@ class Ui: Application() {
         applyEdgeDefaults()
         logic()
 
-        var test = RegEx()
-        var nfa = test.regexToNfae("(0+1.0)*.1+(0+1.0)*.1.1.(1+0.1)*+(0+1.0)*.1.1.(1+0.1)*.0+(0+1.0)*")
-        automatonType = "ε-nfa"
-        alphabet.add("0")
-        alphabet.add("1")
-        drawAutomaton(nfa)
+//        var test = RegEx()
+//        var nfa = test.regexToNfae("(0+1.0)*.1+(0+1.0)*.1.1.(1+0.1)*+(0+1.0)*.1.1.(1+0.1)*.0+(0+1.0)*")
+//        automatonType = "ε-nfa"
+//        alphabet.add("0")
+//        alphabet.add("1")
+//        drawAutomaton(nfa, false)
     }
 
     private fun  mxGraph.update(block: () -> Any) {
@@ -377,6 +403,7 @@ class Ui: Application() {
         }
     }
 
+
     fun logic() {
         createStateButton.onMouseClicked = EventHandler<MouseEvent> {
             insertState(stateNameTextField.text, initialComboBox.value.toLowerCase(), acceptanceComboBox.value.toLowerCase())
@@ -385,7 +412,7 @@ class Ui: Application() {
             deleteState()
         }
         createTransitionButton.onMouseClicked = EventHandler<MouseEvent> {
-            createTransition(symbolTextField.text, originComboBox.value, destinyComboBox.value)
+            createTransition(symbolTextField.text, originComboBox.value, destinyComboBox.value, true)
         }
         instantiateAutomatonButton.onMouseClicked = EventHandler<MouseEvent> {
             clearAutomaton()
@@ -425,6 +452,21 @@ class Ui: Application() {
         toRegexButton.onMouseClicked = EventHandler<MouseEvent> {
             convertToRegex()
         }
+        grammarToPdaButton.onMouseClicked = EventHandler<MouseEvent> {
+            grammarToPda()
+        }
+        addBranchButton.onMouseClicked = EventHandler<MouseEvent> {
+            addBranchDialog()
+        }
+    }
+
+    private fun grammarToPda() {
+        var gramatica = CFG()
+        gramatica.grammarMap = grammarMap
+
+        automatonType = "pda"
+        var miPDA = gramatica.transformarPDA()
+       drawAutomaton(miPDA, false)
     }
 
     private fun convertToRegex() {
@@ -455,6 +497,40 @@ class Ui: Application() {
 //        consoleOutput.isVisible = true
     }
 
+    private fun addBranchDialog() {
+//        val dialog = TextInputDialog()
+//        dialog.title = "CFG to PDA"
+//        dialog.headerText = "Context Free Grammar to PDA"
+//        dialog.contentText = "Please enter grammar branch: "
+//
+//        val result = dialog.showAndWait()
+        var branch = branchTextField.text
+//        if (result.isPresent) {
+//            branch = result.get()
+//        }
+
+        if (branch != "") {
+           var grammarBranch = branch.split('-')
+            addBranch(branch[0], grammarBranch[1])
+        }
+        branchTextField.text = ""
+    }
+
+    open fun addBranch(indice:Char,producciones:String){
+        var strLista = mutableListOf<String>()
+        strLista.add(producciones)
+        if(grammarMap.containsKey(indice)){
+            var strLista2 = grammarMap.get(indice) as MutableList<String>
+            for(elem in strLista2){
+                strLista.add(elem)
+            }
+            grammarMap.remove(indice)
+            grammarMap.put(indice,strLista)
+        }else{
+            grammarMap.put(indice,strLista)
+        }
+    }
+
     private fun scrollableDialog(text:String) {
         val alert = Alert(Alert.AlertType.INFORMATION)
         alert.title = "Regex"
@@ -475,8 +551,6 @@ class Ui: Application() {
         expContent.maxWidth = java.lang.Double.MAX_VALUE
         expContent.add(label, 0, 0)
         expContent.add(textArea, 0, 1)
-
-// Set expandable Exception into the dialog pane.
         alert.dialogPane.expandableContent = expContent
 
         alert.showAndWait()
@@ -485,10 +559,9 @@ class Ui: Application() {
     private fun regexToAutomaton() {
         var RegexConverter = RegEx()
         var automaton = RegexConverter.regexToNfae(regexToNfaeTextField.text)
-        alphabet = RegexConverter.generateAlphabet()
-        clearAutomaton()
-        drawAutomaton(automaton)
         automatonType = "ε-nfa"
+        alphabet = RegexConverter.generateAlphabet()
+        drawAutomaton(automaton, false)
     }
 
     fun minify() {
@@ -496,20 +569,20 @@ class Ui: Application() {
         if (automaton is nonDeterministicFiniteAutomaton) { // same as !(obj is String)
             var automata = automaton.convertToDFA().minimize()
             clearAutomaton()
-            drawAutomaton(automata)
+            drawAutomaton(automata, false)
         }
         else if (automaton is nonDeterministicAutomatonEpsilon){
             var automata = automaton.convertToNFA().convertToDFA().minimize()
             clearAutomaton()
-            drawAutomaton(automata)
+            drawAutomaton(automata, false)
         } else if (automaton is deterministicFiniteAutomaton) {
             var automata = automaton.minimize()
             clearAutomaton()
-            drawAutomaton(automata)
+            drawAutomaton(automata, false)
         }
     }
     fun automatonsOperations(operation: String) {
-        if (automatonTypeComboBox.value.equals("dfa")) {
+        if (automatonType.equals("dfa")) {
             var automatonA = generateAutomaton() as deterministicFiniteAutomaton
 
             var alert = Alert(Alert.AlertType.INFORMATION)
@@ -523,7 +596,7 @@ class Ui: Application() {
             if (automatonA != null && automatonB != null) {
                  var newAutomaton = automatonOps().operation(automatonA, automatonB, operation)
                 clearAutomaton()
-                drawAutomaton(newAutomaton)
+                drawAutomaton(newAutomaton, false)
             }
         } else {
             var alert = Alert(Alert.AlertType.INFORMATION)
@@ -542,7 +615,7 @@ class Ui: Application() {
             if (automaton is deterministicFiniteAutomaton) {
                 var automatonToComplement = automatonOps().complement(automaton)
                 if (automatonToComplement != null) {
-                    drawAutomaton(automatonToComplement)
+                    drawAutomaton(automatonToComplement,false)
                 }
             } else {
                 var alert = Alert(Alert.AlertType.INFORMATION)
@@ -569,7 +642,7 @@ class Ui: Application() {
             if (file != null) {
                 try {
                     val image = mxCellRenderer.createBufferedImage(graph, null, 1.0, java.awt.Color.WHITE , true, null)
-                    ImageIO.write(image, "png", File(file.path + ".png"))
+                        ImageIO.write(image, "png", File(file.path + ".png"))
                 } catch (ex: IOException) {
                     var alert = Alert(Alert.AlertType.INFORMATION)
                     alert.title = "Automaton Export"
@@ -595,12 +668,14 @@ class Ui: Application() {
             if (automaton is nonDeterministicFiniteAutomaton) {
 
                 val dfa = (automaton).convertToDFA()
-                drawAutomaton(dfa)
+                clearAutomaton()
+                drawAutomaton(dfa,false)
             }
             else if (automaton is nonDeterministicAutomatonEpsilon){
 
                 var dfa = ((automaton).transformToDfa())
-                drawAutomaton(dfa)
+                clearAutomaton()
+                drawAutomaton(dfa,false)
             }
             else {
                 var alert = Alert(Alert.AlertType.INFORMATION)
@@ -609,7 +684,7 @@ class Ui: Application() {
                 alert.contentText = "Can only convert from NFA or ε-NFA"
                 alert.showAndWait()
             }
-            automatonTypeComboBox.value = "dfa"
+            automatonType = "dfa"
         } else {
             var alert = Alert(Alert.AlertType.INFORMATION)
             alert.title = "Convert to DFA"
@@ -632,14 +707,14 @@ class Ui: Application() {
             clearTransitionsForm()
     }
 
-    private fun drawAutomaton(automaton: Automaton) {
+    private fun drawAutomaton(automaton: Automaton, validateDuplicateTransitions:Boolean) {
         clearAutomaton()
         for (state in automaton.states) {
             insertState(state._name, state._initialState.toString(), state._isAcceptanceState.toString())
         }
         for (state in automaton.states) {
             for (transition in state._transitions) {
-                createTransition(transition._symbol, transition._origin, transition._destiny)
+                createTransition(transition._symbol, transition._origin, transition._destiny, validateDuplicateTransitions)
             }
         }
     }
@@ -725,8 +800,8 @@ class Ui: Application() {
         deleteStateComboBox.value = ""
     }
 
-    fun createTransition(symbol: String, origin: String, destiny: String) {
-        if (!automatonTypeComboBox.value.equals("pda") && !automatonTypeComboBox.value.equals("Turing Machine")) {
+    fun createTransition(symbol: String, origin: String, destiny: String, validateDuplicates: Boolean) {
+        if (!automatonType.equals("pda") && !automatonType.equals("Turing Machine")) {
             if (symbol.length >1) {
                 var alert = Alert(Alert.AlertType.INFORMATION)
                 alert.title = "Transition Creation"
@@ -751,7 +826,7 @@ class Ui: Application() {
                     var edge = graph.insertEdge(parent, null, symbol, getNode(origin), getNode(destiny)) as mxCell
                     //edge.put(mxConstants.STYLE_ROUNDED, true);
                     edges.add(edge)
-                } else {
+                } else if (validateDuplicates){
                     var alert = Alert(Alert.AlertType.INFORMATION)
                     alert.title = "Transition Addition"
                     alert.headerText = null
@@ -856,7 +931,7 @@ class Ui: Application() {
                 }
             }
         }
-        var automaton = AutomatonGenerator(automatonTypeComboBox.value).generateAutomaton(nodes, edges, alphabet)
+        var automaton = AutomatonGenerator(automatonType).generateAutomaton(nodes, edges, alphabet)
         if ( automaton != null && automaton!!.states.size >=1) {
             for (state in automaton.states) {
                 for (transition in state._transitions) {

@@ -5,7 +5,7 @@ package KotlinAlgorithm
  */
 class CFG {
 
-    var mapaGramatica: MutableMap<Char,MutableList<String>> = mutableMapOf()
+    var grammarMap: MutableMap<Char,MutableList<String>> = mutableMapOf()
     var simboloInicial = '0'
     /*
         open fun evaluar(evaluarEsto:String):Boolean{
@@ -27,27 +27,27 @@ class CFG {
     open fun addBranch(indice:Char,producciones:String){
         var strLista = mutableListOf<String>()
         strLista.add(producciones)
-        if(mapaGramatica.containsKey(indice)){
-            var strLista2 = mapaGramatica.get(indice) as MutableList<String>
+        if(grammarMap.containsKey(indice)){
+            var strLista2 = grammarMap.get(indice) as MutableList<String>
             for(elem in strLista2){
                 strLista.add(elem)
             }
-            mapaGramatica.remove(indice)
-            mapaGramatica.put(indice,strLista)
+            grammarMap.remove(indice)
+            grammarMap.put(indice,strLista)
         }else{
-            mapaGramatica.put(indice,strLista)
+            grammarMap.put(indice,strLista)
         }
     }
 
     open fun setInicial(indice:Char){
-        if(mapaGramatica.containsKey(indice)){
+        if(grammarMap.containsKey(indice)){
             simboloInicial = indice
         }
     }
 
     open fun fillNoTerminales():MutableList<Char>{
         var noTerminales = mutableListOf<Char>()
-        for(elem in mapaGramatica){
+        for(elem in grammarMap){
             noTerminales.add(elem.key)
         }
         return noTerminales
@@ -55,12 +55,12 @@ class CFG {
 
     open fun fillTerminales():MutableList<String>{
         var Terminales = mutableListOf<String>()
-        for(elem in mapaGramatica){
+        for(elem in grammarMap){
             var miLista = elem.value
             for(elem2 in miLista){
                 var misChars = elem2.toCharArray().toMutableList()
                 for(charact in misChars){
-                    if(!Terminales.contains(charact.toString()) && !mapaGramatica.containsKey(charact)){
+                    if(!Terminales.contains(charact.toString()) && !grammarMap.containsKey(charact)){
                         Terminales.add(charact.toString())
                     }
                 }
@@ -71,7 +71,7 @@ class CFG {
 
     open fun verifyEvaluar(evaluarEsto:String):Boolean{
         var miStrArray = evaluarEsto.toCharArray().toMutableList()
-        for(elem in mapaGramatica){
+        for(elem in grammarMap){
             if(!miStrArray.contains(elem.key)){
                 return false
             }
@@ -88,7 +88,7 @@ class CFG {
         automataPDA.addState("q2",false,false)
         var miStr = simboloInicial + "Z"
         automataPDA.states[0].addTransition("(E,Z/$miStr)","q1")
-        for(elem in mapaGramatica){
+        for(elem in grammarMap){
             var miStrLista = elem.value
             for(str in miStrLista){
                 automataPDA.states[1].addTransition("(E,"+elem.key+"/"+str+")", "q1")

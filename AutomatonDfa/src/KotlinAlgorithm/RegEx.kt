@@ -12,11 +12,53 @@ import org.unitec.regularexpresion.tree.*
 class RegEx {
     var EPSILON = "e"
     var currentStateIndex = 0
-    var _regExp = ""
+    var verifiedRegExp = ""
 
+    open fun generarER(regex: String):String{
+        var miList = regex.toCharArray().toMutableList()
+        var miStr = ""
+        for(elem in miList){
+            if(!(elem == '[') && !(elem == ']') && !(elem == ' ') && !(elem == ',') && !(elem == '.')){
+                miStr += elem.toString()
+            }
+            if(elem == '['){
+                miStr += "("
+            }
+            if(elem == ']'){
+                miStr += ")"
+            }
+        }
+        return miStr
+    }
+
+    open fun parseExpresion(regex: String):String{
+        var str = generarER(regex)
+        var expresionDividida = str.toCharArray().toMutableList()
+        val miCharList = mutableListOf<Char>()
+        for(elem in expresionDividida){
+            if(miCharList.isNotEmpty()){
+                if((miCharList.last() != '(' && miCharList.last() != '+') && (elem != '(' && elem != ')' && elem != '+' && elem != '*')){
+                    miCharList.add('.')
+                }
+                if((miCharList.last() == ')' || miCharList.last() == '*') && elem == '('){
+                    miCharList.add('.')
+                }
+                if((miCharList.last() != ')' && miCharList.last() != '*' && miCharList.last() != '('  && miCharList.last() != '+'  && miCharList.last() != '.') && elem == '('){
+                    miCharList.add('.')
+                }
+            }
+            miCharList.add(elem)
+        }
+        var returnStr = ""
+        for(elem in miCharList){
+            returnStr += elem.toString()
+        }
+        return returnStr
+    }
     open fun regexToNfae(regex: String):nonDeterministicAutomatonEpsilon {
-        _regExp = regex
-        var rootNode: Node = RegularExpressionParser().Parse(regex)
+        verifiedRegExp = parseExpresion(regex)
+        println(verifiedRegExp)
+        var rootNode: Node = RegularExpressionParser().Parse(verifiedRegExp)
         return generateNfae(rootNode)
     }
     private fun generateNfae(node:Node):nonDeterministicAutomatonEpsilon{
@@ -104,7 +146,7 @@ class RegEx {
 
     fun  generateAlphabet(): MutableList<String> {
         var newAlphabet:MutableList<String> = mutableListOf()
-        for (item in _regExp) {
+        for (item in verifiedRegExp) {
             if (item != '(' && item != ')' && item != '+' && item != '.' && item != '*') {
                 newAlphabet.add(item.toString())
             }
