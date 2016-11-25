@@ -15,8 +15,7 @@ The project consists in topics merely of Computational Theory of Automatons, pro
 
 *Turing Machine  
 
-#Convertions Supported  
-
+#Converting
 *From NFA to DFA  
 
 *From NFAe to DFA  
