@@ -1,9 +1,8 @@
 # Automaton-Drawer
 
-Project developer using kotlin programming language and Jgraph/Javafx for the UI implementation.
+Project developed using kotlin programming language and Jgraph/Javafx for the UI implementation.
 
-The project consists in topics merely of Computational Theory of Automatons providing the ease to model automatons graphically and transforming them to regular expressiosns and backwards.  
-
+The project consists in topics merely of Computational Theory of Automatons, providing the ease to model automatons graphically and transforming them to regular expressiosns and backwards.
 #Solving  
 
 *Deterministic Finite Automaton (DFA)  
