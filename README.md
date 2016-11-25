@@ -37,3 +37,6 @@ The project consists in topics merely of Computational Theory of Automatons, pro
 *Subtraction  
 
 *Complement  
+
+Executable con be found in: AutomatonDfa/out/artifacts/AutomatonDfa_jar2/AutomatonDfa.jar  
+(Current .jar does not support all warking methods).
