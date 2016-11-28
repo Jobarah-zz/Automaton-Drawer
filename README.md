@@ -9,7 +9,7 @@ The project consists in topics merely of Computational Theory of Automatons, pro
 
 *Non Deterministic Finite Automaton (NFA)  
 
-*Non Deterministic Finite Automaton Epsilon (NFAe)  
+*Non Deterministic Finite Automaton Epsilon (NFA-ε)  
 
 *Push Down Automaton (PDA)  
 
