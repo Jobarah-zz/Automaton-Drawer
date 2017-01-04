@@ -3,40 +3,41 @@
 Project developed using kotlin programming language and Jgraph/Javafx for the UI implementation.
 
 The project consists in topics merely of Computational Theory of Automatons, providing the ease to model automatons graphically and transforming them to regular expressiosns and backwards.
-#Solving  
+# Solving  
 
-*Deterministic Finite Automaton (DFA)  
+* Deterministic Finite Automaton (DFA)  
 
-*Non Deterministic Finite Automaton (NFA)  
+* Non Deterministic Finite Automaton (NFA)  
 
-*Non Deterministic Finite Automaton Epsilon (NFA-ε)  
+* Non Deterministic Finite Automaton Epsilon (NFA-ε)  
 
-*Push Down Automaton (PDA)  
+* Push Down Automaton (PDA)  
 
-*Turing Machine  
+* Turing Machine  
 
-#Converting
-*From NFA to DFA  
+# Converting  
 
-*From NFAe to DFA  
+* From NFA to DFA  
 
-*From DFA to Regular Expression(Regex)  
+* From NFAe to DFA  
 
-*From Context Free Grammar(CFG or CFL) to PDA  
+* From DFA to Regular Expression(Regex)  
 
-*Minimizing DFA  
+* From Context Free Grammar(CFG or CFL) to PDA  
 
-*Regular Expression to NFAe  
+* Minimizing DFA  
 
-#Automaton Operations Supported  
+* Regular Expression to NFAe  
 
-*Union  
+# Automaton Operations Supported  
 
-*Intersection  
+* Union  
 
-*Subtraction  
+* Intersection  
 
-*Complement  
+* Subtraction  
+
+* Complement  
 
 Executable con be found in: AutomatonDfa/out/artifacts/AutomatonDfa_jar2/AutomatonDfa.jar  
-(Current .jar does not support all warking methods).
+(Current .jar does not support all working methods).
